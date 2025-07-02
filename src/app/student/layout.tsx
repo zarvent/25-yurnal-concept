@@ -2,23 +2,24 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, Library, School, BookHeart, Lock } from 'lucide-react';
+import { LayoutDashboard, Network, Library, BookUser, BookHeart, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
 
 const navItems = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/student/articles', label: 'Artículos', icon: FileText },
+  { href: '/student/courses', label: 'Rutas de Aprendizaje', icon: Network },
   { href: '/student/library', label: 'Biblioteca', icon: Library },
-  { href: '/student/courses', label: 'Cursos', icon: School },
+  { href: '/student/my-journal', label: 'Mi Diario', icon: BookUser },
 ];
 
 const pageTitles: { [key: string]: string } = {
   '/student/dashboard': 'Dashboard Académico',
   '/student/articles': 'Artículos de Divulgación',
+  '/student/courses': 'Rutas de Aprendizaje',
   '/student/library': 'Biblioteca de Tesis y Papers',
-  '/student/courses': 'Cursos y Formación',
+  '/student/my-journal': 'Mi Diario Personal',
 };
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {

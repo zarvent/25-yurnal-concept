@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Calendar, Settings, BookHeart, Lock } from 'lucide-react';
+import { LayoutDashboard, Users, Library, Calendar, BookHeart, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
@@ -10,13 +10,14 @@ import { Separator } from '@/components/ui/separator';
 const navItems = [
   { href: '/therapist/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/therapist/patients', label: 'Pacientes', icon: Users },
+  { href: '/therapist/library', label: 'Biblioteca', icon: Library },
   { href: '/therapist/schedule', label: 'Agenda', icon: Calendar },
-  { href: '/therapist/settings', label: 'Ajustes', icon: Settings },
 ];
 
 const pageTitles: { [key: string]: string } = {
   '/therapist/dashboard': 'Dashboard',
   '/therapist/patients': 'Mis Pacientes',
+  '/therapist/library': 'Biblioteca de Recursos',
   '/therapist/schedule': 'Mi Agenda',
   '/therapist/settings': 'Ajustes',
 };

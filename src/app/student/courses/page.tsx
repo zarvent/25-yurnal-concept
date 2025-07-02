@@ -31,8 +31,8 @@ export default function CoursesPage() {
     <div className="flex flex-col gap-6">
        <Card>
         <CardHeader>
-          <CardTitle>Cursos y Formación</CardTitle>
-          <CardDescription>Formaciones, workshops y masterclasses para llevar tu conocimiento al siguiente nivel.</CardDescription>
+          <CardTitle>Rutas de Aprendizaje</CardTitle>
+          <CardDescription>Sigue rutas de aprendizaje guiadas que combinan teoría y práctica para una formación integral.</CardDescription>
         </CardHeader>
        </Card>
 
