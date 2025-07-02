@@ -32,6 +32,7 @@ import {
   Hand,
   Wind,
   ClipboardList,
+  GripVertical,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -157,7 +158,8 @@ function SortableToolCard({ tool }: { tool: Tool }) {
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <Card key={tool.title} className="flex flex-col h-full cursor-grab active:cursor-grabbing">
-        <CardHeader>
+        <CardHeader className="relative">
+          <GripVertical className="absolute top-6 right-5 text-muted-foreground/40" />
           <div className="flex items-center justify-between">
             {tool.icon}
             {info ? (
@@ -191,7 +193,7 @@ function SortableToolCard({ tool }: { tool: Tool }) {
               <Badge variant="outline">{tool.framework}</Badge>
             )}
           </div>
-          <CardTitle className="pt-4">{tool.title}</CardTitle>
+          <CardTitle className="pt-4 pr-8">{tool.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
           <p className="text-sm text-muted-foreground">
