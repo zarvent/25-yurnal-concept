@@ -159,7 +159,7 @@ function SortableToolCard({ tool }: { tool: Tool }) {
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <Card key={tool.title} className="flex flex-col h-full cursor-grab active:cursor-grabbing">
         <CardHeader className="relative">
-          <GripVertical className="absolute top-6 right-5 text-muted-foreground/40" />
+          <GripVertical className="absolute top-4 right-4 text-muted-foreground/40" />
           <div className="flex items-center justify-between">
             {tool.icon}
             {info ? (
