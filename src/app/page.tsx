@@ -18,28 +18,28 @@ export default function Home() {
       icon: <User className="h-8 w-8 text-primary" />,
       title: 'Para uso personal',
       description: 'Un espacio seguro para la introspección y el crecimiento personal.',
-      href: '/patient/today',
-      cta: 'Empezar mi diario',
+      href: '/patient/onboarding',
+      cta: 'Empezar mi viaje',
     },
     {
       icon: <Stethoscope className="h-8 w-8 text-primary" />,
       title: 'Como terapeuta',
       description: 'Una herramienta para potenciar tu práctica clínica y la de tus pacientes.',
-      href: '/therapist/dashboard',
-      cta: 'Acceder a mi portal',
+      href: '/therapist/onboarding',
+      cta: 'Configurar mi portal',
     },
     {
       icon: <GraduationCap className="h-8 w-8 text-primary" />,
       title: 'Como estudiante',
       description: 'Un recurso para conectar la teoría de la psicología con la práctica.',
-      href: '/student/dashboard',
-      cta: 'Explorar Yurnal Academic',
+      href: '/student/onboarding',
+      cta: 'Iniciar aprendizaje',
     },
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4 sm:p-8">
-      <header className="text-center mb-10 animate-fade-in">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4 sm:p-8 animate-fade-in">
+      <header className="text-center mb-10">
         <BookHeart className="h-16 w-16 text-primary mx-auto mb-4" />
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
           Bienvenido a tu santuario digital
@@ -49,19 +49,19 @@ export default function Home() {
         </p>
       </header>
 
-      <main className="w-full max-w-4xl animate-fade-in" style={{ animationDelay: '200ms' }}>
-        <Card className="w-full">
+      <main className="w-full max-w-4xl">
+        <Card className="w-full shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl text-center">¿Qué camino eliges hoy?</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
             {roles.map((role) => (
               <Link href={role.href} key={role.title} passHref>
-                <div className="p-6 rounded-lg border bg-card hover:bg-muted/50 hover:border-primary/30 transition-all h-full flex flex-col text-center items-center cursor-pointer">
+                <div className="p-6 rounded-lg border-2 border-transparent bg-card hover:border-primary/50 transition-all h-full flex flex-col text-center items-center cursor-pointer shadow-sm hover:shadow-md">
                   {role.icon}
                   <h3 className="font-semibold text-lg mt-4">{role.title}</h3>
                   <p className="text-muted-foreground text-sm mt-2 flex-grow">{role.description}</p>
-                  <Button variant="link" className="mt-4 p-0 h-auto">
+                  <Button variant="link" className="mt-4 p-0 h-auto text-base">
                     {role.cta}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -70,7 +70,7 @@ export default function Home() {
             ))}
           </CardContent>
           <CardFooter className="flex-col items-center justify-center pt-4">
-             <Button variant="ghost" asChild className="text-sm text-muted-foreground">
+             <Button variant="ghost" asChild className="text-sm text-muted-foreground hover:bg-transparent">
                 <Link href="/business">
                     ¿Buscas una solución para tu empresa?
                 </Link>
