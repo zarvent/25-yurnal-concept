@@ -5,14 +5,14 @@
 Esta ruta (`/therapist/patients`) está diseñada para ser la interfaz de gestión de pacientes del terapeuta. Actualmente, se implementa como un componente de servidor estático que sirve como marcador de posición.
 
 -   **Estado Actual**: La página renderiza una `Card` con títulos, descripciones y un estado vacío. No contiene lógica de cliente ni obtención de datos, lo que la hace muy performante en su estado actual.
--   **Arquitectura Futura**: Esta página es la candidata ideal para una refactorización futura que involucre:
+-   **Arquitectura Futura**: Esta página es la candidata ideal para una futura refactorización que involucre:
     1.  **Obtención de Datos del Lado del Servidor**: Convertirse en un `async` Server Component que obtenga la lista de pacientes del terapeuta desde la base de datos.
     2.  **Paso de Datos a Componentes de Cliente**: Pasar la lista de pacientes a un componente de cliente (`"use client"`) que maneje la interactividad, como una tabla ordenable y filtrable (`<PatientDataTable />`).
     3.  **Acciones**: El componente de cliente contendría botones o menús para acciones por paciente (ver detalles, asignar recurso, etc.).
 
 La estructura actual establece un contenedor claro para esta futura funcionalidad compleja.
 
-## Análisis del PSICÓLEGO CATO
+## Análisis del PSICÓLOGO CATO
 
 La página de "Pacientes" es el **"Archivo Clínico Confidencial"** del terapeuta. Es una de las áreas más sensibles de toda la aplicación y su diseño debe estar gobernado por los principios éticos más estrictos.
 

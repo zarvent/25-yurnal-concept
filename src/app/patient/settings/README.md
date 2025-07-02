@@ -9,7 +9,7 @@ Esta ruta implementa la interfaz de configuración para el usuario paciente. La 
 -   **Componente Reutilizable**: La pestaña "Acerca de" renderiza el componente `CreditsDisplay`. Este es un buen ejemplo de reutilización de componentes, asegurando que la información de créditos sea consistente y fácil de actualizar en un solo lugar.
 -   **Marcadores de Posición**: Las pestañas para funcionalidades futuras (Perfil, Notificaciones, Suscripción) muestran un texto de "Próximamente...". Esto es efectivo para comunicar el roadmap del producto sin implementar la lógica completa.
 
-## Análisis del PSICÓLEGO CATO
+## Análisis del PSICÓLOGO CATO
 
 La página de "Ajustes" es crucial para el **sentimiento de "Agencia y Autonomía"** del usuario. Psicológicamente, es el espacio donde el usuario puede ejercer control sobre su entorno, lo cual es un componente fundamental del bienestar.
 
