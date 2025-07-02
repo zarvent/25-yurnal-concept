@@ -1,5 +1,29 @@
+'use client';
+
+import { BarChart as BarChartIcon, Users, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BarChart, Clock } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+
+const chartData = [
+  { month: 'Enero', stress: 80, anxiety: 65 },
+  { month: 'Febrero', stress: 70, anxiety: 72 },
+  { month: 'Marzo', stress: 75, anxiety: 60 },
+  { month: 'Abril', stress: 60, anxiety: 55 },
+  { month: 'Mayo', stress: 55, anxiety: 50 },
+  { month: 'Junio', stress: 50, anxiety: 45 },
+];
+
+const chartConfig = {
+  stress: {
+    label: 'Estrés',
+    color: 'hsl(var(--chart-1))',
+  },
+  anxiety: {
+    label: 'Ansiedad',
+    color: 'hsl(var(--chart-2))',
+  },
+};
 
 export default function TherapistDashboardPage() {
   return (
@@ -27,13 +51,43 @@ export default function TherapistDashboardPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Tendencia General</CardTitle>
-          <BarChart className="h-4 w-4 text-muted-foreground" />
+          <BarChartIcon className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">Estable</div>
           <p className="text-xs text-muted-foreground">Nivel de estrés promedio a la baja</p>
         </CardContent>
       </Card>
+      
+      <Card className="md:col-span-2 lg:col-span-3">
+        <CardHeader>
+          <CardTitle>Evolución Emocional Agregada</CardTitle>
+          <CardDescription>
+            Tendencia de los niveles de estrés y ansiedad reportados por los pacientes en los últimos 6 meses. (Datos de ejemplo)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pl-2">
+          <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <ResponsiveContainer>
+              <BarChart data={chartData} margin={{ top: 20, right: 20, bottom: 5, left: 0 }}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <YAxis />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="stress" fill="var(--color-stress)" radius={4} />
+                <Bar dataKey="anxiety" fill="var(--color-anxiety)" radius={4} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+      
       <Card className="lg:col-span-3">
         <CardHeader>
           <CardTitle>Actividad Reciente de Pacientes</CardTitle>

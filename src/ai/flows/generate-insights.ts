@@ -20,9 +20,19 @@ export type GenerateInsightsInput = z.infer<typeof GenerateInsightsInputSchema>;
 
 const GenerateInsightsOutputSchema = z.object({
   themes: z
-    .string()
+    .array(z.string())
     .describe(
-      'A cloud of frequent themes and emotions identified in the journal entries.'
+      'A list of 5-7 frequent themes or emotions identified in the journal entries. These should be single words or short phrases.'
+    ),
+  strengths: z
+    .array(z.string())
+    .describe(
+      'A list of 2-3 identified strengths, moments of resilience, or positive resources mentioned by the user.'
+    ),
+  questions: z
+    .array(z.string())
+    .describe(
+      'A list of 2-3 gentle, open-ended Socratic questions to prompt deeper reflection on the identified themes. Frame them as invitations to explore, not as assertions.'
     ),
 });
 export type GenerateInsightsOutput = z.infer<typeof GenerateInsightsOutputSchema>;
@@ -35,14 +45,18 @@ const prompt = ai.definePrompt({
   name: 'generateInsightsPrompt',
   input: {schema: GenerateInsightsInputSchema},
   output: {schema: GenerateInsightsOutputSchema},
-  prompt: `You are an AI assistant designed to analyze journal entries and identify frequent themes and emotions.
+  prompt: `You are a compassionate and insightful AI assistant trained in psychological principles. Your role is to analyze journal entries and help the user reflect on their thoughts and feelings in a safe, non-judgmental way. You are an analyst, not a therapist.
 
-  Please provide a cloud of the most frequent themes and emotions found in the following journal entries:
+Your task is to analyze the following journal entries and extract key information.
 
-  {{journalEntries}}
+**Output Instructions:**
+1.  **Themes:** Identify a list of the most frequent or impactful themes and emotions.
+2.  **Strengths:** Look for moments of resilience, self-awareness, positive actions, or personal strengths. It is very important to find these even if the text is largely negative.
+3.  **Questions:** Based on the themes, formulate gentle, Socratic questions that encourage the user to explore their own feelings further. NEVER give advice or make definitive statements about the user. Start questions with phrases like "I wonder if...", "What comes to mind when you think about...", or "How do the themes of X and Y relate for you?".
 
-  Focus on extracting the core topics and feelings expressed throughout the week.
-  The output should be a concise string of comma separated themes and emotions, such as "stress, anxiety, work, relationships".`,
+**Journal Entries:**
+{{{journalEntries}}}
+`,
 });
 
 const generateInsightsFlow = ai.defineFlow(

@@ -6,7 +6,7 @@ import { generateInsights, GenerateInsightsOutput } from '@/ai/flows/generate-in
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Wand2, AlertTriangle } from 'lucide-react';
+import { Loader2, Wand2, AlertTriangle, Lightbulb, ThumbsUp, HelpCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -48,14 +48,12 @@ export function ReflectionsGenerator() {
     }
   };
 
-  const themes = insights?.themes.split(',').map(theme => theme.trim()).filter(Boolean) || [];
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Nube de Temas y Emociones</CardTitle>
+        <CardTitle>Generador de Reflexiones</CardTitle>
         <CardDescription>
-          Yurnal AI es un Asistente Analítico, no un terapeuta. Analiza tus entradas para generar una 'Nube de Temas y Emociones', ayudándote a visualizar lo que es importante para ti de forma privada y segura.
+          Yurnal AI es un Asistente Analítico, no un terapeuta. Analiza tus entradas para generar puntos de reflexión que te ayuden a visualizar lo que es importante para ti de forma privada y segura.
         </CardDescription>
       </CardHeader>
       <CardContent className="min-h-[200px]">
@@ -72,13 +70,51 @@ export function ReflectionsGenerator() {
                 <AlertDescription>{error}</AlertDescription>
             </Alert>
         )}
-        {insights && themes.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {themes.map((theme, index) => (
-              <Badge key={index} variant="secondary" className="text-base px-3 py-1">
-                {theme}
-              </Badge>
-            ))}
+        {insights && (
+          <div className="space-y-6">
+            {insights.themes?.length > 0 && (
+              <div>
+                <h3 className="flex items-center text-lg font-semibold mb-3">
+                  <Lightbulb className="mr-2 h-5 w-5 text-primary" />
+                  Nube de Temas y Emociones
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {insights.themes.map((theme, index) => (
+                    <Badge key={index} variant="secondary" className="text-base px-3 py-1">
+                      {theme}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {insights.strengths?.length > 0 && (
+              <div>
+                <h3 className="flex items-center text-lg font-semibold mb-3">
+                  <ThumbsUp className="mr-2 h-5 w-5 text-muted-foreground" />
+                  Fortalezas Identificadas
+                </h3>
+                <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2">
+                  {insights.strengths.map((strength, index) => (
+                    <li key={index}>{strength}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {insights.questions?.length > 0 && (
+              <div>
+                <h3 className="flex items-center text-lg font-semibold mb-3">
+                  <HelpCircle className="mr-2 h-5 w-5 text-muted-foreground" />
+                  Preguntas para la Reflexión
+                </h3>
+                 <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2">
+                  {insights.questions.map((question, index) => (
+                    <li key={index}>{question}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
          {!isLoading && !insights && !error && (

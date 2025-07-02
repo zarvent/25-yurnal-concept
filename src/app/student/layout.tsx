@@ -65,6 +65,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             <UserNav />
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
+        <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
+          <strong>Recurso Educativo:</strong> La información aquí presentada es para fines educativos y no debe ser usada para autodiagnóstico. Si necesitas apoyo, busca a un profesional de la salud mental calificado.
+        </footer>
       </div>
     </div>
   );

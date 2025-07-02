@@ -67,6 +67,9 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
             <UserNav />
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
+        <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
+          <strong>Nota Importante:</strong> Yurnal es una herramienta de autoconocimiento y no reemplaza la terapia profesional. Si te encuentras en una crisis de salud mental, por favor, no estás solo. Contacta a la línea de prevención de suicidio de tu país o busca ayuda de emergencia. En Bolivia, puedes llamar a la línea gratuita de ayuda del SEDES (168).
+        </footer>
       </div>
     </div>
   );

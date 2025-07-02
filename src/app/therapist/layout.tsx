@@ -65,6 +65,9 @@ export default function TherapistLayout({ children }: { children: React.ReactNod
             <UserNav />
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
+        <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
+          <strong>Recurso Profesional:</strong> Esta plataforma es una herramienta de apoyo. En caso de una emergencia de un paciente, guíalo hacia los servicios de emergencia apropiados.
+        </footer>
       </div>
     </div>
   );
