@@ -1,10 +1,23 @@
 'use client';
 
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarInset,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarProvider,
+    SidebarSeparator,
+    SidebarTrigger,
+} from '@/components/ui/sidebar';
+import { UserNav } from '@/components/user-nav';
+import { cn } from '@/lib/utils';
+import { BookHeart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookHeart } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { UserNav } from '@/components/user-nav';
 import type { ReactNode } from 'react';
 
 interface NavItem {
@@ -35,54 +48,106 @@ export function DashboardLayout({
     children
 }: DashboardLayoutProps) {
     const pathname = usePathname();
-    
+
     const getPageTitle = () => {
         // Find the most specific matching key for the current path to handle nested routes correctly.
         const matchingKey = Object.keys(pageTitles)
             .filter(key => pathname.startsWith(key))
             .sort((a, b) => b.length - a.length)[0];
-        
+
         return pageTitles[matchingKey] || defaultTitle;
     };
 
     const pageTitle = getPageTitle();
 
     return (
-        <div className="flex min-h-screen w-full flex-col bg-muted/40">
-            <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-background sm:flex">
-                <div className="flex h-16 items-center border-b px-6">
-                    <Link href={brandHref} className="flex items-center gap-2 font-semibold">
-                        <BookHeart className="h-6 w-6 text-primary" />
-                        <span className="">{brandName}</span>
-                    </Link>
-                </div>
-                <nav className="flex flex-col p-4">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.label}
-                            href={item.href}
-                            className={cn(
-                                'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                                { 'bg-muted text-primary': pathname.startsWith(item.href) }
-                            )}
-                        >
-                            <item.icon className="h-4 w-4" />
-                            {item.label}
-                        </Link>
-                    ))}
-                </nav>
-                <div className="mt-auto flex-1" />
-                {sidebarFooter}
-            </aside>
+        <SidebarProvider>
+            <div className="flex min-h-screen w-full bg-background">
+                <Sidebar variant="sidebar" className="border-r-0 shadow-lg">
+                    <SidebarHeader className="border-b bg-card/50 backdrop-blur-sm">
+                        <div className="flex items-center gap-3 px-4 py-3">
+                            <Link href={brandHref} className="flex items-center gap-3 transition-all duration-300 hover:scale-105">
+                                <div className="rounded-lg bg-primary/10 p-2">
+                                    <BookHeart className="h-6 w-6 text-primary" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="font-bold text-lg leading-none">{brandName}</span>
+                                    <span className="text-xs text-muted-foreground font-medium">Wellness Platform</span>
+                                </div>
+                            </Link>
+                        </div>
+                    </SidebarHeader>
 
-            <div className="flex flex-col sm:pl-60">
-                <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-                    <h1 className="flex-1 text-xl font-semibold">{pageTitle}</h1>
-                    <UserNav />
-                </header>
-                <main className="flex-1 p-4 md:p-8">{children}</main>
-                {mainFooter}
+                    <SidebarContent className="px-2 py-4">
+                        <SidebarMenu>
+                            {navItems.map((item, index) => {
+                                const isActive = pathname.startsWith(item.href);
+                                return (
+                                    <SidebarMenuItem key={item.label}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={isActive}
+                                            className={cn(
+                                                "h-12 text-base font-medium transition-all duration-300 rounded-xl mb-1",
+                                                "hover:bg-primary/10 hover:text-primary hover:shadow-sm",
+                                                "data-[active=true]:bg-primary data-[active=true]:text-primary-foreground",
+                                                "data-[active=true]:shadow-md data-[active=true]:glow"
+                                            )}
+                                        >
+                                            <Link href={item.href} className="flex items-center gap-3 px-4">
+                                                <item.icon className="h-5 w-5 flex-shrink-0" />
+                                                <span className="font-medium">{item.label}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                );
+                            })}
+                        </SidebarMenu>
+                    </SidebarContent>
+
+                    <SidebarFooter className="border-t bg-card/30 backdrop-blur-sm">
+                        {sidebarFooter}
+                    </SidebarFooter>
+                </Sidebar>
+
+                <SidebarInset className="flex flex-col">
+                    {/* Enhanced Header */}
+                    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-4 border-b bg-card/80 backdrop-blur-md px-6 shadow-sm">
+                        <div className="flex items-center gap-3">
+                            <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-primary/10 transition-colors" />
+                            <SidebarSeparator orientation="vertical" className="h-6" />
+                        </div>
+
+                        <div className="flex flex-1 items-center justify-between">
+                            <div className="flex flex-col">
+                                <h1 className="text-xl font-bold leading-none">{pageTitle}</h1>
+                                <p className="text-xs text-muted-foreground font-medium mt-0.5">
+                                    {new Date().toLocaleDateString('es-ES', {
+                                        weekday: 'long',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                </p>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <UserNav />
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Enhanced Main Content */}
+                    <main className="flex-1 overflow-auto bg-muted/20">
+                        <div className="p-6 lg:p-8">
+                            <div className="mx-auto max-w-screen-2xl animate-fade-in-up">
+                                {children}
+                            </div>
+                        </div>
+                        {mainFooter}
+                    </main>
+                </SidebarInset>
             </div>
-        </div>
+        </SidebarProvider>
     );
 }

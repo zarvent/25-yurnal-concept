@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
-import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import "./globals.css";
+import { Providers } from "./providers";
 
-export const metadata: Metadata = {
-  title: "Yurnal: Tu Espacio para el Bienestar y Crecimiento",
-  description: "Un santuario digital para la introspección personal y el aprendizaje en psicología.",
+export const metadata = {
+  title: "Yurnal: El Futuro del Bienestar Digital",
+  description:
+    "La plataforma más avanzada del mundo para crecimiento personal, aprendizaje psicológico y transformación terapéutica. Tecnología de vanguardia al servicio del bienestar humano.",
 };
 
 export default function RootLayout({
@@ -13,17 +14,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" className="scroll-smooth">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className="font-body antialiased">
-        {children}
+      <body className="font-sans antialiased bg-background text-foreground selection:bg-primary/20 selection:text-primary-foreground">
+        <Providers>
+          <div className="relative flex min-h-screen flex-col">
+            <div className="flex-1">{children}</div>
+          </div>
+        </Providers>
         <Toaster />
       </body>
     </html>
