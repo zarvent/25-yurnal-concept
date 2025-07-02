@@ -2,108 +2,83 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookHeart, User, Stethoscope, GraduationCap, Briefcase } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { BookHeart, User, Stethoscope, GraduationCap, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [year, setYear] = useState(new Date().getFullYear());
 
-  // This useEffect ensures the year is updated on the client side,
-  // preventing a potential hydration mismatch error, though it's a rare edge case for the year.
   useEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
 
+  const roles = [
+    {
+      icon: <User className="h-8 w-8 text-primary" />,
+      title: 'Para uso personal',
+      description: 'Un espacio seguro para la introspección y el crecimiento personal.',
+      href: '/patient/today',
+      cta: 'Empezar mi diario',
+    },
+    {
+      icon: <Stethoscope className="h-8 w-8 text-primary" />,
+      title: 'Como terapeuta',
+      description: 'Una herramienta para potenciar tu práctica clínica y la de tus pacientes.',
+      href: '/therapist/dashboard',
+      cta: 'Acceder a mi portal',
+    },
+    {
+      icon: <GraduationCap className="h-8 w-8 text-primary" />,
+      title: 'Como estudiante',
+      description: 'Un recurso para conectar la teoría de la psicología con la práctica.',
+      href: '/student/dashboard',
+      cta: 'Explorar Yurnal Academic',
+    },
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4">
-      <div className="flex flex-col items-center text-center mb-10">
-        <BookHeart className="h-16 w-16 text-primary mb-4" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4 sm:p-8">
+      <header className="text-center mb-10 animate-fade-in">
+        <BookHeart className="h-16 w-16 text-primary mx-auto mb-4" />
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-          Bienvenido a Yurnal
+          Bienvenido a tu santuario digital
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mt-4">
-          Un ecosistema para el bienestar y el conocimiento. Conecta contigo mismo, con profesionales y con el saber de la psicología.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mt-4">
+          Un espacio seguro e inteligente para navegar tu mundo interior. Elige cómo quieres empezar.
         </p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 w-full max-w-screen-xl mx-auto">
-        <Card className="flex flex-col">
-          <CardHeader className="text-center">
-            <User className="h-10 w-10 mx-auto text-primary mb-3" />
-            <CardTitle className="text-2xl">Para Pacientes</CardTitle>
-            <CardDescription>
-              Tu espacio seguro para la introspección y el crecimiento personal.
-            </CardDescription>
+      </header>
+
+      <main className="w-full max-w-4xl animate-fade-in" style={{ animationDelay: '200ms' }}>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">¿Qué camino eliges hoy?</CardTitle>
           </CardHeader>
-          <CardContent className="flex-grow text-center">
-            <p className="mb-6 text-muted-foreground">
-              Escribe en tu diario, descubre patrones y, si lo deseas, comparte tus reflexiones con tu terapeuta.
-            </p>
+          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            {roles.map((role) => (
+              <Link href={role.href} key={role.title} passHref>
+                <div className="p-6 rounded-lg border bg-card hover:bg-muted/50 hover:border-primary/30 transition-all h-full flex flex-col text-center items-center cursor-pointer">
+                  {role.icon}
+                  <h3 className="font-semibold text-lg mt-4">{role.title}</h3>
+                  <p className="text-muted-foreground text-sm mt-2 flex-grow">{role.description}</p>
+                  <Button variant="link" className="mt-4 p-0 h-auto">
+                    {role.cta}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </Link>
+            ))}
           </CardContent>
-          <div className="p-6 pt-0">
-            <Button asChild size="lg" className="w-full">
-              <Link href="/patient/today">Entrar a mi espacio</Link>
-            </Button>
-          </div>
+          <CardFooter className="flex-col items-center justify-center pt-4">
+             <Button variant="ghost" asChild className="text-sm text-muted-foreground">
+                <Link href="/business">
+                    ¿Buscas una solución para tu empresa?
+                </Link>
+             </Button>
+          </CardFooter>
         </Card>
-        <Card className="flex flex-col">
-          <CardHeader className="text-center">
-            <Stethoscope className="h-10 w-10 mx-auto text-primary mb-3" />
-            <CardTitle className="text-2xl">Para Terapeutas</CardTitle>
-            <CardDescription>
-              Optimiza tu práctica con insights valiosos y herramientas digitales.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow text-center">
-            <p className="mb-6 text-muted-foreground">
-              Gestiona pacientes, comunícate de forma segura y ofrece un cuidado más conectado.
-            </p>
-          </CardContent>
-          <div className="p-6 pt-0">
-            <Button asChild size="lg" variant="outline" className="w-full">
-              <Link href="/therapist/dashboard">Acceder a mi portal</Link>
-            </Button>
-          </div>
-        </Card>
-        <Card className="flex flex-col">
-          <CardHeader className="text-center">
-            <GraduationCap className="h-10 w-10 mx-auto text-primary mb-3" />
-            <CardTitle className="text-2xl">Para Estudiantes</CardTitle>
-            <CardDescription>
-              Democratizamos el acceso al conocimiento en psicología.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow text-center">
-            <p className="mb-6 text-muted-foreground">
-              Explora una vasta biblioteca de tesis, artículos y cursos para potenciar tu formación.
-            </p>
-          </CardContent>
-          <div className="p-6 pt-0">
-            <Button asChild size="lg" className="w-full">
-              <Link href="/student/dashboard">Explorar Yurnal Academic</Link>
-            </Button>
-          </div>
-        </Card>
-         <Card className="flex flex-col">
-          <CardHeader className="text-center">
-            <Briefcase className="h-10 w-10 mx-auto text-primary mb-3" />
-            <CardTitle className="text-2xl">Para Empresas</CardTitle>
-            <CardDescription>
-              Bienestar mental como beneficio corporativo. (Próximamente)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow text-center">
-            <p className="mb-6 text-muted-foreground">
-              Ofrece Yurnal a tu equipo y obtén insights anónimos para mejorar la salud organizacional.
-            </p>
-          </CardContent>
-          <div className="p-6 pt-0">
-            <Button asChild size="lg" variant="secondary" className="w-full">
-              <Link href="/business">Conocer más</Link>
-            </Button>
-          </div>
-        </Card>
-      </div>
+      </main>
+
       <footer className="mt-12 text-xs text-muted-foreground">
         © {year} Yurnal. Todos los derechos reservados.
       </footer>
