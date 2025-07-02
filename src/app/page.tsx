@@ -175,7 +175,6 @@ export default function Home() {
                           size="lg"
                           className="w-full group focus-therapeutic"
                           asChild
-                          optimistic
                         >
                           <Link href={role.href}>
                             <span className="flex items-center justify-center">

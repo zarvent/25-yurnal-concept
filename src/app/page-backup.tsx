@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { TherapeuticButton } from '@/components/ui/therapeutic-button';
 import { ArrowRight, BookHeart, Globe, GraduationCap, HeartHandshake, Shield, Sparkles, User, Zap } from 'lucide-react';
