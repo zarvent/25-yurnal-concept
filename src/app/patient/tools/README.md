@@ -1,20 +1,20 @@
-# Skills Toolbox Page (`tools`)
+# Tools Marketplace (`tools`)
 
 ## Análisis del INGENIERO CATO
 
-Esta ruta (`/patient/tools`) implementa una "Caja de Herramientas" de habilidades terapéuticas interactiva. Es un componente de cliente (`"use client"`) técnicamente sofisticado.
+Esta ruta (`/patient/tools`) implementa el **marketplace de herramientas terapéuticas**. Ha sido refactorizada de una lista estática con drag-and-drop a una galería dinámica y escalable.
 
--   **Drag-and-Drop (DnD)**: Utiliza la librería `dnd-kit` (`@dnd-kit/core`, `@dnd-kit/sortable`) para permitir al usuario reordenar las tarjetas de herramientas. La implementación sigue las mejores prácticas, incluyendo sensores para puntero y teclado (`PointerSensor`, `KeyboardSensor`) para garantizar la accesibilidad.
--   **Gestión de Estado Local**: Mantiene el orden de las herramientas en el estado del componente (`useState`). La función `handleDragEnd` actualiza este estado cuando el usuario suelta una tarjeta, volviendo a renderizar la lista en el nuevo orden.
--   **Componentización Avanzada**: Descompone la lógica de DnD en un componente `SortableToolCard`, que encapsula los hooks de `useSortable`. Esto mantiene la página principal más limpia y la lógica de ordenamiento contenida.
--   **UI Modal**: Utiliza el componente `Dialog` de ShadCN para mostrar información detallada sobre los marcos terapéuticos (TCC, TDC) sin sacar al usuario de la página. Esto es eficiente y proporciona una buena experiencia de usuario.
--   **Estructura de Datos**: La información de las herramientas y los marcos teóricos está bien estructurada en arrays y objetos (`initialTools`, `frameworkInfo`), lo que facilita su gestión y renderizado.
+-   **Arquitectura de Datos**: La UI ahora se basa en un modelo de datos (`toolsData`) que simula la respuesta de una API, en línea con las especificaciones de Yurnal v2.0. Cada herramienta tiene propiedades como `category`, `riskLevel`, y `usageCount`.
+-   **Interactividad del Frontend**: El componente es un **Client Component** (`"use client"`) que maneja la interactividad del lado del cliente.
+    -   **Filtrado y Búsqueda**: Utiliza `useState` para gestionar el término de búsqueda y la categoría activa. `useMemo` se emplea para recalcular eficientemente la lista de herramientas mostradas solo cuando cambian las dependencias, optimizando el rendimiento del renderizado.
+    -   **Navegación**: Cada `ToolCard` enlaza a una ruta dinámica (`/patient/tools/[toolId]`), sentando las bases para vistas de detalle dedicadas.
+-   **Escalabilidad**: Esta arquitectura está preparada para el futuro. La lógica de filtrado y búsqueda puede ser fácilmente adaptada para delegar estas operaciones a una API de backend (agregando `debounce` a la búsqueda) a medida que el número de herramientas crezca. El uso de `useMemo` es una buena práctica de rendimiento frontend que seguirá siendo relevante.
 
 ## Análisis del PSICÓLOGO CATO
 
-La página de "Herramientas" es la **"Sala de Entrenamiento de Habilidades"** de Yurnal. Es donde la psicoeducación se convierte en práctica y empoderamiento.
+La "Biblioteca de Habilidades" ha evolucionado hacia un **"Marketplace de Bienestar"**. Este cambio de paradigma es psicológicamente significativo.
 
--   **Psicoeducación Interactiva**: En lugar de simplemente leer sobre técnicas, el usuario interactúa con ellas. Cada tarjeta es una "ficha" de una habilidad concreta (ej. "Verificar los Hechos", "Habilidad STOP"), que son pilares de terapias basadas en la evidencia como la Terapia Dialéctico Conductual (TDC) y la Terapia Cognitivo-Conductual (TCC).
--   **Personalización y Agencia**: La capacidad de arrastrar y soltar las herramientas es psicológicamente muy poderosa. Permite al usuario **jerarquizar y personalizar su propio plan de tratamiento implícito**. Puede mover las herramientas que más le sirven a la parte superior, creando un "kit de primeros auxilios" emocional a su medida. Esto fomenta un locus de control interno y la autoeficacia.
--   **Desmitificación de la Terapia**: Los `Dialog` que explican qué es la TCC o la TDC en lenguaje sencillo ("Es como aprender a ser un detective de tu propia mente") desmitifican la terapia. Hacen que conceptos complejos sean accesibles y menos intimidantes, reduciendo la barrera para buscar ayuda profesional.
--   **Gamificación Sutil**: La interactividad del DnD introduce un elemento lúdico y de compromiso que puede aumentar la probabilidad de que el usuario explore y recuerde las habilidades disponibles.
+-   **De la Organización a la Exploración**: El modelo anterior de arrastrar y soltar se centraba en la *organización* personal de un conjunto limitado de herramientas. El nuevo modelo de marketplace se centra en la *exploración* y el *descubrimiento* dentro de un ecosistema de recursos en crecimiento. Esto fomenta la curiosidad y la autonomía del usuario.
+-   **Validación Social y Guía**: La ordenación por `usageCount` (popularidad) actúa como una forma de **validación social sutil**. Ver qué herramientas son más utilizadas por otros puede reducir la ansiedad de la elección y guiar a los nuevos usuarios hacia técnicas probadas y efectivas.
+-   **Personalización a través del Filtro**: La capacidad de filtrar por categorías ("Ansiedad", "Sueño", "TCC") permite al usuario personalizar su experiencia de búsqueda de una manera muy intencionada. Puede abordar un problema específico ("Hoy me siento ansioso, buscaré herramientas para eso"), lo que aumenta la relevancia y la eficacia percibida de la plataforma. Es un paso hacia un plan de tratamiento auto-dirigido.
+-   **Indicadores de Seguridad (Risk Level)**: La inclusión de niveles de riesgo (`low`, `medium`, `high`) es una característica de seguridad ética fundamental. Enseña al usuario a autoevaluar su preparación para una técnica, promoviendo un enfoque de auto-cuidado que es a la vez valiente y prudente.
