@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,12 +22,26 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Crown, Zap, Search, FileDown, QrCode, User, Settings } from 'lucide-react';
-import { Badge } from './ui/badge';
+import { Crown, Zap, Search, FileDown, QrCode, User, Settings, LogOut, Loader2 } from 'lucide-react';
+import { useSessionStore, type UserProfile } from '@/store/session-store';
+
+const getMockUser = (): UserProfile => ({
+  id: '1',
+  name: 'C. S. Ventura',
+  email: 'cato@yurnal.com',
+  role: 'patient',
+  avatarUrl: 'https://placehold.co/100x100',
+});
 
 export function UserNav() {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const pathname = usePathname();
+  const { user, login, logout, isLoading } = useSessionStore();
+
+  useEffect(() => {
+    const loggedInUser = getMockUser();
+    login(loggedInUser);
+  }, [login]);
   
   const getBasePath = () => {
     if (pathname.startsWith('/patient')) return '/patient';
@@ -38,23 +52,39 @@ export function UserNav() {
   
   const basePath = getBasePath();
 
+  const getInitials = (name: string) => {
+    const names = name.split(' ');
+    if (names.length > 1) {
+        return `${names[0][0]}${names[names.length - 1][0]}`;
+    }
+    return name.substring(0, 2);
+  }
+
+  if (isLoading) {
+    return <Loader2 className="h-6 w-6 animate-spin" />;
+  }
+
+  if (!user) {
+    return <Button variant="outline">Iniciar Sesión</Button>;
+  }
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-9 w-9">
-              <AvatarImage src="https://placehold.co/100x100" alt="@usuario" data-ai-hint="user avatar" />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarImage src={user.avatarUrl} alt={`@${user.name}`} data-ai-hint="user avatar" />
+              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">Usuario</p>
+              <p className="text-sm font-medium leading-none">{user.name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                usuario@ejemplo.com
+                {user.email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -76,7 +106,10 @@ export function UserNav() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
+          <DropdownMenuItem onClick={logout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Cerrar sesión
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <PremiumModal isOpen={showPremiumModal} onOpenChange={setShowPremiumModal} />
