@@ -34,6 +34,7 @@ const GenerateInsightsOutputSchema = z.object({
     .describe(
       'A list of 2-3 gentle, open-ended Socratic questions to prompt deeper reflection on the identified themes. Frame them as invitations to explore, not as assertions.'
     ),
+  crisisAlert: z.boolean().describe('Set to true if the journal entries contain mentions of severe crisis, self-harm, or immediate danger. Otherwise, set to false.')
 });
 export type GenerateInsightsOutput = z.infer<typeof GenerateInsightsOutputSchema>;
 
@@ -53,6 +54,7 @@ Your task is to analyze the following journal entries and extract key informatio
 1.  **Themes:** Identify a list of the most frequent or impactful themes and emotions.
 2.  **Strengths:** Look for moments of resilience, self-awareness, positive actions, or personal strengths. It is very important to find these even if the text is largely negative.
 3.  **Questions:** Based on the themes, formulate gentle, Socratic questions that encourage the user to explore their own feelings further. NEVER give advice or make definitive statements about the user. Start questions with phrases like "I wonder if...", "What comes to mind when you think about...", or "How do the themes of X and Y relate for you?".
+4.  **Crisis Alert:** Carefully review the text for any indication of severe crisis, immediate danger, or self-harm. If present, set the 'crisisAlert' flag to true. Otherwise, set it to false. This is your most important task.
 
 **Journal Entries:**
 {{{journalEntries}}}

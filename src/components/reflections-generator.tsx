@@ -80,6 +80,18 @@ export function ReflectionsGenerator() {
         )}
         {insights && (
           <div className="space-y-6 animate-fade-in">
+            {insights.crisisAlert && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Importante: Tu Bienestar es la Prioridad</AlertTitle>
+                <AlertDescription>
+                  Algunos de tus escritos sugieren que podrías estar pasando por un momento muy difícil. Recuerda que no estás solo/a.
+                  <br />
+                  <strong>Yurnal no es una herramienta de crisis.</strong> Por favor, considera contactar a un profesional de la salud mental o a una línea de ayuda. En Bolivia, puedes llamar a la línea gratuita de ayuda del SEDES (168).
+                </AlertDescription>
+              </Alert>
+            )}
+
             {insights.themes?.length > 0 && (
               <div>
                 <h3 className="flex items-center text-lg font-semibold mb-3">
