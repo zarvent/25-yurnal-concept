@@ -6,6 +6,8 @@ import { LayoutDashboard, Network, Library, BookUser, BookHeart, Lock } from 'lu
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState, useEffect } from 'react';
 
 const navItems = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -20,11 +22,17 @@ const pageTitles: { [key: string]: string } = {
   '/student/courses': 'Rutas de Aprendizaje',
   '/student/library': 'Biblioteca de Tesis y Papers',
   '/student/my-journal': 'Mi Diario Personal',
+  '/student/settings': 'Ajustes',
 };
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const pageTitle = pageTitles[pathname] || 'Yurnal Academic';
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -51,6 +59,19 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           ))}
         </nav>
         <div className="mt-auto flex-1" />
+        <div className="p-4 text-center text-xs text-muted-foreground">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className='cursor-default'>© {year} Zarvent Labs</button>
+              </TooltipTrigger>
+              <TooltipContent side="top" align="center" className="max-w-xs text-center bg-background text-foreground border-border">
+                <p className="text-sm font-bold">Un proyecto de Zarvent Labs</p>
+                <p className="text-xs">Bajo la visión de Cesar Sebastian Zambrana Ventura</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <Separator className='mx-4' />
         <div className="p-4">
             <div className="flex items-center justify-center text-center text-xs text-muted-foreground">

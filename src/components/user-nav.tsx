@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,11 +22,21 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Crown, Zap, Search, FileDown, QrCode } from 'lucide-react';
+import { Crown, Zap, Search, FileDown, QrCode, User, Settings } from 'lucide-react';
 import { Badge } from './ui/badge';
 
 export function UserNav() {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const pathname = usePathname();
+  
+  const getBasePath = () => {
+    if (pathname.startsWith('/patient')) return '/patient';
+    if (pathname.startsWith('/therapist')) return '/therapist';
+    if (pathname.startsWith('/student')) return '/student';
+    return '/';
+  }
+  
+  const basePath = getBasePath();
 
   return (
     <>
@@ -32,7 +44,7 @@ export function UserNav() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-9 w-9">
-              <AvatarImage src="https://placehold.co/100x100" alt="@usuario" />
+              <AvatarImage src="https://placehold.co/100x100" alt="@usuario" data-ai-hint="user avatar" />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
           </Button>
@@ -48,12 +60,20 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>Perfil</DropdownMenuItem>
+            <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <span>Perfil</span>
+            </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => setShowPremiumModal(true)}>
               <Crown className="mr-2 h-4 w-4 text-yellow-500" />
               <span>Yurnal+</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>Ajustes</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+                 <Link href={`${basePath}/settings`}>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Ajustes</span>
+                 </Link>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>

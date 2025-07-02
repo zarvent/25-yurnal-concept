@@ -29,7 +29,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Perfil</CardTitle>
             <CardDescription>
-              Gestiona tu perfil profesional, notificaciones y más. (Funcionalidad en desarrollo)
+              Gestiona los ajustes de tu perfil público y privado. (Funcionalidad en desarrollo)
             </CardDescription>
           </CardHeader>
           <CardContent className="flex items-center justify-center p-12 text-muted-foreground">
@@ -68,7 +68,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Suscripción</CardTitle>
             <CardDescription>
-              Gestiona tu plan de suscripción de terapeuta. (Funcionalidad en desarrollo)
+              Gestiona tu plan de suscripción a Yurnal+. (Funcionalidad en desarrollo)
             </CardDescription>
           </CardHeader>
            <CardContent className="flex items-center justify-center p-12 text-muted-foreground">

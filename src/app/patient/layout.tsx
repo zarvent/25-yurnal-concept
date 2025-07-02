@@ -6,12 +6,13 @@ import { Pencil, BookOpen, Wrench, HeartHandshake, Lock, BookHeart } from 'lucid
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState, useEffect } from 'react';
 
 const navItems = [
   { href: '/patient/today', label: 'Hoy', icon: Pencil },
   { href: '/patient/journal', label: 'Diario', icon: BookOpen },
-  { href: '/patient/tools', label: 'Herramientas', icon: Wrench },
-  { href: '/patient/my-therapist', label: 'Mi Terapeuta', icon: HeartHandshake },
+  { href: '/patient/reflections', label: 'Reflexiones', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
@@ -19,11 +20,18 @@ const pageTitles: { [key: string]: string } = {
   '/patient/journal': 'Diario',
   '/patient/tools': 'Caja de Herramientas',
   '/patient/my-therapist': 'Mi Terapeuta',
+  '/patient/reflections': 'Mis Reflexiones',
+  '/patient/settings': 'Ajustes',
 };
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const pageTitle = pageTitles[pathname] || 'Yurnal';
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -50,6 +58,19 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
           ))}
         </nav>
         <div className="mt-auto flex-1" />
+        <div className="p-4 text-center text-xs text-muted-foreground">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className='cursor-default'>© {year} Zarvent Labs</button>
+              </TooltipTrigger>
+              <TooltipContent side="top" align="center" className="max-w-xs text-center bg-background text-foreground border-border">
+                <p className="text-sm font-bold">Un proyecto de Zarvent Labs</p>
+                <p className="text-xs">Bajo la visión de Cesar Sebastian Zambrana Ventura</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <Separator className='mx-4' />
         <div className="p-4">
             <div className="flex items-center justify-center text-center text-xs text-muted-foreground">

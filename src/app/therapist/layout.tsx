@@ -6,6 +6,8 @@ import { LayoutDashboard, Users, Library, Calendar, BookHeart, Lock } from 'luci
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState, useEffect } from 'react';
 
 const navItems = [
   { href: '/therapist/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -25,6 +27,11 @@ const pageTitles: { [key: string]: string } = {
 export default function TherapistLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const pageTitle = pageTitles[pathname] || 'Portal de Terapeuta';
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -51,6 +58,19 @@ export default function TherapistLayout({ children }: { children: React.ReactNod
           ))}
         </nav>
         <div className="mt-auto flex-1" />
+        <div className="p-4 text-center text-xs text-muted-foreground">
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className='cursor-default'>© {year} Zarvent Labs</button>
+              </TooltipTrigger>
+              <TooltipContent side="top" align="center" className="max-w-xs text-center bg-background text-foreground border-border">
+                <p className="text-sm font-bold">Un proyecto de Zarvent Labs</p>
+                <p className="text-xs">Bajo la visión de Cesar Sebastian Zambrana Ventura</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <Separator className='mx-4' />
         <div className="p-4">
             <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
