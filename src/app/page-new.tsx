@@ -29,7 +29,6 @@ export default function Home() {
             icon: <GraduationCap className="h-10 w-10 text-secondary" />,
             title: 'Excelencia Académica',
             description: 'Conecta teoría psicológica avanzada con aplicaciones prácticas del mundo real.',
-            href: '/academic/onboarding',
             cta: 'Iniciar mi formación',
             gradient: 'from-secondary/15 to-accent/10',
             features: ['Biblioteca premium', 'Rutas personalizadas', 'Papers exclusivos']

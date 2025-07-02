@@ -136,7 +136,7 @@ function PremiumModal({ isOpen, onOpenChange }: { isOpen: boolean, onOpenChange:
           <div className="flex items-start gap-4">
             <Zap className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
             <div>
-              <h4 className="font-semibold">Reflexiones de IA Ilimitadas</h4>
+              <h4 className="font-semibold">Análisis de IA Ilimitados</h4>
               <p className="text-sm text-muted-foreground">Analiza tus patrones cuantas veces quieras, sin esperas semanales.</p>
             </div>
           </div>
@@ -158,7 +158,7 @@ function PremiumModal({ isOpen, onOpenChange }: { isOpen: boolean, onOpenChange:
             <FileDown className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
             <div>
               <h4 className="font-semibold">Exportación a PDF y Markdown</h4>
-              <p className="text-sm text-muted-foreground">Lleva tus reflexiones contigo o compártelas de forma segura.</p>
+              <p className="text-sm text-muted-foreground">Lleva tus análisis contigo o compártelos de forma segura.</p>
             </div>
           </div>
         </div>

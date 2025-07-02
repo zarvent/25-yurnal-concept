@@ -47,16 +47,16 @@ export default function TodayPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lightbulb className="h-5 w-5 text-primary" />
-              <span>Mis Reflexiones</span>
+              <span>Análisis de Patrones</span>
             </CardTitle>
             <CardDescription>
-              Descubre patrones y temas en tus entradas con la ayuda de la IA.
+              Descubre patrones y temas profundos en tus entradas con análisis de IA.
             </CardDescription>
           </CardHeader>
           <CardContent>
              <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href="/patient/reflections">
-                  Generar Reflexión <ArrowRight className="ml-2" />
+                  Generar Análisis <ArrowRight className="ml-2" />
                 </Link>
              </Button>
           </CardContent>

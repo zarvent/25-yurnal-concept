@@ -8,9 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useJournal } from '@/hooks/use-journal';
 import { useToast } from '@/hooks/use-toast';
+import { TranscriptionResult, VoiceTranscriptionService } from '@/lib/voice-transcription';
 import { useJournalStore } from '@/store/journal-store';
-import { Film, Loader2, Paperclip, PartyPopper, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { Film, Loader2, Mic, MicOff, Paperclip, PartyPopper, X } from 'lucide-react';
+import React, { useCallback, useRef, useState } from 'react';
 
 const templates = [
   {
@@ -122,11 +123,130 @@ export function JournalEditor() {
   const [uploadedFile, setUploadedFile] = useState<{ name: string; type: string } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+  // Estados para transcripción de voz
+  const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [recordingInterval, setRecordingInterval] = useState<NodeJS.Timeout | null>(null);
+  const voiceServiceRef = useRef<VoiceTranscriptionService | null>(null);
+
   // Datos simulados del terapeuta (en producción vendrían del estado de sesión)
   const therapistContact = {
     name: 'Dr. García Martínez',
     phone: '+34 600 123 456',
     email: 'dr.garcia@yurnal.com'
+  };
+
+  // Funciones para transcripción de voz
+  const startRecording = useCallback(async () => {
+    try {
+      // Verificar soporte del navegador
+      if (!VoiceTranscriptionService.isSupported()) {
+        toast({
+          title: 'Función no soportada',
+          description: 'Tu navegador no soporta la grabación de audio.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Inicializar el servicio de transcripción
+      voiceServiceRef.current = new VoiceTranscriptionService({
+        language: 'es-ES',
+        emotionalContextAnalysis: true,
+        localProcessing: true,
+        confidenceThreshold: 0.7
+      });
+
+      // Iniciar grabación
+      await voiceServiceRef.current.startRecording();
+      setIsRecording(true);
+      setRecordingTime(0);
+
+      // Iniciar contador de tiempo
+      const interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+      setRecordingInterval(interval);
+
+      toast({
+        title: 'Grabación iniciada',
+        description: 'Habla naturalmente, tu voz será transcrita a texto.',
+      });
+
+    } catch (error: any) {
+      console.error('Error al iniciar grabación:', error);
+      toast({
+        title: 'Error de grabación',
+        description: error.message || 'No se pudo acceder al micrófono.',
+        variant: 'destructive',
+      });
+      setIsRecording(false);
+      voiceServiceRef.current = null;
+    }
+  }, [toast]);
+
+  const stopRecording = useCallback(async () => {
+    if (!voiceServiceRef.current || !isRecording) return;
+
+    try {
+      setIsRecording(false);
+      setIsTranscribing(true);
+
+      // Detener contador de tiempo
+      if (recordingInterval) {
+        clearInterval(recordingInterval);
+        setRecordingInterval(null);
+      }
+
+      // Obtener transcripción
+      const result: TranscriptionResult = await voiceServiceRef.current.stopRecording();
+
+      // Agregar la transcripción al contenido
+      const timestamp = new Date().toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const transcriptionText = `[Transcripción de voz - ${timestamp}]\n${result.text}\n`;
+
+      const newContent = content.trim()
+        ? `${content}\n\n${transcriptionText}`
+        : `${selectedTemplate.content}\n\n${transcriptionText}`;
+
+      setContent(newContent);
+      setIsTranscribing(false);
+      voiceServiceRef.current = null;
+
+      // Mostrar feedback con información del análisis emocional si está disponible
+      let description = 'Tu voz ha sido transcrita exitosamente.';
+      if (result.emotionalMarkers) {
+        description += ` Tono detectado: ${result.emotionalMarkers.tone}`;
+      }
+
+      toast({
+        title: 'Transcripción completada',
+        description,
+      });
+
+    } catch (error: any) {
+      console.error('Error en transcripción:', error);
+      setIsTranscribing(false);
+      voiceServiceRef.current = null;
+
+      toast({
+        title: 'Error en transcripción',
+        description: error.message || 'No se pudo transcribir el audio.',
+        variant: 'destructive',
+      });
+    }
+  }, [isRecording, recordingInterval, content, selectedTemplate.content, toast]);
+
+  // Formatear tiempo de grabación
+  const formatRecordingTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handleTemplateChange = (templateName: string) => {
@@ -235,26 +355,63 @@ export function JournalEditor() {
         </CardContent>
         <CardFooter>
           <div className="flex items-center justify-between w-full gap-4">
-            <div className="flex-1 space-y-2 max-w-[calc(100%-150px)]">
-              {!isUploading && !uploadedFile && (
-                <PremiumButton
-                  variant="outline"
-                  size="sm"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isSaving}
-                >
-                  <Paperclip className="mr-2 h-4 w-4" />
-                  Adjuntar Archivo
-                </PremiumButton>
+            <div className="flex items-center gap-2 flex-1">
+              {!isUploading && !uploadedFile && !isRecording && !isTranscribing && (
+                <>
+                  <PremiumButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isSaving}
+                  >
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    Adjuntar Archivo
+                  </PremiumButton>
+
+                  <PremiumButton
+                    variant="outline"
+                    size="sm"
+                    onClick={startRecording}
+                    disabled={isSaving}
+                    className="bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border-blue-200"
+                  >
+                    <Mic className="mr-2 h-4 w-4 text-blue-600" />
+                    Transcribir Voz
+                  </PremiumButton>
+                </>
               )}
-              {isUploading && (
+
+              {isRecording && (
                 <div className="flex items-center gap-2">
+                  <PremiumButton
+                    variant="outline"
+                    size="sm"
+                    onClick={stopRecording}
+                    className="animate-pulse border-red-200 text-red-600 hover:bg-red-50"
+                  >
+                    <MicOff className="mr-2 h-4 w-4" />
+                    Detener ({formatRecordingTime(recordingTime)})
+                  </PremiumButton>
+                  <span className="text-sm text-muted-foreground">Grabando...</span>
+                </div>
+              )}
+
+              {isTranscribing && (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+                  <span className="text-sm text-muted-foreground">Transcribiendo tu voz...</span>
+                </div>
+              )}
+
+              {isUploading && (
+                <div className="flex items-center gap-2 flex-1">
                   <Progress value={uploadProgress} className="w-full" />
                   <span className="text-xs text-muted-foreground">{uploadProgress}%</span>
                 </div>
               )}
+
               {uploadedFile && (
-                <div className="flex items-center justify-between rounded-md border p-2 bg-muted/50">
+                <div className="flex items-center justify-between rounded-md border p-2 bg-muted/50 flex-1">
                   <div className="flex items-center gap-2 truncate">
                     <Film className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground truncate">{uploadedFile.name}</span>
@@ -270,7 +427,12 @@ export function JournalEditor() {
                 </div>
               )}
             </div>
-            <PremiumButton onClick={handleSave} disabled={isSaving || isUploading} className="ml-auto">
+
+            <PremiumButton
+              onClick={handleSave}
+              disabled={isSaving || isUploading || isRecording || isTranscribing}
+              className="ml-auto"
+            >
               {isSaving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

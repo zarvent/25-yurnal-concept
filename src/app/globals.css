@@ -4,6 +4,125 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Colores base de la aplicación */
+    --background: 0 0% 97.3%;
+    /* #F8F7F4 (blanco roto) */
+    --foreground: 222.2 84% 4.9%;
+    /* Texto principal oscuro */
+
+    /* Paleta de colores de Yurnal */
+    --primary: 210 40% 50%;
+    /* Azul sereno */
+    --primary-foreground: 210 40% 98%;
+    /* Texto para botones primarios */
+
+    --secondary: 210 10% 60%;
+    /* Gris cálido */
+    --secondary-foreground: 210 10% 98%;
+
+    --accent: 12 84% 60%;
+    /* Coral suave para acentos */
+    --accent-foreground: 0 0% 100%;
+
+    /* Otros colores (cards, borders, inputs) */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 215 20.2% 65.1%;
+
+    /* Colores semánticos */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 142.1 76.2% 36.3%;
+    --success-foreground: 142.1 76.2% 96.3%;
+    --warning: 47.9 95.8% 53.1%;
+    --warning-foreground: 47.9 95.8% 93.1%;
+
+
+    /* Radio de borde para consistencia */
+    --radius: 0.75rem;
+    /* Bordes más redondeados para un look suave */
+
+    --yurnal-blue-100: 210 100% 98%;
+    --yurnal-blue-200: 210 100% 95%;
+    --yurnal-blue-300: 210 100% 90%;
+    --yurnal-blue-400: 210 100% 80%;
+    --yurnal-blue-500: 210 100% 70%;
+    --yurnal-blue-600: 210 100% 60%;
+    --yurnal-blue-700: 210 100% 50%;
+    --yurnal-blue-800: 210 100% 40%;
+    --yurnal-blue-900: 210 100% 30%;
+
+    --yurnal-teal-100: 170 100% 98%;
+    --yurnal-teal-200: 170 100% 95%;
+    --yurnal-teal-300: 170 100% 90%;
+    --yurnal-teal-400: 170 100% 80%;
+    --yurnal-teal-500: 170 100% 70%;
+    --yurnal-teal-600: 170 100% 60%;
+    --yurnal-teal-700: 170 100% 50%;
+    --yurnal-teal-800: 170 100% 40%;
+    --yurnal-teal-900: 170 100% 30%;
+
+    --yurnal-gray-100: 220 10% 98%;
+    --yurnal-gray-200: 220 10% 95%;
+    --yurnal-gray-300: 220 10% 90%;
+    --yurnal-gray-400: 220 10% 80%;
+    --yurnal-gray-500: 220 10% 70%;
+    --yurnal-gray-600: 220 10% 60%;
+    --yurnal-gray-700: 220 10% 50%;
+    --yurnal-gray-800: 220 10% 40%;
+    --yurnal-gray-900: 220 10% 30%;
+
+    --yurnal-success: 140 80% 60%;
+    --yurnal-warning: 40 100% 70%;
+    --yurnal-error: 0 90% 70%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 210 40% 46.1%;
+  }
+
+  .dark {
+    /* Paleta para el modo oscuro */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 12 84% 70%;
+    --accent-foreground: 0 0% 0%;
+
+    --card: 217.2 32.6% 17.5%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
 /* Premium Typography Stack */
 
 body {
@@ -142,172 +261,6 @@ body {
   }
 }
 
-@layer base {
-  :root {
-    /* Yurnal Design System v2.0 - Professional & Therapeutic */
-    /* Core Surfaces - Clarity and Space */
-    --background: 216 18% 98%;
-    /* #F8F9FA - Blanco Hueso */
-    --foreground: 213 15% 15%;
-    /* #24292E - Gris Casi Negro */
-    --card: 0 0% 100%;
-    /* #FFFFFF - Blanco Puro */
-    --card-foreground: 213 15% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 213 15% 15%;
-
-    /* Primary - Calma y Confianza (Azul Sereno) */
-    --primary: 207 79% 66%;
-    /* #5BB8F8 - Celeste brillante */
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 207 79% 80%;
-    /* #A9DBFF - Celeste suave */
-    --primary-lighter: 207 80% 90%;
-    /* #DFF5FF - Azul muy claro */
-    --primary-dark: 207 79% 56%;
-    /* #3A97DA - Azul profundo */
-
-    /* Secondary - Crecimiento y Naturaleza (Verde Menta) */
-    --secondary: 207 79% 56%;
-    /* #3A97DA - Variante secundaria más oscura */
-    --secondary-foreground: 0 0% 100%;
-
-    /* Muted - Texto Secundario y Superficies */
-    --muted: 216 18% 95%;
-    --muted-foreground: 213 15% 35%;
-    /* #586069 - Gris Medio */
-
-    /* Accent - Warmth for highlights */
-    --accent: 207 79% 46%;
-    /* #2A80C9 - Acento azul moderado */
-    --accent-foreground: 0 0% 100%;
-
-    /* Semantic Colors - Therapeutic & Professional */
-    --destructive: 352 70% 55%;
-    /* #D73A49 - Rojo Suave */
-    --destructive-foreground: 0 0% 100%;
-    --success: 95 100% 49%;
-    /* Verde Menta como éxito */
-    --success-foreground: 0 0% 100%;
-    --warning: 35 91% 55%;
-    /* #F6A623 - Naranja para advertencias */
-    --warning-foreground: 0 0% 100%;
-
-    /* Interactive Elements */
-    --border: 216 18% 90%;
-    /* Bordes sutiles */
-    --input: 216 18% 95%;
-    /* Campos de entrada */
-    --ring: 211 79% 58%;
-    /* Focus ring usando primary */
-
-    /* Advanced Radius System - Suave y Amigable */
-    --radius: 8px;
-    /* Border radius base - más suave */
-    --radius-sm: 6px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-
-    /* Therapeutic Chart Colors */
-    --chart-1: 211 79% 58%;
-    /* Primary Blue */
-    --chart-2: 95 100% 49%;
-    /* Secondary Green */
-    --chart-3: 35 91% 55%;
-    /* Accent Orange */
-    --chart-4: 262 52% 47%;
-    /* Purple accent */
-    --chart-5: 173 58% 39%;
-    /* Teal accent */
-
-    /* Professional Sidebar System */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 213 15% 15%;
-    --sidebar-primary: 211 79% 58%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 216 18% 95%;
-    --sidebar-accent-foreground: 213 15% 15%;
-    --sidebar-border: 216 18% 90%;
-    --sidebar-ring: 211 79% 58%;
-
-    /* Glass Morphism - Elegante y Moderno */
-    --glass-background: 0 0% 100% / 0.85;
-    --glass-border: 216 18% 90% / 0.3;
-
-    /* Professional Shadow System */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow: 0 2px 8px -2px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.12);
-    --shadow-lg: 0 8px 24px -4px rgb(0 0 0 / 0.15);
-    --shadow-xl: 0 12px 32px -8px rgb(0 0 0 / 0.2);
-  }
-
-  .dark {
-    /* Dark Mode - Therapeutic Midnight Theme */
-    --background: 222 47% 6%;
-    /* Más suave que negro puro */
-    --foreground: 210 40% 95%;
-    /* Blanco cálido, no puro */
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 95%;
-    --popover: 222 47% 6%;
-    --popover-foreground: 210 40% 95%;
-
-    /* Primary - Más brillante en dark mode para mejor contraste */
-    --primary: 211 79% 65%;
-    /* Azul más claro en dark */
-    --primary-foreground: 222 47% 6%;
-    --primary-light: 211 79% 75%;
-    --primary-lighter: 211 79% 20%;
-
-    /* Secondary - Verde ajustado para dark mode */
-    --secondary: 95 100% 55%;
-    --secondary-foreground: 222 47% 6%;
-
-    /* Dark surfaces */
-    --muted: 222 47% 12%;
-    --muted-foreground: 213 15% 65%;
-
-    /* Accent - Más suave en dark mode */
-    --accent: 35 91% 60%;
-    --accent-foreground: 222 47% 6%;
-
-    /* Dark semantic colors - Más suaves para reducir fatiga ocular */
-    --destructive: 352 70% 60%;
-    --destructive-foreground: 210 40% 95%;
-    --success: 95 100% 55%;
-    --success-foreground: 210 40% 95%;
-    --warning: 35 91% 60%;
-    --warning-foreground: 210 40% 95%;
-
-    /* Dark interactive elements */
-    --border: 222 47% 18%;
-    --input: 222 47% 12%;
-    --ring: 211 79% 65%;
-
-    /* Dark chart colors */
-    --chart-1: 211 79% 65%;
-    --chart-2: 95 100% 55%;
-    --chart-3: 35 91% 60%;
-    --chart-4: 262 52% 57%;
-    --chart-5: 173 58% 49%;
-
-    /* Dark sidebar system */
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 210 40% 95%;
-    --sidebar-primary: 211 79% 65%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 222 47% 12%;
-    --sidebar-accent-foreground: 210 40% 95%;
-    --sidebar-border: 222 47% 18%;
-    --sidebar-ring: 211 79% 65%;
-
-    /* Dark glass morphism */
-    --glass-background: 222 47% 8% / 0.85;
-    --glass-border: 222 47% 18% / 0.3;
-  }
-}
-
 /* Therapeutic Keyframe Animations */
 @keyframes gentle-pulse {
 
@@ -417,14 +370,4 @@ body {
   font-weight: 400;
   line-height: 1.5;
   color: hsl(var(--muted-foreground));
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
 }

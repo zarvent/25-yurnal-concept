@@ -9,7 +9,7 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 const navItems = [
   { href: '/patient/today', label: 'Hoy', icon: Pencil },
   { href: '/patient/journal', label: 'Diario', icon: BookOpen },
-  { href: '/patient/reflections', label: 'Reflexiones', icon: Wrench },
+  { href: '/patient/reflections', label: 'Análisis', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
@@ -17,7 +17,7 @@ const pageTitles: { [key: string]: string } = {
   '/patient/journal': 'Diario',
   '/patient/tools': 'Caja de Herramientas',
   '/patient/my-therapist': 'Mi Terapeuta',
-  '/patient/reflections': 'Mis Reflexiones',
+  '/patient/reflections': 'Análisis de Patrones',
   '/patient/settings': 'Ajustes',
 };
 

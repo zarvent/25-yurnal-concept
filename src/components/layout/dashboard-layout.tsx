@@ -15,15 +15,17 @@ import {
 } from '@/components/ui/sidebar';
 import { UserNav } from '@/components/user-nav';
 import { cn } from '@/lib/utils';
-import { BookHeart } from 'lucide-react';
+import { BookHeart, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-interface NavItem {
+export interface NavItem {
     href: string;
     label: string;
-    icon: React.ComponentType<{ className: string }>;
+    icon: LucideIcon;
+    endContent?: React.ReactNode;
+    items?: NavItem[];
 }
 
 interface DashboardLayoutProps {
