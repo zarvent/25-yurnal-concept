@@ -1,9 +1,14 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { useJournal, type JournalEntry } from '@/hooks/use-journal';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FileQuestion } from 'lucide-react';
+import { FileQuestion, BookOpen, CalendarDays } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 function JournalEntryCard({ entry }: { entry: JournalEntry }) {
   const formattedDate = new Date(entry.date).toLocaleDateString('es-ES', {
@@ -29,8 +34,37 @@ function JournalEntryCard({ entry }: { entry: JournalEntry }) {
   );
 }
 
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-[400px]">
+      <FileQuestion className="mx-auto h-12 w-12 text-muted-foreground" />
+      <h3 className="mt-4 text-lg font-semibold">No has escrito ninguna entrada</h3>
+      <p className="mb-4 mt-2 text-sm text-muted-foreground">
+        Ve a la pestaña "Hoy" para comenzar tu diario.
+      </p>
+    </div>
+  );
+}
+
+
 export default function JournalPage() {
   const { entries, isLoaded } = useJournal();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+
+  const entryDates = useMemo(() => {
+    return entries.map(entry => new Date(entry.date));
+  }, [entries]);
+
+  const selectedEntries = useMemo(() => {
+    if (!selectedDate) return [];
+    return entries.filter(entry => {
+      const entryDate = new Date(entry.date);
+      return entryDate.getFullYear() === selectedDate.getFullYear() &&
+             entryDate.getMonth() === selectedDate.getMonth() &&
+             entryDate.getDate() === selectedDate.getDate();
+    });
+  }, [entries, selectedDate]);
+
 
   if (!isLoaded) {
     return (
@@ -51,22 +85,62 @@ export default function JournalPage() {
   }
 
   if (entries.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-[400px]">
-        <FileQuestion className="mx-auto h-12 w-12 text-muted-foreground" />
-        <h3 className="mt-4 text-lg font-semibold">No has escrito ninguna entrada</h3>
-        <p className="mb-4 mt-2 text-sm text-muted-foreground">
-          Ve a la pestaña "Hoy" para comenzar tu diario.
-        </p>
-      </div>
-    );
+    return <EmptyState />;
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {entries.map((entry) => (
-        <JournalEntryCard key={entry.id} entry={entry} />
-      ))}
-    </div>
+    <Tabs defaultValue="list" className="space-y-4">
+      <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
+        <TabsTrigger value="list">
+          <BookOpen className="mr-2 h-4 w-4" />
+          Vista de Lista
+        </TabsTrigger>
+        <TabsTrigger value="calendar">
+          <CalendarDays className="mr-2 h-4 w-4" />
+          Vista de Calendario
+        </TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="list" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {entries.map((entry) => (
+          <JournalEntryCard key={entry.id} entry={entry} />
+        ))}
+      </TabsContent>
+
+      <TabsContent value="calendar" className="space-y-4">
+        <Card>
+          <CardContent className="p-0 sm:p-4 flex justify-center">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              locale={es}
+              modifiers={{ hasEntry: entryDates }}
+              modifiersClassNames={{
+                hasEntry: 'font-bold text-primary',
+              }}
+              initialFocus
+            />
+          </CardContent>
+        </Card>
+        
+        {selectedDate && (
+           <div className="space-y-4">
+            <h2 className="text-xl font-semibold">
+              Entradas para {format(selectedDate, 'PPP', { locale: es })}
+            </h2>
+            {selectedEntries.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {selectedEntries.map((entry) => (
+                  <JournalEntryCard key={entry.id} entry={entry} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground">No hay entradas para este día.</p>
+            )}
+           </div>
+        )}
+      </TabsContent>
+    </Tabs>
   );
 }
