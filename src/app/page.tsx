@@ -178,8 +178,10 @@ export default function Home() {
                           optimistic
                         >
                           <Link href={role.href}>
-                            {role.cta}
-                            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                            <span className="flex items-center justify-center">
+                              {role.cta}
+                              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                            </span>
                           </Link>
                         </TherapeuticButton>
                       </CardFooter>
