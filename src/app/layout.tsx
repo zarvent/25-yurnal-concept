@@ -5,7 +5,7 @@ import { Providers } from "./providers";
 export const metadata = {
   title: "Yurnal: El Futuro del Bienestar Digital",
   description:
-    "La plataforma más avanzada del mundo para crecimiento personal, aprendizaje psicológico y transformación terapéutica. Tecnología de vanguardia al servicio del bienestar humano.",
+    "La plataforma más avanzada del mundo para Yurnal Pacientes, aprendizaje psicológico y transformación terapéutica. Tecnología de vanguardia al servicio del bienestar humano.",
 };
 
 export default function RootLayout({

@@ -3,7 +3,6 @@
 import { cn } from '@/lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Loader2 } from 'lucide-react';
 import * as React from 'react';
 
 /**
@@ -85,53 +84,11 @@ export interface TherapeuticButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof therapeuticButtonVariants> {
     asChild?: boolean;
-    loading?: boolean;
-    loadingText?: string;
-    leftIcon?: React.ReactNode;
-    rightIcon?: React.ReactNode;
-    optimistic?: boolean; // For optimistic UI updates
 }
 
 const TherapeuticButton = React.forwardRef<HTMLButtonElement, TherapeuticButtonProps>(
-    (
-        {
-            className,
-            variant,
-            size,
-            animation,
-            asChild = false,
-            loading = false,
-            loadingText,
-            leftIcon,
-            rightIcon,
-            optimistic = false,
-            children,
-            disabled,
-            onClick,
-            ...props
-        },
-        ref
-    ) => {
-        const [isOptimisticState, setIsOptimisticState] = React.useState(false);
-
-        // Optimistic UI handler following UX guidelines
-        const handleOptimisticClick = React.useCallback(
-            (event: React.MouseEvent<HTMLButtonElement>) => {
-                if (optimistic && !disabled && !loading) {
-                    setIsOptimisticState(true);
-                    // Reset optimistic state after a delay
-                    setTimeout(() => setIsOptimisticState(false), 2000);
-                }
-                onClick?.(event);
-            },
-            [optimistic, disabled, loading, onClick]
-        );
-
+    ({ className, variant, size, animation, asChild = false, ...props }, ref) => {
         const Comp = asChild ? Slot : 'button';
-        const isDisabled = disabled || loading;
-        const showLoading = loading || (optimistic && isOptimisticState);
-
-        // Add gradient background utility for therapeutic variant
         const gradientClasses = variant === 'therapeutic' ? bgSizeUtility : '';
 
         return (
@@ -142,40 +99,8 @@ const TherapeuticButton = React.forwardRef<HTMLButtonElement, TherapeuticButtonP
                     className
                 )}
                 ref={ref}
-                disabled={isDisabled}
-                onClick={handleOptimisticClick}
-                aria-describedby={loading ? 'button-loading' : undefined}
                 {...props}
-            >
-                {/* Loading state with accessible loading text */}
-                {showLoading && (
-                    <>
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                        <span className="sr-only" id="button-loading">
-                            {loadingText || 'Cargando...'}
-                        </span>
-                    </>
-                )}
-
-                {/* Left icon when not loading */}
-                {!showLoading && leftIcon && (
-                    <span className="flex-shrink-0" aria-hidden="true">
-                        {leftIcon}
-                    </span>
-                )}
-
-                {/* Button content */}
-                <span className={showLoading ? 'sr-only' : ''}>
-                    {showLoading ? (loadingText || 'Cargando...') : children}
-                </span>
-
-                {/* Right icon when not loading */}
-                {!showLoading && rightIcon && (
-                    <span className="flex-shrink-0" aria-hidden="true">
-                        {rightIcon}
-                    </span>
-                )}
-            </Comp>
+            />
         );
     }
 );

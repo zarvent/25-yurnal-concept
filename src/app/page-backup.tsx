@@ -1,19 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { TherapeuticButton } from '@                      <CardFooter className="p-0">
-                        <TherapeuticButton 
-                          variant="default"
-                          size="lg"
-                          className="w-full group"
-                          asChild
-                        >
-                          <Link href={role.href}>
-                            {role.cta}
-                            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                          </Link>
-                        </TherapeuticButton>
-                      </CardFooter>ts/ui/therapeutic-button';
+import { TherapeuticButton } from '@/components/ui/therapeutic-button';
 import { ArrowRight, BookHeart, Globe, GraduationCap, HeartHandshake, Shield, Sparkles, User, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -30,7 +18,7 @@ export default function Home() {
   const roles = [
     {
       icon: <User className="h-10 w-10 text-primary" />,
-      title: 'Crecimiento Personal',
+      title: 'Yurnal Pacientes',
       description: 'Un santuario digital para la introspección profunda y el desarrollo emocional.',
       href: '/patient/onboarding',
       cta: 'Comenzar mi transformación',
@@ -175,13 +163,17 @@ export default function Home() {
                       </CardContent>
 
                       <CardFooter className="p-0">
-                        <PremiumButton
+                        <TherapeuticButton
                           variant="default"
-                          className="w-full h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105"
+                          size="lg"
+                          className="w-full group"
+                          asChild
                         >
-                          {role.cta}
-                          <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                        </PremiumButton>
+                          <Link href={role.href}>
+                            {role.cta}
+                            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </TherapeuticButton>
                       </CardFooter>
                     </div>
                   </div>

@@ -18,7 +18,7 @@ export default function Home() {
     const roles = [
         {
             icon: <User className="h-10 w-10 text-primary" />,
-            title: 'Crecimiento Personal',
+            title: 'Yurnal Pacientes',
             description: 'Un santuario digital para la introspección profunda y el desarrollo emocional.',
             href: '/patient/onboarding',
             cta: 'Comenzar mi transformación',
@@ -173,11 +173,10 @@ export default function Home() {
                                                 <TherapeuticButton
                                                     variant="default"
                                                     size="lg"
-                                                    className="w-full group focus-therapeutic"
+                                                    className="w-full group"
                                                     asChild
-                                                    optimistic
                                                 >
-                                                    <Link href={role.href}>
+                                                    <Link href="/patient/onboarding">
                                                         {role.cta}
                                                         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                                                     </Link>
@@ -244,10 +243,10 @@ export default function Home() {
                                 variant="therapeutic"
                                 size="xl"
                                 animation="shimmer"
-                                className="focus-therapeutic"
-                                rightIcon={<ArrowRight className="h-5 w-5" />}
+                                className="w-full"
                             >
                                 Comenzar gratis
+                                <ArrowRight className="h-5 w-5" />
                             </TherapeuticButton>
                             <TherapeuticButton
                                 variant="outline"

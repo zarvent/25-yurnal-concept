@@ -18,7 +18,7 @@ export default function Home() {
   const roles = [
     {
       icon: <User className="h-10 w-10 text-primary" />,
-      title: 'Crecimiento Personal',
+      title: 'Yurnal Pacientes',
       description: 'Un santuario digital para la introspección profunda y el desarrollo emocional.',
       href: '/patient/onboarding',
       cta: 'Comenzar mi transformación',
@@ -26,22 +26,22 @@ export default function Home() {
       features: ['Diario inteligente', 'Reflexiones guiadas', 'Seguimiento emocional']
     },
     {
-      icon: <GraduationCap className="h-10 w-10 text-secondary" />,
-      title: 'Excelencia Académica',
-      description: 'Conecta teoría psicológica avanzada con aplicaciones prácticas del mundo real.',
-      href: '/academic/onboarding',
-      cta: 'Iniciar mi formación',
-      gradient: 'from-secondary/15 to-accent/10',
-      features: ['Biblioteca premium', 'Rutas personalizadas', 'Papers exclusivos']
-    },
-    {
       icon: <HeartHandshake className="h-10 w-10 text-accent" />,
-      title: 'Práctica Profesional',
+      title: 'Yurnal Terapeuta',
       description: 'Herramientas avanzadas para potenciar tu impacto terapéutico y transformar vidas.',
       href: '/therapist/onboarding',
       cta: 'Acceder al portal pro',
       gradient: 'from-accent/15 to-primary/10',
       features: ['Dashboard clínico', 'Gestión de pacientes', 'Análisis avanzado']
+    },
+    {
+      icon: <GraduationCap className="h-10 w-10 text-secondary" />,
+      title: 'Yurnal Academico',
+      description: 'Conecta teoría psicológica avanzada con aplicaciones prácticas del mundo real.',
+      href: '/academic/onboarding',
+      cta: 'Iniciar mi formación',
+      gradient: 'from-secondary/15 to-accent/10',
+      features: ['Biblioteca premium', 'Rutas personalizadas', 'Papers exclusivos']
     },
   ];
 
@@ -192,6 +192,20 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        {/* Business Solution Button - Clean and Simple */}
+        <div className="mt-12 text-center">
+          <TherapeuticButton
+            variant="ghost"
+            size="lg"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            asChild
+          >
+            <Link href="/business">
+              ¿Buscas una solución para tu empresa?
+            </Link>
+          </TherapeuticButton>
+        </div>
       </section>
 
       {/* Features Grid - Professional Information Architecture */}
@@ -247,9 +261,9 @@ export default function Home() {
                 size="xl"
                 animation="shimmer"
                 className="focus-therapeutic"
-                rightIcon={<ArrowRight className="h-5 w-5" />}
               >
                 Comenzar gratis
+                <ArrowRight className="h-5 w-5" />
               </TherapeuticButton>
               <TherapeuticButton
                 variant="outline"
