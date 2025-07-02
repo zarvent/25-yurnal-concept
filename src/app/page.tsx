@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookHeart, User, Stethoscope } from 'lucide-react';
+import { BookHeart, User, Stethoscope, GraduationCap } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -11,24 +11,24 @@ export default function Home() {
       <div className="flex flex-col items-center text-center mb-10">
         <BookHeart className="h-16 w-16 text-primary mb-4" />
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-          Bienvenido a Yurnal Terapia
+          Bienvenido a Yurnal
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mt-4">
-          El espacio seguro y colaborativo donde la introspección personal y la terapia profesional se encuentran para potenciar tu bienestar.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mt-4">
+          Un ecosistema para el bienestar y el conocimiento. Conecta contigo mismo, con profesionales y con el saber de la psicología.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
         <Card className="flex flex-col">
           <CardHeader className="text-center">
             <User className="h-10 w-10 mx-auto text-primary mb-3" />
             <CardTitle className="text-2xl">Para Pacientes</CardTitle>
             <CardDescription>
-              Continúa tu viaje de autoconocimiento con el apoyo de un profesional.
+              Tu espacio seguro para la introspección y el crecimiento personal.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex-grow text-center">
             <p className="mb-6 text-muted-foreground">
-              Comparte tus reflexiones de forma segura y enriquece tus sesiones de terapia.
+              Escribe en tu diario, descubre patrones y, si lo deseas, comparte tus reflexiones con tu terapeuta.
             </p>
           </CardContent>
           <div className="p-6 pt-0">
@@ -42,12 +42,12 @@ export default function Home() {
             <Stethoscope className="h-10 w-10 mx-auto text-primary mb-3" />
             <CardTitle className="text-2xl">Para Terapeutas</CardTitle>
             <CardDescription>
-              Optimiza tu práctica con insights valiosos de tus pacientes.
+              Optimiza tu práctica con insights valiosos y herramientas digitales.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex-grow text-center">
             <p className="mb-6 text-muted-foreground">
-              Gestiona citas, comunícate de forma segura y ofrece un cuidado más conectado.
+              Gestiona pacientes, comunícate de forma segura y ofrece un cuidado más conectado.
             </p>
           </CardContent>
           <div className="p-6 pt-0">
@@ -56,9 +56,28 @@ export default function Home() {
             </Button>
           </div>
         </Card>
+        <Card className="flex flex-col">
+          <CardHeader className="text-center">
+            <GraduationCap className="h-10 w-10 mx-auto text-primary mb-3" />
+            <CardTitle className="text-2xl">Para Estudiantes</CardTitle>
+            <CardDescription>
+              Democratizamos el acceso al conocimiento en psicología.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-grow text-center">
+            <p className="mb-6 text-muted-foreground">
+              Explora una vasta biblioteca de tesis, artículos y cursos para potenciar tu formación.
+            </p>
+          </CardContent>
+          <div className="p-6 pt-0">
+            <Button asChild size="lg" className="w-full">
+              <Link href="/student/dashboard">Explorar Yurnal Academic</Link>
+            </Button>
+          </div>
+        </Card>
       </div>
       <footer className="absolute bottom-4 text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Yurnal Terapia. Todos los derechos reservados.
+        © {new Date().getFullYear()} Yurnal. Todos los derechos reservados.
       </footer>
     </div>
   );
