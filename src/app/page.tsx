@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookHeart, User, Stethoscope, GraduationCap } from 'lucide-react';
+import { BookHeart, User, Stethoscope, GraduationCap, Briefcase } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
           Un ecosistema para el bienestar y el conocimiento. Conecta contigo mismo, con profesionales y con el saber de la psicología.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 w-full max-w-screen-xl mx-auto">
         <Card className="flex flex-col">
           <CardHeader className="text-center">
             <User className="h-10 w-10 mx-auto text-primary mb-3" />
@@ -75,8 +75,27 @@ export default function Home() {
             </Button>
           </div>
         </Card>
+         <Card className="flex flex-col">
+          <CardHeader className="text-center">
+            <Briefcase className="h-10 w-10 mx-auto text-primary mb-3" />
+            <CardTitle className="text-2xl">Para Empresas</CardTitle>
+            <CardDescription>
+              Bienestar mental como beneficio corporativo. (Próximamente)
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-grow text-center">
+            <p className="mb-6 text-muted-foreground">
+              Ofrece Yurnal a tu equipo y obtén insights anónimos para mejorar la salud organizacional.
+            </p>
+          </CardContent>
+          <div className="p-6 pt-0">
+            <Button asChild size="lg" variant="secondary" className="w-full">
+              <Link href="/business">Conocer más</Link>
+            </Button>
+          </div>
+        </Card>
       </div>
-      <footer className="absolute bottom-4 text-xs text-muted-foreground">
+      <footer className="mt-12 text-xs text-muted-foreground">
         © {new Date().getFullYear()} Yurnal. Todos los derechos reservados.
       </footer>
     </div>
