@@ -4,8 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Yurnal: Tu Espacio Consciente",
-  description: "Un espacio sagrado, privado y seguro para la introspección guiada.",
+  title: "Yurnal Terapia: Conectando Mentes y Corazones",
+  description: "Tu plataforma integral para el bienestar mental. Conecta con terapeutas, comparte tus reflexiones y crece.",
 };
 
 export default function RootLayout({
