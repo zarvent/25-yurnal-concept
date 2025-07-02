@@ -7,6 +7,9 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 
 // In a real app, this data would be fetched from the backend.
 const getArticleDetails = (articleId: string) => {
@@ -20,6 +23,7 @@ const getArticleDetails = (articleId: string) => {
         tags: ['neurociencia', 'tcc', 'investigación'],
         upvoteCount: 152,
         publicationDate: new Date('2025-06-15T10:00:00Z'),
+        comments: [],
       },
       {
         articleId: '2',
@@ -30,6 +34,22 @@ const getArticleDetails = (articleId: string) => {
         tags: ['psicoanálisis', 'lacan', 'teoría'],
         upvoteCount: 210,
         publicationDate: new Date('2025-05-20T14:30:00Z'),
+        comments: [
+            {
+                commentId: 'c1',
+                authorName: 'Ps. Jacques Lacan',
+                isAnonymous: false,
+                content: 'Una lectura precisa. El sujeto no es quien piensa, sino donde se piensa. El "yo" es una ficción necesaria, pero una ficción al fin y al cabo.',
+                createdAt: new Date('2025-05-21T10:00:00Z'),
+            },
+            {
+                commentId: 'c2',
+                authorName: 'Un lector',
+                isAnonymous: true,
+                content: 'Siempre me ha costado entender a Lacan, pero este artículo y el comentario anterior lo hacen mucho más claro. ¿Recomiendan alguna lectura introductoria?',
+                createdAt: new Date('2025-05-21T14:20:00Z'),
+            },
+        ],
       },
       {
         articleId: '3',
@@ -40,6 +60,7 @@ const getArticleDetails = (articleId: string) => {
         tags: ['mindfulness', 'ansiedad', 'clínica'],
         upvoteCount: 350,
         publicationDate: new Date('2025-06-28T09:00:00Z'),
+        comments: [],
       },
        {
         articleId: '4',
@@ -50,6 +71,7 @@ const getArticleDetails = (articleId: string) => {
         tags: ['apego', 'relaciones', 'desarrollo'],
         upvoteCount: 180,
         publicationDate: new Date('2025-04-10T11:00:00Z'),
+        comments: [],
       },
     ];
     return mockArticles.find(a => a.articleId === articleId) || null;
@@ -113,10 +135,19 @@ export default function ArticleDetailPage({ params }: { params: { articleId: str
                 <ThumbsUp className="mr-2 h-5 w-5" />
                 Votar ({article.upvoteCount})
             </Button>
-            <Button size="lg" variant="outline">
-                <Download className="mr-2 h-5 w-5" />
-                Exportar
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="lg" variant="outline">
+                    <Download className="mr-2 h-5 w-5" />
+                    Exportar
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Exportar como PDF</DropdownMenuItem>
+                <DropdownMenuItem>Exportar como Markdown (.md)</DropdownMenuItem>
+                <DropdownMenuItem>Exportar como Texto (.txt)</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
         </CardFooter>
       </Card>
 
@@ -124,7 +155,7 @@ export default function ArticleDetailPage({ params }: { params: { articleId: str
         <CardHeader>
             <CardTitle className="flex items-center gap-2">
                 <MessageSquare />
-                Discusión
+                Discusión ({(article.comments || []).length})
             </CardTitle>
             <CardDescription>Comparte tus pensamientos y preguntas sobre este artículo.</CardDescription>
         </CardHeader>
@@ -140,8 +171,28 @@ export default function ArticleDetailPage({ params }: { params: { articleId: str
                 </div>
             </div>
             <Separator />
-            <div className="text-center text-muted-foreground p-4">
-                Aún no hay comentarios. ¡Sé el primero en iniciar la conversación!
+            <div className="space-y-6">
+                {(article.comments || []).length > 0 ? (
+                    (article.comments || []).map((comment: any) => (
+                        <div key={comment.commentId} className="flex gap-4">
+                            <Avatar>
+                                <AvatarImage src="https://placehold.co/100x100" data-ai-hint="user avatar" />
+                                <AvatarFallback>{comment.isAnonymous ? 'AN' : comment.authorName.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                    <p className="font-semibold">{comment.isAnonymous ? 'Anónimo' : comment.authorName}</p>
+                                    <p className="text-xs text-muted-foreground">{new Date(comment.createdAt).toLocaleString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                </div>
+                                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{comment.content}</p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center text-muted-foreground p-4">
+                        Aún no hay comentarios. ¡Sé el primero en iniciar la conversación!
+                    </div>
+                )}
             </div>
         </CardContent>
       </Card>
