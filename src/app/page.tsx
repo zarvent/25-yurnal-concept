@@ -42,10 +42,10 @@ export default function Home() {
       <header className="text-center mb-10">
         <BookHeart className="h-16 w-16 text-primary mx-auto mb-4" />
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-          Bienvenido a tu santuario digital
+          Bienvenido a Yurnal
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mt-4">
-          Un espacio seguro e inteligente para navegar tu mundo interior. Elige cómo quieres empezar.
+          Valoramos y agradecemos tu presencia, danos una oportunidad y Conecta con tu bienestar.
         </p>
       </header>
 
