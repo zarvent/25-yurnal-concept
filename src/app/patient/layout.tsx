@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Pencil, BookOpen, Sparkles, Lock, BookHeart, Users } from 'lucide-react';
+import { Pencil, BookOpen, Sparkles, Lock, BookHeart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
@@ -11,19 +11,17 @@ const navItems = [
   { href: '/patient/today', label: 'Hoy', icon: Pencil },
   { href: '/patient/journal', label: 'Diario', icon: BookOpen },
   { href: '/patient/reflections', label: 'Reflexiones', icon: Sparkles },
-  { href: '/patient/my-therapist', label: 'Mi Terapeuta', icon: Users },
 ];
 
 const pageTitles: { [key: string]: string } = {
-  '/patient/today': 'Tu Entrada de Hoy',
-  '/patient/journal': 'Tu Diario',
-  '/patient/reflections': 'Tus Reflexiones',
-  '/patient/my-therapist': 'Tu Terapeuta',
+  '/patient/today': 'Hoy',
+  '/patient/journal': 'Diario',
+  '/patient/reflections': 'Reflexiones',
 };
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const pageTitle = pageTitles[pathname] || 'Yurnal Terapia';
+  const pageTitle = pageTitles[pathname] || 'Yurnal';
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -31,7 +29,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
         <div className="flex h-16 items-center border-b px-6">
           <Link href="/patient/today" className="flex items-center gap-2 font-semibold">
             <BookHeart className="h-6 w-6 text-primary" />
-            <span className="">Yurnal Terapia</span>
+            <span className="">Yurnal</span>
           </Link>
         </div>
         <nav className="flex flex-col p-4">
@@ -52,9 +50,9 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
         <div className="mt-auto flex-1" />
         <Separator className='mx-4' />
         <div className="p-4">
-            <div className="flex items-center justify-center text-xs text-muted-foreground">
-                <Lock className="mr-2 h-4 w-4" />
-                <span>Encriptación de Extremo a Extremo</span>
+            <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
+                <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
+                <span>Encriptación de Extremo a Extremo. Ni nosotros podemos leer tu diario.</span>
             </div>
         </div>
       </aside>

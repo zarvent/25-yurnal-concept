@@ -44,7 +44,7 @@ export function ReflectionsGenerator() {
       <CardHeader>
         <CardTitle>Nube de Temas y Emociones</CardTitle>
         <CardDescription>
-          Nuestro asistente de IA analiza tus entradas para identificar patrones y temas recurrentes. Esto no es terapia, sino una herramienta para ayudarte a ver tu mundo interior con más claridad.
+          Yurnal AI es un Asistente Analítico, no un terapeuta. Analiza tus entradas para generar una 'Nube de Temas y Emociones', ayudándote a visualizar lo que es importante para ti de forma privada y segura.
         </CardDescription>
       </CardHeader>
       <CardContent className="min-h-[200px]">

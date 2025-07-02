@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Yurnal Terapia: Conectando Mentes y Corazones",
-  description: "Tu plataforma integral para el bienestar mental. Conecta con terapeutas, comparte tus reflexiones y crece.",
+  title: "Yurnal: Tu espacio privado y seguro",
+  description: "Yurnal es tu espacio privado y seguro para entender tus pensamientos sin ser juzgado.",
 };
 
 export default function RootLayout({
