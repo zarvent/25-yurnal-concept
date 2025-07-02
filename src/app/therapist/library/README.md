@@ -6,7 +6,7 @@ Esta ruta (`/therapist/library`) sirve como un marcador de posición para la fut
 
 -   **Implementación Actual**: Es un componente de servidor estático, lo que significa que es renderizado en el servidor y enviado como HTML simple al cliente. Esto lo hace extremadamente performante y eficiente.
 -   **Diseño para el Futuro**: La estructura de la UI, utilizando `Card` y mensajes claros, establece la base para la funcionalidad futura. Cuando se implemente, este componente probablemente se convertirá en un componente de cliente (`"use client"`) que manejará estados como la lista de recursos, la subida de nuevos materiales y la asignación de recursos a pacientes.
--   **Manejo del Estado Vacío/En Construcción**: El uso de un ícono `Library` y el texto "Contenido en construcción" es una forma efectiva y amigable de comunicar al usuario el estado actual de la funcionalidad, gestionando sus expectativas.
+-   **Manejo del Estado Vacío/En Construcción**: El uso de un ícono `Library` y el texto "Contenido en construcción" es una forma efectiva y amigabler de comunicar al usuario el estado actual de la funcionalidad, gestionando sus expectativas.
 
 ## Análisis del PSICÓLOGO CATO
 
