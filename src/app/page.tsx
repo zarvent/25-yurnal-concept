@@ -45,7 +45,7 @@ export default function Home() {
           Bienvenido a Yurnal
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mt-4">
-          Valoramos y agradecemos tu presencia, danos una oportunidad y Conecta con tu bienestar.
+          Un espacio seguro, diseñado para ti y conectar con tu bienestar.
         </p>
       </header>
 
