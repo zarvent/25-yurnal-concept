@@ -1,5 +1,22 @@
 'use client';
 
+import { useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import {
   Card,
   CardContent,
@@ -25,8 +42,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-const tools = [
+const initialTools = [
   {
+    id: '1',
     title: 'Verificar los Hechos',
     description:
       'Separa los hechos de las interpretaciones para ver si tu emoción encaja con la realidad.',
@@ -36,6 +54,7 @@ const tools = [
     comingSoon: true,
   },
   {
+    id: '2',
     title: 'Resolución de Problemas',
     description:
       'Define un problema, genera soluciones y crea un plan de acción concreto para resolverlo.',
@@ -45,6 +64,7 @@ const tools = [
     comingSoon: true,
   },
   {
+    id: '3',
     title: 'Planificador DEAR MAN',
     description:
       'Estructura una conversación difícil para pedir lo que quieres o decir no de forma asertiva.',
@@ -54,6 +74,7 @@ const tools = [
     comingSoon: true,
   },
   {
+    id: '4',
     title: 'Habilidad STOP',
     description:
       'Una pausa de emergencia para detenerte antes de actuar por un impulso que podrías lamentar.',
@@ -63,6 +84,7 @@ const tools = [
     comingSoon: true,
   },
   {
+    id: '5',
     title: 'Habilidad TIP',
     description:
       'Cambia tu fisiología corporal rápidamente para reducir el malestar extremo en momentos de crisis.',
@@ -72,6 +94,7 @@ const tools = [
     comingSoon: true,
   },
   {
+    id: '6',
     title: 'Registros de Habilidades',
     description:
       'Lleva un registro de la práctica de tus habilidades para monitorizar tu progreso y auto-conocimiento.',
@@ -113,7 +136,100 @@ const frameworkInfo: {
   },
 };
 
+type Tool = typeof initialTools[number];
+
+function SortableToolCard({ tool }: { tool: Tool }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: tool.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  const info = frameworkInfo[tool.frameworkId as keyof typeof frameworkInfo];
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Card key={tool.title} className="flex flex-col h-full cursor-grab active:cursor-grabbing">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            {tool.icon}
+            {info ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Badge variant="outline" className="cursor-pointer hover:bg-accent">
+                    {tool.framework}
+                  </Badge>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>{info.title}</DialogTitle>
+                  </DialogHeader>
+                  <div className="py-4 space-y-4 text-sm">
+                    <div>
+                        <h3 className="font-semibold text-foreground">Idea Central</h3>
+                        <p className="text-muted-foreground">{info.coreIdea}</p>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-foreground">Analogía</h3>
+                        <p className="text-muted-foreground">{info.analogy}</p>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-foreground">Beneficio Principal</h3>
+                        <p className="text-muted-foreground">{info.mainBenefit}</p>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <Badge variant="outline">{tool.framework}</Badge>
+            )}
+          </div>
+          <CardTitle className="pt-4">{tool.title}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex-grow">
+          <p className="text-sm text-muted-foreground">
+            {tool.description}
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button disabled={tool.comingSoon} className="w-full">
+            {tool.comingSoon ? 'Próximamente' : 'Empezar'}
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+
+
 export default function ToolsPage() {
+  const [tools, setTools] = useState(initialTools);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const {active, over} = event;
+
+    if (over && active.id !== over.id) {
+      setTools((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
@@ -122,65 +238,25 @@ export default function ToolsPage() {
         </h1>
         <p className="text-muted-foreground">
           Una colección de ejercicios interactivos basados en marcos
-          terapéuticos validados para entrenar tu mente y regular tus emociones.
+          terapéuticos validados. Arrastra y suelta para organizar las herramientas según tu preferencia.
         </p>
       </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {tools.map((tool) => {
-          const info = frameworkInfo[tool.frameworkId as keyof typeof frameworkInfo];
-          return (
-            <Card key={tool.title} className="flex flex-col">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  {tool.icon}
-                  {info ? (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Badge variant="outline" className="cursor-pointer hover:bg-accent">
-                          {tool.framework}
-                        </Badge>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                          <DialogTitle>{info.title}</DialogTitle>
-                        </DialogHeader>
-                        <div className="py-4 space-y-4 text-sm">
-                          <div>
-                              <h3 className="font-semibold text-foreground">Idea Central</h3>
-                              <p className="text-muted-foreground">{info.coreIdea}</p>
-                          </div>
-                          <div>
-                              <h3 className="font-semibold text-foreground">Analogía</h3>
-                              <p className="text-muted-foreground">{info.analogy}</p>
-                          </div>
-                          <div>
-                              <h3 className="font-semibold text-foreground">Beneficio Principal</h3>
-                              <p className="text-muted-foreground">{info.mainBenefit}</p>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  ) : (
-                    <Badge variant="outline">{tool.framework}</Badge>
-                  )}
-                </div>
-                <CardTitle className="pt-4">{tool.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="text-sm text-muted-foreground">
-                  {tool.description}
-                </p>
-              </CardContent>
-              <CardFooter>
-                <Button disabled={tool.comingSoon} className="w-full">
-                  {tool.comingSoon ? 'Próximamente' : 'Empezar'}
-                </Button>
-              </CardFooter>
-            </Card>
-          );
-        })}
-      </div>
+      
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext 
+          items={tools.map(t => t.id)}
+        >
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {tools.map((tool) => (
+              <SortableToolCard key={tool.id} tool={tool} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }
