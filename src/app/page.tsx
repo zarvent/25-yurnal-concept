@@ -4,8 +4,17 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookHeart, User, Stethoscope, GraduationCap, Briefcase } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  // This useEffect ensures the year is updated on the client side,
+  // preventing a potential hydration mismatch error, though it's a rare edge case for the year.
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4">
       <div className="flex flex-col items-center text-center mb-10">
@@ -96,7 +105,7 @@ export default function Home() {
         </Card>
       </div>
       <footer className="mt-12 text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Yurnal. Todos los derechos reservados.
+        © {year} Yurnal. Todos los derechos reservados.
       </footer>
     </div>
   );

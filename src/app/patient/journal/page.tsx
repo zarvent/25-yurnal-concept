@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useJournal, type JournalEntry } from '@/hooks/use-journal';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -49,7 +49,12 @@ function EmptyState() {
 
 export default function JournalPage() {
   const { entries, isLoaded } = useJournal();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+
+  useEffect(() => {
+    // Set the initial date only on the client to avoid hydration mismatch
+    setSelectedDate(new Date());
+  }, []);
 
   const entryDates = useMemo(() => {
     return entries.map(entry => new Date(entry.date));
