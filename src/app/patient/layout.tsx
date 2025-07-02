@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Pencil, BookOpen, Sparkles, Lock, BookHeart, HeartHandshake, Toolbox } from 'lucide-react';
+import { Pencil, BookOpen, Sparkles, Lock, BookHeart, HeartHandshake, Wrench } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator';
 const navItems = [
   { href: '/patient/today', label: 'Hoy', icon: Pencil },
   { href: '/patient/journal', label: 'Diario', icon: BookOpen },
-  { href: '/patient/tools', label: 'Herramientas', icon: Toolbox },
+  { href: '/patient/tools', label: 'Herramientas', icon: Wrench },
   { href: '/patient/reflections', label: 'Reflexiones', icon: Sparkles },
   { href: '/patient/my-therapist', label: 'Mi Terapeuta', icon: HeartHandshake },
 ];
