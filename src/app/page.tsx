@@ -25,7 +25,7 @@ export default function Home() {
       icon: <GraduationCap className="h-8 w-8 text-primary" />,
       title: 'Como estudiante',
       description: 'Un recurso para conectar la teoría de la psicología con la práctica.',
-      href: '/student/onboarding',
+      href: '/academic/onboarding',
       cta: 'Iniciar aprendizaje',
     },
     {
