@@ -79,8 +79,9 @@ export default function Home() {
         </Card>
       </main>
 
-      <footer className="mt-12 text-xs text-muted-foreground">
-        © {year} Yurnal. Todos los derechos reservados.
+      <footer className="mt-12 text-center text-xs text-muted-foreground">
+        <p>© {year} Yurnal. Todos los derechos reservados.</p>
+        <p>Zarvent Labs - Cesar Sebastian Zambrana Ventura</p>
       </footer>
     </div>
   );
