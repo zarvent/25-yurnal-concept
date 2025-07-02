@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { useJournal } from '@/hooks/use-journal';
 import { useToast } from '@/hooks/use-toast';
-import { PartyPopper, Loader2 } from 'lucide-react';
+import { PartyPopper, Loader2, Paperclip, Film, X } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 const templates = [
   {
@@ -104,11 +105,45 @@ export function JournalEditor() {
   const { addEntry } = useJournal();
   const { toast } = useToast();
 
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedFile, setUploadedFile] = useState<{ name: string; type: string } | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const handleTemplateChange = (templateName: string) => {
     const template = templates.find((t) => t.name === templateName);
     if (template) {
       setSelectedTemplate(template);
       setContent(template.content);
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      setUploadProgress(0);
+      setUploadedFile(null);
+
+      // Simulate upload progress. In a real app, this would be a real upload process.
+      const interval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            setIsUploading(false);
+            setUploadedFile({ name: file.name, type: file.type });
+            return 100;
+          }
+          return prev + 20;
+        });
+      }, 300);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setUploadedFile(null);
+    if(fileInputRef.current) {
+        fileInputRef.current.value = "";
     }
   };
 
@@ -125,7 +160,8 @@ export function JournalEditor() {
     setIsSaving(true);
     // Simular una operación asíncrona para dar feedback visual
     setTimeout(() => {
-      addEntry(content, selectedTemplate.name);
+      const attachments = uploadedFile ? [uploadedFile] : undefined;
+      addEntry(content, selectedTemplate.name, attachments);
       toast({
           title: '¡Entrada Guardada!',
           description: 'Tu reflexión ha sido guardada de forma segura en tu santuario digital.',
@@ -133,6 +169,7 @@ export function JournalEditor() {
         });
       setContent(selectedTemplate.content);
       setIsSaving(false);
+      handleRemoveFile(); // Clear file after saving
     }, 500);
   };
 
@@ -162,18 +199,57 @@ export function JournalEditor() {
           className="min-h-[300px] text-base"
           aria-label="Editor de diario"
         />
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileSelect}
+          className="hidden"
+          accept="audio/*,video/*,image/*"
+        />
       </CardContent>
       <CardFooter>
-        <Button onClick={handleSave} disabled={isSaving} className="ml-auto">
-          {isSaving ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Guardando...
-            </>
-          ) : (
-            'Guardar Entrada'
-          )}
-        </Button>
+        <div className="flex items-center justify-between w-full gap-4">
+          <div className="flex-1 space-y-2 max-w-[calc(100%-150px)]">
+            {!isUploading && !uploadedFile && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isSaving}
+              >
+                <Paperclip className="mr-2 h-4 w-4" />
+                Adjuntar Archivo
+              </Button>
+            )}
+            {isUploading && (
+              <div className="flex items-center gap-2">
+                <Progress value={uploadProgress} className="w-full" />
+                <span className="text-xs text-muted-foreground">{uploadProgress}%</span>
+              </div>
+            )}
+            {uploadedFile && (
+              <div className="flex items-center justify-between rounded-md border p-2 bg-muted/50">
+                  <div className="flex items-center gap-2 truncate">
+                      <Film className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground truncate">{uploadedFile.name}</span>
+                  </div>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 flex-shrink-0" onClick={handleRemoveFile}>
+                      <X className="h-4 w-4" />
+                  </Button>
+              </div>
+            )}
+          </div>
+          <Button onClick={handleSave} disabled={isSaving || isUploading} className="ml-auto">
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Guardando...
+              </>
+            ) : (
+              'Guardar Entrada'
+            )}
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

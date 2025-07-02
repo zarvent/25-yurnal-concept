@@ -4,13 +4,14 @@ import { useState, useMemo, useEffect } from 'react';
 import { useJournal, type JournalEntry } from '@/hooks/use-journal';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FileQuestion, BookOpen, CalendarDays, Pencil } from 'lucide-react';
+import { FileQuestion, BookOpen, CalendarDays, Pencil, Film } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 function JournalEntryCard({ entry }: { entry: JournalEntry }) {
   const formattedDate = new Date(entry.date).toLocaleDateString('es-ES', {
@@ -24,8 +25,24 @@ function JournalEntryCard({ entry }: { entry: JournalEntry }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{entry.template}</CardTitle>
-        <CardDescription>{formattedDate}</CardDescription>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle>{entry.template}</CardTitle>
+            <CardDescription>{formattedDate}</CardDescription>
+          </div>
+          {entry.mediaAttachments && entry.mediaAttachments.length > 0 && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Film className="h-5 w-5 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Esta entrada contiene un adjunto.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <p className="whitespace-pre-wrap text-sm text-muted-foreground line-clamp-6">

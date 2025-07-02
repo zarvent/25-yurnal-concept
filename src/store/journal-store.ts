@@ -7,6 +7,10 @@ export interface JournalEntry {
   date: string;
   content: string;
   template: string;
+  mediaAttachments?: {
+    name: string;
+    type: string;
+  }[];
 }
 
 const JOURNAL_KEY = 'yurnal-entries';
@@ -15,7 +19,7 @@ interface JournalState {
   entries: JournalEntry[];
   isLoaded: boolean;
   loadEntries: () => void;
-  addEntry: (content: string, template: string) => void;
+  addEntry: (content: string, template: string, mediaAttachments?: JournalEntry['mediaAttachments']) => void;
   getEntriesAsText: () => string;
 }
 
@@ -33,7 +37,7 @@ export const useJournalStore = create<JournalState>((set, get) => ({
     }
     set({ isLoaded: true });
   },
-  addEntry: (content: string, template: string) => {
+  addEntry: (content: string, template: string, mediaAttachments?: JournalEntry['mediaAttachments']) => {
     try {
       const newEntry: JournalEntry = {
         id: new Date().toISOString(),
@@ -41,6 +45,11 @@ export const useJournalStore = create<JournalState>((set, get) => ({
         content,
         template,
       };
+
+      if (mediaAttachments && mediaAttachments.length > 0) {
+        newEntry.mediaAttachments = mediaAttachments;
+      }
+
       const updatedEntries = [newEntry, ...get().entries];
       set({ entries: updatedEntries });
       localStorage.setItem(JOURNAL_KEY, JSON.stringify(updatedEntries));
