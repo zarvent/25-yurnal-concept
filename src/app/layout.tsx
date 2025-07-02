@@ -3,8 +3,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Yurnal Terapia: Conectando Pacientes y Terapeutas",
-  description: "Un portal seguro y colaborativo para una terapia más informada y continua.",
+  title: "Yurnal: Tu Espacio para el Bienestar y Crecimiento",
+  description: "Un santuario digital para la introspección personal y el aprendizaje en psicología.",
 };
 
 export default function RootLayout({

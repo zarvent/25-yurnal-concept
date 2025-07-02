@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { BookHeart, User, Stethoscope, GraduationCap, ArrowRight } from 'lucide-react';
+import { BookHeart, User, GraduationCap, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
@@ -20,13 +20,6 @@ export default function Home() {
       description: 'Un espacio seguro para la introspección y el crecimiento personal.',
       href: '/patient/onboarding',
       cta: 'Empezar mi viaje',
-    },
-    {
-      icon: <Stethoscope className="h-8 w-8 text-primary" />,
-      title: 'Como terapeuta',
-      description: 'Una herramienta para potenciar tu práctica clínica y la de tus pacientes.',
-      href: '/therapist/onboarding',
-      cta: 'Configurar mi portal',
     },
     {
       icon: <GraduationCap className="h-8 w-8 text-primary" />,
@@ -49,12 +42,12 @@ export default function Home() {
         </p>
       </header>
 
-      <main className="w-full max-w-4xl">
+      <main className="w-full max-w-3xl">
         <Card className="w-full shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl text-center">¿Qué camino eliges hoy?</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 md:p-6">
             {roles.map((role) => (
               <Link href={role.href} key={role.title} passHref>
                 <div className="p-6 rounded-lg border-2 border-transparent bg-card hover:border-primary/50 transition-all h-full flex flex-col text-center items-center cursor-pointer shadow-sm hover:shadow-md">
