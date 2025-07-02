@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { useJournal } from '@/hooks/use-journal';
 import { useToast } from '@/hooks/use-toast';
-import { PartyPopper } from 'lucide-react';
+import { PartyPopper, Loader2 } from 'lucide-react';
 
 const templates = [
   {
@@ -29,6 +29,11 @@ const templates = [
     name: 'Técnica CBT (Terapia Cognitivo-Conductual)',
     prompt: 'Identifica un pensamiento negativo y reestructúralo.',
     content: 'Situación: \n\nPensamiento Automático Negativo: \n\nEmociones que sentí: \n\nEvidencia que apoya este pensamiento: \n\nEvidencia que contradice este pensamiento: \n\nPensamiento Alternativo y más equilibrado: ',
+  },
+  {
+    name: 'Verificar los Hechos',
+    prompt: 'Separa los hechos de las interpretaciones para ver si tu emoción encaja con la realidad.',
+    content: 'Emoción que siento: \nIntensidad (0-100): \n\nEvento Desencadenante (objetivamente): \n\nMis Interpretaciones y Pensamientos: \n\nEvidencia que apoya mi emoción: \n\nEvidencia que NO apoya mi emoción: \n\nUna visión más equilibrada es: \n',
   },
   {
     name: 'Diario de Mindfulness',
@@ -95,6 +100,7 @@ const templates = [
 export function JournalEditor() {
   const [selectedTemplate, setSelectedTemplate] = useState(templates[0]);
   const [content, setContent] = useState(templates[0].content);
+  const [isSaving, setIsSaving] = useState(false);
   const { addEntry } = useJournal();
   const { toast } = useToast();
 
@@ -115,13 +121,19 @@ export function JournalEditor() {
       });
       return;
     }
-    addEntry(content, selectedTemplate.name);
-    toast({
-        title: '¡Entrada Guardada!',
-        description: 'Tu reflexión ha sido guardada de forma segura.',
-        action: <PartyPopper className="h-5 w-5 text-primary" />,
-      });
-    setContent(selectedTemplate.content);
+
+    setIsSaving(true);
+    // Simular una operación asíncrona para dar feedback visual
+    setTimeout(() => {
+      addEntry(content, selectedTemplate.name);
+      toast({
+          title: '¡Entrada Guardada!',
+          description: 'Tu reflexión ha sido guardada de forma segura en tu santuario digital.',
+          action: <PartyPopper className="h-5 w-5 text-primary" />,
+        });
+      setContent(selectedTemplate.content);
+      setIsSaving(false);
+    }, 500);
   };
 
   return (
@@ -152,8 +164,15 @@ export function JournalEditor() {
         />
       </CardContent>
       <CardFooter>
-        <Button onClick={handleSave} className="ml-auto">
-          Guardar Entrada
+        <Button onClick={handleSave} disabled={isSaving} className="ml-auto">
+          {isSaving ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Guardando...
+            </>
+          ) : (
+            'Guardar Entrada'
+          )}
         </Button>
       </CardFooter>
     </Card>
