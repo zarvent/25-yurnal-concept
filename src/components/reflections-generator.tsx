@@ -53,10 +53,18 @@ export function ReflectionsGenerator() {
       <CardHeader>
         <CardTitle>Generador de Reflexiones</CardTitle>
         <CardDescription>
-          Yurnal AI es un Asistente Analítico, no un terapeuta. Analiza tus entradas para generar puntos de reflexión que te ayuden a visualizar lo que es importante para ti de forma privada y segura.
+          Descubre patrones en tus entradas con la ayuda de nuestro asistente de IA.
         </CardDescription>
       </CardHeader>
-      <CardContent className="min-h-[200px]">
+      <CardContent className="space-y-6 min-h-[250px]">
+        <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Aviso Importante: Asistente Analítico</AlertTitle>
+            <AlertDescription>
+              Yurnal AI no es un terapeuta. Sus reflexiones son generadas por IA y no sustituyen el consejo profesional. Si necesitas ayuda, por favor contacta a un especialista.
+            </AlertDescription>
+        </Alert>
+        
         {isLoading && (
           <div className="flex flex-col items-center justify-center h-full">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -71,7 +79,7 @@ export function ReflectionsGenerator() {
             </Alert>
         )}
         {insights && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fade-in">
             {insights.themes?.length > 0 && (
               <div>
                 <h3 className="flex items-center text-lg font-semibold mb-3">
@@ -118,7 +126,7 @@ export function ReflectionsGenerator() {
           </div>
         )}
          {!isLoading && !insights && !error && (
-            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-[200px]">
+            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-full">
                 <h3 className="text-lg font-semibold">Listo para descubrir tus patrones</h3>
                 <p className="mb-4 mt-2 text-sm text-muted-foreground">
                     Haz clic en el botón de abajo para generar tu nube de temas.
