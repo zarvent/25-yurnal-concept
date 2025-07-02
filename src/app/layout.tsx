@@ -3,8 +3,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Yurnal: Tu espacio privado y seguro",
-  description: "Yurnal es tu espacio privado y seguro para entender tus pensamientos sin ser juzgado.",
+  title: "Yurnal Terapia: Conectando Pacientes y Terapeutas",
+  description: "Un portal seguro y colaborativo para una terapia más informada y continua.",
 };
 
 export default function RootLayout({

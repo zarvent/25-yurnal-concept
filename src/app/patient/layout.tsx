@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Pencil, BookOpen, Sparkles, Lock, BookHeart } from 'lucide-react';
+import { Pencil, BookOpen, Sparkles, Lock, BookHeart, HeartHandshake } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from '@/components/user-nav';
 import { Separator } from '@/components/ui/separator';
@@ -11,12 +11,14 @@ const navItems = [
   { href: '/patient/today', label: 'Hoy', icon: Pencil },
   { href: '/patient/journal', label: 'Diario', icon: BookOpen },
   { href: '/patient/reflections', label: 'Reflexiones', icon: Sparkles },
+  { href: '/patient/my-therapist', label: 'Mi Terapeuta', icon: HeartHandshake },
 ];
 
 const pageTitles: { [key: string]: string } = {
   '/patient/today': 'Hoy',
   '/patient/journal': 'Diario',
   '/patient/reflections': 'Reflexiones',
+  '/patient/my-therapist': 'Mi Terapeuta',
 };
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
