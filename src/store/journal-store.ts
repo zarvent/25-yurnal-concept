@@ -1,84 +1,56 @@
 'use client';
 
-import { detectCrisisKeywords } from '@/types';
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { JournalEntry } from '@/types/index';
 
-export interface JournalEntry {
-  id: string;
-  date: string;
-  content: string;
-  template: string;
-  mediaAttachments?: {
-    name: string;
-    type: string;
-  }[];
-  crisisDetected?: boolean;
-}
-
-const JOURNAL_KEY = 'yurnal-entries';
-
-interface JournalState {
+// Define a comprehensive interface for the store's state and actions
+interface JournalStore {
   entries: JournalEntry[];
   isLoaded: boolean;
-  crisisDetected: boolean;
-  loadEntries: () => void;
-  addEntry: (content: string, template: string, mediaAttachments?: JournalEntry['mediaAttachments']) => void;
+  addEntry: (entry: JournalEntry) => void;
+  loadEntries: () => void; // This action will be responsible for loading
   getEntriesAsText: () => string;
-  clearCrisisAlert: () => void;
 }
 
-export const useJournalStore = create<JournalState>((set, get) => ({
-  entries: [],
-  isLoaded: false,
-  crisisDetected: false,
-  loadEntries: () => {
-    try {
-      const storedEntries = localStorage.getItem(JOURNAL_KEY);
-      if (storedEntries) {
-        set({ entries: JSON.parse(storedEntries) });
+export const useJournalStore = create<JournalStore>()(
+  persist(
+    (set, get) => ({
+      entries: [],
+      isLoaded: false, // Initialize as false
+
+      loadEntries: () => {
+        // This function body is where you would fetch from a real async source.
+        // For now, we rely on the `persist` middleware to rehydrate the state.
+        // We just need to set `isLoaded` to true.
+        set({ isLoaded: true });
+      },
+
+      addEntry: (entry) =>
+        set((state) => ({
+          entries: [...state.entries, entry],
+        })),
+      
+      getEntriesAsText: () => {
+        const { entries } = get();
+        return entries.map(e => `Date: ${e.createdAt.toISOString()}
+Content: ${e.content}`).join('\n\n');
       }
-    } catch (error) {
-      console.error('Failed to load journal entries from localStorage', error);
+    }),
+    {
+      name: 'journal-storage', // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+      // onRehydrateStorage returns a function that can be used as a listener
+      onRehydrateStorage: () => {
+        return (state) => {
+          if (state) {
+            state.isLoaded = true;
+          }
+        }
+      }
     }
-    set({ isLoaded: true });
-  },
-  addEntry: (content: string, template: string, mediaAttachments?: JournalEntry['mediaAttachments']) => {
-    try {
-      // Detectar crisis en el contenido
-      const crisisDetected = detectCrisisKeywords(content);
+  )
+);
 
-      const newEntry: JournalEntry = {
-        id: new Date().toISOString(),
-        date: new Date().toISOString(),
-        content,
-        template,
-        crisisDetected,
-      };
-
-      if (mediaAttachments && mediaAttachments.length > 0) {
-        newEntry.mediaAttachments = mediaAttachments;
-      }
-
-      const updatedEntries = [newEntry, ...get().entries];
-      set({
-        entries: updatedEntries,
-        crisisDetected: crisisDetected || get().crisisDetected
-      });
-      localStorage.setItem(JOURNAL_KEY, JSON.stringify(updatedEntries));
-
-      // Log seguro para auditoría (sin exponer contenido)
-      if (crisisDetected) {
-        console.warn('[CRISIS DETECTION] Crisis keywords detected in journal entry');
-      }
-    } catch (error) {
-      console.error('Failed to save journal entry to localStorage', error);
-    }
-  },
-  getEntriesAsText: () => {
-    const entries = get().entries;
-    return entries.map(entry => `Fecha: ${new Date(entry.date).toLocaleDateString('es-ES')}\nPlantilla: ${entry.template}\nContenido: ${entry.content}`).join('\n\n---\n\n');
-  },
-  clearCrisisAlert: () => {
-    set({ crisisDetected: false });
-  },
-}));
+// Export the JournalEntry type for external usage
+export type { JournalEntry };

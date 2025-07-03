@@ -71,10 +71,18 @@ export type TherapistPatientRelation = z.infer<typeof TherapistPatientRelationSc
 
 export interface JournalState {
   entries: JournalEntry[];
+  selectedEntries: Set<string>;
   currentEntry: Partial<JournalEntry> | null;
   isLoading: boolean;
   error: string | null;
   insights: Insight[];
+
+  // Funciones para manipular el estado
+  setEntries: (entries: JournalEntry[]) => void;
+  addEntry: (entry: JournalEntry) => void;
+  toggleEntrySelection: (id: string) => void;
+  clearSelection: () => void;
+  getSelectedEntriesContent: () => string;
 }
 
 export interface SessionState {
