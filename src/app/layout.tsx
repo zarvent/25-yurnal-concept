@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { Providers } from "./providers";
+import MainHeader from "@/components/layout/main-header";
 
 export const metadata = {
   title: "Yurnal: El Futuro del Bienestar Digital",
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-background text-foreground selection:bg-primary/20 selection:text-primary-foreground">
         <Providers>
           <div className="relative flex min-h-screen flex-col">
+            <MainHeader />
             <div className="flex-1">{children}</div>
           </div>
         </Providers>
