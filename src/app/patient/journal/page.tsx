@@ -1,20 +1,21 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { useJournal, type JournalEntry } from '@/hooks/use-journal';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { FileQuestion, BookOpen, CalendarDays, Pencil, Film } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useJournal } from '@/hooks/use-journal';
+import type { JournalEntry } from '@/types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Button } from '@/components/ui/button';
+import { BookOpen, CalendarDays, FileQuestion, Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { useEffect, useMemo, useState } from 'react';
+import { exportJournal } from './test-journal';
 
 function JournalEntryCard({ entry }: { entry: JournalEntry }) {
-  const formattedDate = new Date(entry.date).toLocaleDateString('es-ES', {
+  const formattedDate = new Date(entry.createdAt).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -27,27 +28,22 @@ function JournalEntryCard({ entry }: { entry: JournalEntry }) {
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle>{entry.template}</CardTitle>
+            <CardTitle>{entry.content}</CardTitle>
             <CardDescription>{formattedDate}</CardDescription>
           </div>
-          {entry.mediaAttachments && entry.mediaAttachments.length > 0 && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Film className="h-5 w-5 text-muted-foreground" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Esta entrada contiene un adjunto.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
         </div>
       </CardHeader>
       <CardContent>
         <p className="whitespace-pre-wrap text-sm text-muted-foreground line-clamp-6">
           {entry.content}
         </p>
+        <Button
+          onClick={() => exportJournal(entry, 'markdown', `nota-${entry.id}.md`)}
+          className="mt-2 bg-green-600 text-white"
+          size="sm"
+        >
+          Exportar esta nota
+        </Button>
       </CardContent>
     </Card>
   );
@@ -72,56 +68,52 @@ function EmptyState() {
 }
 
 function JournalLoadingSkeleton() {
-    return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {[...Array(6)].map((_, i) => (
-          <Card key={i}>
-            <CardHeader>
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-4 w-1/2 mt-2" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    )
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {[...Array(6)].map((_, i) => (
+        <Card key={i}>
+          <CardHeader>
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-1/2 mt-2" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
 }
 
 
 export default function JournalPage() {
-  const { entries, isLoaded } = useJournal();
+  const { entries } = useJournal();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
   useEffect(() => {
-    // Set the initial date only on the client to avoid hydration mismatch
     setSelectedDate(new Date());
   }, []);
 
-  const entryDates = useMemo(() => {
+  const entryDates = useMemo((): Date[] => {
     if (!entries) return [];
-    return entries.map(entry => new Date(entry.date));
+    return entries.map((entry: JournalEntry) => new Date(entry.createdAt));
   }, [entries]);
 
-  const selectedEntries = useMemo(() => {
+  const selectedEntries = useMemo((): JournalEntry[] => {
     if (!selectedDate || !entries) return [];
-    return entries.filter(entry => {
-      const entryDate = new Date(entry.date);
-      return entryDate.getFullYear() === selectedDate.getFullYear() &&
-             entryDate.getMonth() === selectedDate.getMonth() &&
-             entryDate.getDate() === selectedDate.getDate();
+    return entries.filter((entry: JournalEntry) => {
+      const entryDate = new Date(entry.createdAt);
+      return (
+        entryDate.getFullYear() === selectedDate.getFullYear() &&
+        entryDate.getMonth() === selectedDate.getMonth() &&
+        entryDate.getDate() === selectedDate.getDate()
+      );
     });
   }, [entries, selectedDate]);
-
-
-  if (!isLoaded) {
-    return <JournalLoadingSkeleton />;
-  }
 
   if (entries.length === 0) {
     return <EmptyState />;
@@ -140,8 +132,17 @@ export default function JournalPage() {
         </TabsTrigger>
       </TabsList>
 
+      <div className="mb-4">
+        <Button
+          onClick={() => exportJournal(entries, 'markdown', 'journal-notes.md')}
+          className="bg-blue-500 text-white"
+        >
+          Exportar todas las notas como Markdown
+        </Button>
+      </div>
+
       <TabsContent value="list" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {entries.map((entry) => (
+        {entries.map((entry: JournalEntry) => (
           <JournalEntryCard key={entry.id} entry={entry} />
         ))}
       </TabsContent>
@@ -162,22 +163,22 @@ export default function JournalPage() {
             />
           </CardContent>
         </Card>
-        
+
         {selectedDate && (
-           <div className="space-y-4">
+          <div className="space-y-4">
             <h2 className="text-xl font-semibold">
               Entradas para {format(selectedDate, 'PPP', { locale: es })}
             </h2>
             {selectedEntries.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {selectedEntries.map((entry) => (
+                {selectedEntries.map((entry: JournalEntry) => (
                   <JournalEntryCard key={entry.id} entry={entry} />
                 ))}
               </div>
             ) : (
               <p className="text-muted-foreground">No hay entradas para este día.</p>
             )}
-           </div>
+          </div>
         )}
       </TabsContent>
     </Tabs>

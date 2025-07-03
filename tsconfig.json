@@ -26,14 +26,18 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "jest"
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.mdx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "node_modules/@types/jest"
   ],
   "exclude": [
     "node_modules"

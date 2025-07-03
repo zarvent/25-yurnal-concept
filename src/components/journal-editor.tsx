@@ -2,14 +2,14 @@
 
 import { CrisisAlert } from '@/components/crisis-alert';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { PremiumButton } from '@/components/ui/premium-button';
+import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useJournal } from '@/hooks/use-journal';
 import { useToast } from '@/hooks/use-toast';
 import { TranscriptionResult, VoiceTranscriptionService } from '@/lib/voice-transcription';
-import { useJournalStore } from '@/store/journal-store';
+import { journalService } from '@/services/journal.service';
+import { useJournalUIStore } from '@/store/journal-ui.store';
 import { Film, Loader2, Mic, MicOff, Paperclip, PartyPopper, X } from 'lucide-react';
 import React, { useCallback, useRef, useState } from 'react';
 
@@ -114,9 +114,8 @@ export function JournalEditor() {
   const [selectedTemplate, setSelectedTemplate] = useState(templates[0]);
   const [content, setContent] = useState(templates[0].content);
   const [isSaving, setIsSaving] = useState(false);
-  const { addEntry } = useJournal();
   const { toast } = useToast();
-  const { crisisDetected, clearCrisisAlert } = useJournalStore();
+  const { crisisDetected, clearCrisisAlert } = useJournalUIStore();
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -134,7 +133,7 @@ export function JournalEditor() {
   const therapistContact = {
     name: 'Dr. García Martínez',
     phone: '+34 600 123 456',
-    email: 'dr.garcia@yurnal.com'
+    email: 'dr.garcia@yurnal.com',
   };
 
   // Funciones para transcripción de voz
@@ -155,7 +154,7 @@ export function JournalEditor() {
         language: 'es-ES',
         emotionalContextAnalysis: true,
         localProcessing: true,
-        confidenceThreshold: 0.7
+        confidenceThreshold: 0.7,
       });
 
       // Iniciar grabación
@@ -165,7 +164,7 @@ export function JournalEditor() {
 
       // Iniciar contador de tiempo
       const interval = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
       setRecordingInterval(interval);
 
@@ -173,7 +172,6 @@ export function JournalEditor() {
         title: 'Grabación iniciada',
         description: 'Habla naturalmente, tu voz será transcrita a texto.',
       });
-
     } catch (error: any) {
       console.error('Error al iniciar grabación:', error);
       toast({
@@ -205,7 +203,7 @@ export function JournalEditor() {
       // Agregar la transcripción al contenido
       const timestamp = new Date().toLocaleTimeString('es-ES', {
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
 
       const transcriptionText = `[Transcripción de voz - ${timestamp}]\n${result.text}\n`;
@@ -228,7 +226,6 @@ export function JournalEditor() {
         title: 'Transcripción completada',
         description,
       });
-
     } catch (error: any) {
       console.error('Error en transcripción:', error);
       setIsTranscribing(false);
@@ -286,30 +283,48 @@ export function JournalEditor() {
     }
   };
 
-  const handleSave = () => {
-    if (content.trim() === '' || content.trim() === selectedTemplate.content.trim()) {
+  const handleSave = async () => {
+    if (content.trim().length < 10) {
       toast({
-        title: 'Entrada vacía',
-        description: 'Por favor, escribe algo antes de guardar.',
+        title: 'Contenido demasiado corto',
+        description: 'Tu entrada debe tener al menos 10 caracteres.',
         variant: 'destructive',
       });
       return;
     }
-
     setIsSaving(true);
-    // Simular una operación asíncrona para dar feedback visual
-    setTimeout(() => {
-      const attachments = uploadedFile ? [uploadedFile] : undefined;
-      addEntry(content, selectedTemplate.name, attachments);
+    try {
+      await journalService.createNewEntry(content);
+
       toast({
-        title: '¡Entrada Guardada!',
-        description: 'Tu reflexión ha sido guardada de forma segura en tu santuario digital.',
-        action: <PartyPopper className="h-5 w-5 text-primary" />,
+        title: '¡Guardado!',
+        description: (
+          <div className="flex items-center">
+            <PartyPopper className="mr-2 h-4 w-4 text-green-500" />
+            <span>Tu entrada ha sido guardada de forma segura.</span>
+          </div>
+        ),
       });
-      setContent(selectedTemplate.content);
+
+      // Limpiar el editor
+      setContent('');
+      setSelectedTemplate(templates[0]);
+    } catch (error) {
+      toast({
+        title: 'Error al guardar',
+        description: 'No se pudo guardar tu entrada. Por favor, inténtalo de nuevo.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsSaving(false);
-      handleRemoveFile(); // Clear file after saving
-    }, 500);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedFile({ name: file.name, type: file.type });
+    }
   };
 
   return (
@@ -358,7 +373,7 @@ export function JournalEditor() {
             <div className="flex items-center gap-2 flex-1">
               {!isUploading && !uploadedFile && !isRecording && !isTranscribing && (
                 <>
-                  <PremiumButton
+                  <EnhancedButton
                     variant="outline"
                     size="sm"
                     onClick={() => fileInputRef.current?.click()}
@@ -366,9 +381,9 @@ export function JournalEditor() {
                   >
                     <Paperclip className="mr-2 h-4 w-4" />
                     Adjuntar Archivo
-                  </PremiumButton>
+                  </EnhancedButton>
 
-                  <PremiumButton
+                  <EnhancedButton
                     variant="outline"
                     size="sm"
                     onClick={startRecording}
@@ -377,13 +392,13 @@ export function JournalEditor() {
                   >
                     <Mic className="mr-2 h-4 w-4 text-blue-600" />
                     Transcribir Voz
-                  </PremiumButton>
+                  </EnhancedButton>
                 </>
               )}
 
               {isRecording && (
                 <div className="flex items-center gap-2">
-                  <PremiumButton
+                  <EnhancedButton
                     variant="outline"
                     size="sm"
                     onClick={stopRecording}
@@ -391,7 +406,7 @@ export function JournalEditor() {
                   >
                     <MicOff className="mr-2 h-4 w-4" />
                     Detener ({formatRecordingTime(recordingTime)})
-                  </PremiumButton>
+                  </EnhancedButton>
                   <span className="text-sm text-muted-foreground">Grabando...</span>
                 </div>
               )}
@@ -416,19 +431,19 @@ export function JournalEditor() {
                     <Film className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground truncate">{uploadedFile.name}</span>
                   </div>
-                  <PremiumButton
+                  <EnhancedButton
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6 flex-shrink-0"
                     onClick={handleRemoveFile}
                   >
                     <X className="h-4 w-4" />
-                  </PremiumButton>
+                  </EnhancedButton>
                 </div>
               )}
             </div>
 
-            <PremiumButton
+            <EnhancedButton
               onClick={handleSave}
               disabled={isSaving || isUploading || isRecording || isTranscribing}
               className="ml-auto"
@@ -441,7 +456,7 @@ export function JournalEditor() {
               ) : (
                 'Guardar Entrada'
               )}
-            </PremiumButton>
+            </EnhancedButton>
           </div>
         </CardFooter>
       </Card>
