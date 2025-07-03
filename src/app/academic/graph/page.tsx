@@ -1,6 +1,4 @@
-'use client';
-
-import GraphView from '@/components/graph-view';
+import ClientGraphView from '@/components/graph/client-graph-view';
 import { getAllNotesData } from '@/lib/notes';
 import type { ElementDefinition } from 'cytoscape';
 
@@ -18,12 +16,5 @@ export default function GraphPage() {
         }
     });
 
-    return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Graph Visualization</h1>
-            <div className="border rounded-lg overflow-hidden">
-                <GraphView elements={elements} />
-            </div>
-        </div>
-    );
+    return <ClientGraphView elements={elements} />;
 }

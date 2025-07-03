@@ -3,19 +3,17 @@
 import { AccessPortal } from '@/components/ecosystem-landing/access-portal';
 import { EcosystemHero } from '@/components/ecosystem-landing/ecosystem-hero';
 import { FeatureShowcase } from '@/components/ecosystem-landing/feature-showcase';
-import { 
+import {
   BarChart3,
-  Brain, 
-  Calendar, 
-  FileText, 
-  Lock, 
-  Shield, 
-  Smartphone, 
+  Calendar,
+  FileText,
+  MessageSquare,
+  Shield,
+  Smartphone,
   Stethoscope,
-  Users,
-  UserCheck,
   TrendingUp,
-  MessageSquare
+  UserCheck,
+  Users
 } from 'lucide-react';
 
 export default function TherapistLandingPage() {
@@ -128,7 +126,7 @@ export default function TherapistLandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <EcosystemHero {...heroData} />
-      
+
       <FeatureShowcase
         ecosystem="therapist"
         title="Tecnología que Potencia tu Expertise Clínico"

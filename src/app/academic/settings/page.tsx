@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreditsDisplay } from "@/components/credits-display";
@@ -70,7 +72,7 @@ export default function SettingsPage() {
             <CardDescription>
               Gestiona tu plan de suscripción a Yurnal Academic. (Funcionalidad en desarrollo)
             </CardDescription>
-          </Header>
+          </CardHeader>
            <CardContent className="flex items-center justify-center p-12 text-muted-foreground">
             Próximamente...
           </CardContent>

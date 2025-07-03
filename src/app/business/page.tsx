@@ -3,19 +3,17 @@
 import { AccessPortal } from '@/components/ecosystem-landing/access-portal';
 import { EcosystemHero } from '@/components/ecosystem-landing/ecosystem-hero';
 import { FeatureShowcase } from '@/components/ecosystem-landing/feature-showcase';
-import { 
+import {
   BarChart3,
-  Building2, 
+  Building2,
   Heart,
   Lightbulb,
   PieChart,
   Shield,
-  Smartphone,
+  Target,
   TrendingUp,
-  Users,
   UserCheck,
-  Zap,
-  Target
+  Users
 } from 'lucide-react';
 
 export default function BusinessLandingPage() {
@@ -128,7 +126,7 @@ export default function BusinessLandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <EcosystemHero {...heroData} />
-      
+
       <FeatureShowcase
         ecosystem="business"
         title="Soluciones Empresariales de Clase Mundial"
