@@ -1,20 +1,10 @@
 'use client';
 
-import { useJournalStore, type JournalEntry } from '@/store/journal-store';
-import { useEffect } from 'react';
+import { useJournalDataStore } from '@/store/journal-data.store';
 
-// Re-export the type for convenience
-export type { JournalEntry };
+export type { JournalEntry } from '@/types';
 
 export function useJournal() {
-  const { entries, isLoaded, loadEntries, addEntry, getEntriesAsText } = useJournalStore();
-
-  useEffect(() => {
-    // Load entries from storage once on mount
-    if (!isLoaded) {
-      loadEntries();
-    }
-  }, [isLoaded, loadEntries]);
-
-  return { entries, isLoaded, addEntry, getEntriesAsText };
+  const entries = useJournalDataStore(state => state.entries);
+  return { entries };
 }

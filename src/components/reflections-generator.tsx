@@ -1,12 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { useJournal } from '@/hooks/use-journal';
-import { generateInsights, GenerateInsightsOutput } from '@/ai/flows/generate-insights';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Loader2, Wand2, AlertTriangle, Lightbulb, ThumbsUp, HelpCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -19,34 +12,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { journalService } from '@/services/journal.service';
+import { useJournalDataStore } from '@/store/journal-data.store';
+import { AlertTriangle, HelpCircle, Lightbulb, Loader2, ThumbsUp, Wand2 } from 'lucide-react';
+import { useState } from 'react';
 
 export function ReflectionsGenerator() {
-  const { entries, getEntriesAsText, isLoaded } = useJournal();
+  const { entries, isLoaded, insights } = useJournalDataStore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [insights, setInsights] = useState<GenerateInsightsOutput | null>(null);
 
   const handleGenerate = async () => {
     setIsLoading(true);
     setError(null);
-    setInsights(null);
 
     try {
-      const journalEntries = getEntriesAsText();
-      if (!journalEntries.trim()) {
-        setError('No hay suficientes entradas en el diario para generar una reflexión. Escribe un poco más y vuelve a intentarlo.');
-        setIsLoading(false);
-        return;
-      }
-      const result = await generateInsights({ journalEntries });
-      setInsights(result);
-    } catch (err) {
+      await journalService.generateInsightsFromAllEntries();
+    } catch (err: any) {
       console.error(err);
-      setError('Hubo un error al generar tus reflexiones. Por favor, inténtalo de nuevo más tarde.');
+      setError(err.message || 'Hubo un error al generar tus reflexiones. Por favor, inténtalo de nuevo más tarde.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  const latestInsight = insights.sort((a, b) => new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime())[0];
 
   return (
     <Card>
@@ -58,13 +51,13 @@ export function ReflectionsGenerator() {
       </CardHeader>
       <CardContent className="space-y-6 min-h-[250px]">
         <Alert>
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Aviso Importante: Asistente Analítico</AlertTitle>
-            <AlertDescription>
-              Yurnal AI no es un terapeuta. Sus reflexiones son generadas por IA y no sustituyen el consejo profesional. Si necesitas ayuda, por favor contacta a un especialista.
-            </AlertDescription>
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Aviso Importante: Asistente Analítico</AlertTitle>
+          <AlertDescription>
+            Yurnal AI no es un terapeuta. Sus reflexiones son generadas por IA y no sustituyen el consejo profesional. Si necesitas ayuda, por favor contacta a un especialista.
+          </AlertDescription>
         </Alert>
-        
+
         {isLoading && (
           <div className="flex flex-col items-center justify-center h-full">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -72,15 +65,15 @@ export function ReflectionsGenerator() {
           </div>
         )}
         {error && (
-            <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-            </Alert>
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
-        {insights && (
+        {latestInsight && !isLoading && !error && (
           <div className="space-y-6 animate-fade-in">
-            {insights.crisisAlert && (
+            {latestInsight.crisisAlert && (
               <Alert variant="destructive" className="mb-6">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Importante: Tu Bienestar es la Prioridad</AlertTitle>
@@ -92,14 +85,14 @@ export function ReflectionsGenerator() {
               </Alert>
             )}
 
-            {insights.themes?.length > 0 && (
+            {latestInsight.themes?.length > 0 && (
               <div>
                 <h3 className="flex items-center text-lg font-semibold mb-3">
                   <Lightbulb className="mr-2 h-5 w-5 text-primary" />
                   Nube de Temas y Emociones
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {insights.themes.map((theme, index) => (
+                  {latestInsight.themes.map((theme, index) => (
                     <Badge key={index} variant="secondary" className="text-base px-3 py-1">
                       {theme}
                     </Badge>
@@ -108,28 +101,28 @@ export function ReflectionsGenerator() {
               </div>
             )}
 
-            {insights.strengths?.length > 0 && (
+            {latestInsight.strengths?.length > 0 && (
               <div>
                 <h3 className="flex items-center text-lg font-semibold mb-3">
                   <ThumbsUp className="mr-2 h-5 w-5 text-muted-foreground" />
                   Fortalezas Identificadas
                 </h3>
                 <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2">
-                  {insights.strengths.map((strength, index) => (
+                  {latestInsight.strengths.map((strength, index) => (
                     <li key={index}>{strength}</li>
                   ))}
                 </ul>
               </div>
             )}
 
-            {insights.questions?.length > 0 && (
+            {latestInsight.questions?.length > 0 && (
               <div>
                 <h3 className="flex items-center text-lg font-semibold mb-3">
                   <HelpCircle className="mr-2 h-5 w-5 text-muted-foreground" />
                   Preguntas para la Reflexión
                 </h3>
-                 <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2">
-                  {insights.questions.map((question, index) => (
+                <ul className="list-disc list-inside space-y-1 text-muted-foreground pl-2">
+                  {latestInsight.questions.map((question, index) => (
                     <li key={index}>{question}</li>
                   ))}
                 </ul>
@@ -137,14 +130,14 @@ export function ReflectionsGenerator() {
             )}
           </div>
         )}
-         {!isLoading && !insights && !error && (
-            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-full">
-                <h3 className="text-lg font-semibold">Listo para descubrir tus patrones</h3>
-                <p className="mb-4 mt-2 text-sm text-muted-foreground">
-                    Haz clic en el botón de abajo para generar tu nube de temas.
-                </p>
-            </div>
-         )}
+        {!isLoading && !latestInsight && !error && (
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-full">
+            <h3 className="text-lg font-semibold">Listo para descubrir tus patrones</h3>
+            <p className="mb-4 mt-2 text-sm text-muted-foreground">
+              Haz clic en el botón de abajo para generar tu nube de temas.
+            </p>
+          </div>
+        )}
       </CardContent>
       <CardFooter>
         <AlertDialog>
