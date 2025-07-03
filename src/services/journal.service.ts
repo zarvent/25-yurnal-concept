@@ -1,7 +1,7 @@
 import { generateInsights, GenerateInsightsOutput } from '@/ai/flows/generate-insights';
 import { useJournalDataStore } from '@/store/journal-data.store';
 import { useJournalUIStore } from '@/store/journal-ui.store';
-import { Insight } from '@/types';
+import { Insight, JournalEntry } from '@/types';
 
 export class JournalService {
   private getCurrentUserId(): string {
@@ -70,8 +70,9 @@ export class JournalService {
     return insight;
   }
 
-  public async createNewEntry(content: string): Promise<void> {
-    const newEntry = {
+  public async saveEntry(data: { content: string }): Promise<boolean> {
+    const { content } = data;
+    const newEntry: Omit<JournalEntry, 'insights' | 'sentiment' | 'clarityScore'> = {
       id: crypto.randomUUID(),
       content,
       tags: [],
@@ -81,7 +82,15 @@ export class JournalService {
       isPrivate: true,
     };
 
-    this._dataStore.addEntry(newEntry);
+    this._dataStore.addEntry(newEntry as JournalEntry);
+
+    const insight = await this.generateInsightsForEntry(newEntry.id);
+
+    if (insight.crisisAlert) {
+      useJournalUIStore.getState().setCrisisDetected(true);
+    }
+
+    return insight.crisisAlert;
   }
 }
 
