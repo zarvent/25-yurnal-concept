@@ -106,7 +106,7 @@ export function AnalysisGenerator() {
 			const result = await generateInsights(content);
 			setReflection(result.insights);
 		} catch (err) {
-			setError('Ocurrió un error al generar el análisis. Inténtalo de nuevo.');
+			setError('Error al generar el análisis. Por favor, inténtalo de nuevo más tarde.');
 		} finally {
 			setIsLoading(false);
 		}
@@ -129,7 +129,7 @@ export function AnalysisGenerator() {
 								>
 									<Checkbox
 										id={`entry-${entry.id}`}
-										checked={selectedEntries.has(entry.id)}
+										checked={selectedEntries.includes(entry.id)}
 										onCheckedChange={() => toggleEntrySelection(entry.id)}
 										aria-label={`Seleccionar nota del ${entry.createdAt.toLocaleDateString()}`}
 									/>
@@ -138,7 +138,7 @@ export function AnalysisGenerator() {
 										className="flex-1 cursor-pointer space-y-1"
 									>
 										<p className="font-semibold text-sm">
-											{entry.createdAt.toLocaleDateString('es-ES', {
+											{new Date(entry.createdAt).toLocaleDateString('es-ES', {
 												year: 'numeric',
 												month: 'long',
 												day: 'numeric',
@@ -168,12 +168,12 @@ export function AnalysisGenerator() {
 					<div className="space-y-4">
 						<Button
 							onClick={handleGenerate}
-							disabled={isLoading || selectedEntries.size === 0}
+							disabled={isLoading || selectedEntries.length === 0}
 							className="w-full"
 						>
 							{isLoading
 								? 'Generando...'
-								: `Analizar ${selectedEntries.size} nota(s)`}
+								: `Analizar ${selectedEntries.length} nota(s)`}
 						</Button>
 
 						{error && (
