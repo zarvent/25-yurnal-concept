@@ -158,3 +158,11 @@ export function detectCrisisKeywords(text: string): boolean {
   const normalizedText = text.toLowerCase();
   return CRISIS_KEYWORDS.some(keyword => normalizedText.includes(keyword));
 }
+
+// ===== TIPOS DE HERRAMIENTAS =====
+
+export interface Tool {
+  id: string; // Identificador único
+  name: string; // Nombre de la herramienta
+  // Otros campos relevantes pueden ser añadidos aquí
+}
