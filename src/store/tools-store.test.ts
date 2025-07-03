@@ -1,5 +1,5 @@
-import { useToolsStore, debouncedSave } from './tools-store';
 import { act } from 'react-dom/test-utils';
+import { debouncedSave, useToolsStore } from './tools-store';
 
 jest.mock('./tools-store', () => {
   const originalModule = jest.requireActual('./tools-store');

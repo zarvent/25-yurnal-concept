@@ -1,5 +1,6 @@
 import { arrayMove } from '@dnd-kit/sortable';
 import axios from 'axios';
+import { produce } from 'immer';
 import { debounce } from 'lodash-es';
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
@@ -53,24 +54,20 @@ export const useToolsStore = create<ToolsState>()(
     setTools: (tools) => set({ tools, status: 'idle', error: null }),
     setActiveToolId: (id) => set({ activeToolId: id }),
 
-    moveTool: (activeId, overId) => {
-      set((state) => {
-        const activeIndex = state.tools.findIndex((t) => t.id === activeId);
-        const overIndex = state.tools.findIndex((t) => t.id === overId);
+    moveTool: (activeId, overId) =>
+      set(
+        produce((draft: ToolsState) => {
+          const activeIndex = draft.tools.findIndex((t) => t.id === activeId);
+          const overIndex = draft.tools.findIndex((t) => t.id === overId);
 
-        // Validar índices
-        if (activeIndex === -1 || overIndex === -1 || activeIndex === overIndex) {
-          return state;
-        }
-
-        // Reordenar herramientas
-        const updatedTools = arrayMove(state.tools, activeIndex, overIndex);
-        return { tools: updatedTools };
-      });
-    },
+          if (activeIndex !== -1 && overIndex !== -1) {
+            draft.tools = arrayMove(draft.tools, activeIndex, overIndex);
+          }
+        }),
+      ),
 
     saveToolsOrder: () => {
       debouncedSave(get, set);
     },
-  }))
+  })),
 );

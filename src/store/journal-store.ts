@@ -8,7 +8,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 interface JournalStore {
   entries: JournalEntry[];
   isLoaded: boolean;
-  selectedEntries: Set<string>; // IDs of selected entries
+  selectedEntries: string[]; // Cambiado a array de strings
   addEntry: (entry: JournalEntry) => void;
   loadEntries: () => void; // This action will be responsible for loading
   getEntriesAsText: () => string;
@@ -22,7 +22,7 @@ export const useJournalStore = create<JournalStore>()(
     (set, get) => ({
       entries: [],
       isLoaded: false, // Initialize as false
-      selectedEntries: new Set(),
+      selectedEntries: [], // Iniciar como un array vacío
 
       loadEntries: () => {
         // This function body is where you would fetch from a real async source.
@@ -44,19 +44,17 @@ Content: ${e.content}`).join('\n\n');
 
       toggleEntrySelection: (id) =>
         set((state) => {
-          const selectedEntries = new Set(state.selectedEntries);
-          if (selectedEntries.has(id)) {
-            selectedEntries.delete(id);
-          } else {
-            selectedEntries.add(id);
-          }
-          return { selectedEntries };
+          const isSelected = state.selectedEntries.includes(id);
+          const newSelectedEntries = isSelected
+            ? state.selectedEntries.filter((entryId) => entryId !== id)
+            : [...state.selectedEntries, id];
+          return { selectedEntries: newSelectedEntries };
         }),
 
       getSelectedEntriesContent: () => {
         const { entries, selectedEntries } = get();
         return entries
-          .filter((entry) => selectedEntries.has(entry.id))
+          .filter((entry) => selectedEntries.includes(entry.id))
           .map((entry) => `Date: ${entry.createdAt.toISOString()}\nContent: ${entry.content}`)
           .join('\n\n');
       },
@@ -66,6 +64,13 @@ Content: ${e.content}`).join('\n\n');
     {
       name: 'journal-storage', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+      version: 1,
+      migrate: (persistedState, version) => {
+        if (version < 1) {
+          (persistedState as any).selectedEntries = [];
+        }
+        return persistedState;
+      },
       // onRehydrateStorage returns a function that can be used as a listener
       onRehydrateStorage: () => {
         return (state) => {
@@ -80,3 +85,4 @@ Content: ${e.content}`).join('\n\n');
 
 // Export the JournalEntry type for external usage
 export type { JournalEntry };
+

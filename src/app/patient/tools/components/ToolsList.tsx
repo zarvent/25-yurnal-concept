@@ -1,14 +1,24 @@
 'use client';
 
+import { useToast } from '@/hooks/use-toast';
+import { useToolsStore } from '@/store/tools-store';
 import { Tool } from '@/types';
-import { ToastProvider, ToastViewport } from '@/components/ui/toast';
-import { DndContext, DragOverlay, DropAnimation, KeyboardSensor, PointerSensor, closestCenter, defaultDropAnimation, useSensor, useSensors } from '@dnd-kit/core';
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
+    KeyboardSensor,
+    PointerSensor,
+    closestCenter,
+    useSensor,
+    useSensors
+} from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useEffect } from 'react';
-import { debouncedSave, useToolsStore } from '@/store/tools-store';
+import React, { useEffect } from 'react';
 
-const SortableToolItem = ({ tool }: { tool: Tool }) => {
+const SortableToolItem = React.memo(({ tool }: { tool: Tool }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tool.id });
 
     const style = {
@@ -28,7 +38,8 @@ const SortableToolItem = ({ tool }: { tool: Tool }) => {
             {tool.name}
         </div>
     );
-};
+});
+SortableToolItem.displayName = 'SortableToolItem';
 
 const ToolItemOverlay = ({ tool }: { tool: Tool }) => {
     return (
@@ -36,10 +47,11 @@ const ToolItemOverlay = ({ tool }: { tool: Tool }) => {
             {tool.name}
         </div>
     );
-}
+};
 
 export const ToolsList = () => {
     const { tools, status, error, moveTool, saveToolsOrder, setActiveToolId, activeToolId } = useToolsStore();
+    const { toast } = useToast();
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -48,39 +60,28 @@ export const ToolsList = () => {
 
     useEffect(() => {
         if (status === 'error' && error) {
-            showToast('destructive', 'Error de Sincronización', error);
+            toast({ variant: 'destructive', title: 'Error de Sincronización', description: error });
         }
         if (status === 'success') {
-            showToast('default', 'Orden Guardado', 'El nuevo orden de las herramientas ha sido guardado.');
+            toast({ variant: 'default', title: 'Orden Guardado', description: 'El nuevo orden de las herramientas ha sido guardado.' });
         }
-    }, [status, error]);
+    }, [status, error, toast]);
 
-    const handleDragStart = (event: { active: { id: string } }) => {
-        setActiveToolId(event.active.id);
-        debouncedSave.cancel();
+    const handleDragStart = (event: DragStartEvent) => {
+        setActiveToolId(String(event.active.id));
     };
 
-    const handleDragEnd = (event: { active: { id: string }, over: { id: string } | null }) => {
+    const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         setActiveToolId(null);
 
         if (over && active.id !== over.id) {
-            moveTool(active.id, over.id);
+            moveTool(String(active.id), String(over.id));
             saveToolsOrder();
         }
     };
 
-    const dropAnimation: DropAnimation = {
-        ...defaultDropAnimation,
-        dragSourceOpacity: 1,
-    };
-
-    const activeTool = tools.find(t => t.id === activeToolId);
-
-    const showToast = (variant: 'default' | 'destructive', title: string, description: string) => {
-        // Implementación básica para mostrar un toast
-        console.log(`[Toast] ${variant}: ${title} - ${description}`);
-    };
+    const activeTool = tools.find((t) => t.id === activeToolId);
 
     return (
         <DndContext
@@ -89,14 +90,14 @@ export const ToolsList = () => {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <SortableContext items={tools.map(t => t.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={tools.map((t) => t.id)} strategy={verticalListSortingStrategy}>
                 <div className="space-y-3">
-                    {tools.map(tool => (
+                    {tools.map((tool) => (
                         <SortableToolItem key={tool.id} tool={tool} />
                     ))}
                 </div>
             </SortableContext>
-            <DragOverlay dropAnimation={dropAnimation}>
+            <DragOverlay dropAnimation={{ duration: 250, easing: 'ease' }}>
                 {activeTool ? <ToolItemOverlay tool={activeTool} /> : null}
             </DragOverlay>
         </DndContext>
