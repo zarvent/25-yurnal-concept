@@ -28,9 +28,9 @@ export function StatsCard({
     variant = 'default'
 }: StatsCardProps) {
     const variants = {
-        default: 'bg-card border shadow-sm hover:shadow-md',
-        gradient: 'bg-gradient-to-br from-primary/5 to-accent/5 border-0 shadow-md hover:shadow-lg',
-        minimal: 'bg-transparent border-0 shadow-none hover:bg-muted/50',
+        default: 'bg-white border border-neutral-light shadow-sm hover:shadow-lg rounded-xl',
+        gradient: 'bg-gradient-to-br from-primary/5 to-accent-calm/5 border-0 shadow-md hover:shadow-lg rounded-xl',
+        minimal: 'bg-transparent border-0 shadow-none hover:bg-neutral-light rounded-xl',
     };
 
     return (
@@ -39,34 +39,34 @@ export function StatsCard({
             variants[variant],
             className
         )}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-6">
+                <CardTitle className="text-neutral-medium text-sm font-medium">
                     {title}
                 </CardTitle>
                 {Icon && (
-                    <div className="rounded-lg bg-primary/10 p-2">
-                        <Icon className="h-4 w-4 text-primary" />
+                    <div className="rounded-xl bg-secondary p-3 flex items-center justify-center">
+                        <Icon className="h-5 w-5 text-primary" />
                     </div>
                 )}
             </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold mb-1">{value}</div>
-
+            <CardContent className="p-6">
+                <div className="h2 font-bold mb-1 text-neutral-dark">
+                    {value}
+                </div>
                 {description && (
-                    <p className="text-xs text-muted-foreground mb-2">
+                    <p className="caption text-neutral-medium mb-2">
                         {description}
                     </p>
                 )}
-
                 {trend && (
-                    <div className="flex items-center text-xs">
+                    <div className="flex items-center caption">
                         <span className={cn(
                             'font-medium',
-                            trend.isPositive === false ? 'text-destructive' : 'text-success'
+                            trend.isPositive === false ? 'text-semantic-danger' : 'text-accent-calm'
                         )}>
                             {trend.isPositive !== false ? '+' : ''}{trend.value}%
                         </span>
-                        <span className="text-muted-foreground ml-1">
+                        <span className="text-neutral-medium ml-1">
                             {trend.label}
                         </span>
                     </div>

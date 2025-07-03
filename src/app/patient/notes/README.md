@@ -1,4 +1,10 @@
-# Patient Journal View (`journal`)
+# Notas del Paciente (`notes`)
+
+Esta sección contiene todas las notas del paciente. Antes era conocida como 'Diario'.
+
+- Aquí se listan, exportan y analizan todas las notas.
+- Permite seleccionar notas para análisis en /patient/reflections.
+- Integra todas las funcionalidades de gestión y análisis de notas personales.
 
 ## Análisis del INGENIERO CATO
 

@@ -8,16 +8,15 @@ import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
     { href: '/patient/today', label: 'Hoy', icon: Pencil },
-    { href: '/patient/journal', label: 'Diario', icon: BookOpen },
-    { href: '/patient/reflections', label: 'Análisis', icon: Wrench },
+    { href: '/patient/notes', label: 'Notas', icon: BookOpen },
+    { href: '/patient/reflections', label: 'Reflexiones', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
     '/patient/today': 'Hoy',
-    '/patient/journal': 'Diario',
-    '/patient/tools': 'Caja de Herramientas',
-    '/patient/my-therapist': 'Mi Terapeuta',
+    '/patient/notes': 'Notas',
     '/patient/reflections': 'Análisis de Patrones',
+    '/patient/my-therapist': 'Mi Terapeuta',
     '/patient/settings': 'Ajustes',
 };
 
@@ -47,7 +46,7 @@ const SidebarFooter = () => {
             <div className="p-4">
                 <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
                     <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span>Encriptación de Extremo a Extremo. Ni nosotros podemos leer tu diario.</span>
+                    <span>Encriptación de Extremo a Extremo. Ni nosotros podemos leer tus notas.</span>
                 </div>
             </div>
         </>

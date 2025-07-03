@@ -150,7 +150,7 @@ function PremiumModal({ isOpen, onOpenChange }: { isOpen: boolean, onOpenChange:
           <div className="flex items-start gap-4">
             <Search className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
             <div>
-              <h4 className="font-semibold">Búsqueda Avanzada en Diario</h4>
+              <h4 className="font-semibold">Búsqueda Avanzada en Notas</h4>
               <p className="text-sm text-muted-foreground">Encuentra entradas por emoción, tema o palabra clave al instante.</p>
             </div>
           </div>

@@ -2,14 +2,15 @@
 
 import { CrisisAlert } from '@/components/crisis-alert';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { PremiumButton } from '@/components/ui/premium-button';
+import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useJournal } from '@/hooks/use-journal';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { TranscriptionResult, VoiceTranscriptionService } from '@/lib/voice-transcription';
-import { useJournalStore } from '@/store/journal-store';
+import { journalService } from '@/services/journal.service';
+import { useJournalUIStore } from '@/store/journal-ui.store';
 import { Film, Loader2, Mic, MicOff, Paperclip, PartyPopper, X } from 'lucide-react';
 import React, { useCallback, useRef, useState } from 'react';
 
@@ -43,7 +44,7 @@ const templates = [
       'Emoción que siento: \nIntensidad (0-100): \n\nEvento Desencadenante (objetivamente): \n\nMis Interpretaciones y Pensamientos: \n\nEvidencia que apoya mi emoción: \n\nEvidencia que NO apoya mi emoción: \n\nUna visión más equilibrada es: \n',
   },
   {
-    name: 'Diario de Mindfulness',
+    name: 'Notas de Mindfulness',
     prompt: 'Registra tus prácticas de mindfulness, enfocándote en observar y describir sin juicio.',
     content:
       'Actividad Específica:\n\n' +
@@ -114,9 +115,8 @@ export function JournalEditor() {
   const [selectedTemplate, setSelectedTemplate] = useState(templates[0]);
   const [content, setContent] = useState(templates[0].content);
   const [isSaving, setIsSaving] = useState(false);
-  const { addEntry } = useJournal();
   const { toast } = useToast();
-  const { crisisDetected, clearCrisisAlert } = useJournalStore();
+  const { crisisDetected, clearCrisisAlert } = useJournalUIStore();
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -134,7 +134,7 @@ export function JournalEditor() {
   const therapistContact = {
     name: 'Dr. García Martínez',
     phone: '+34 600 123 456',
-    email: 'dr.garcia@yurnal.com'
+    email: 'dr.garcia@yurnal.com',
   };
 
   // Funciones para transcripción de voz
@@ -155,7 +155,7 @@ export function JournalEditor() {
         language: 'es-ES',
         emotionalContextAnalysis: true,
         localProcessing: true,
-        confidenceThreshold: 0.7
+        confidenceThreshold: 0.7,
       });
 
       // Iniciar grabación
@@ -165,7 +165,7 @@ export function JournalEditor() {
 
       // Iniciar contador de tiempo
       const interval = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
       setRecordingInterval(interval);
 
@@ -173,7 +173,6 @@ export function JournalEditor() {
         title: 'Grabación iniciada',
         description: 'Habla naturalmente, tu voz será transcrita a texto.',
       });
-
     } catch (error: any) {
       console.error('Error al iniciar grabación:', error);
       toast({
@@ -205,7 +204,7 @@ export function JournalEditor() {
       // Agregar la transcripción al contenido
       const timestamp = new Date().toLocaleTimeString('es-ES', {
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
 
       const transcriptionText = `[Transcripción de voz - ${timestamp}]\n${result.text}\n`;
@@ -228,7 +227,6 @@ export function JournalEditor() {
         title: 'Transcripción completada',
         description,
       });
-
     } catch (error: any) {
       console.error('Error en transcripción:', error);
       setIsTranscribing(false);
@@ -286,30 +284,48 @@ export function JournalEditor() {
     }
   };
 
-  const handleSave = () => {
-    if (content.trim() === '' || content.trim() === selectedTemplate.content.trim()) {
+  const handleSave = async () => {
+    if (content.trim().length < 10) {
       toast({
-        title: 'Entrada vacía',
-        description: 'Por favor, escribe algo antes de guardar.',
+        title: 'Contenido demasiado corto',
+        description: 'Tu entrada debe tener al menos 10 caracteres.',
         variant: 'destructive',
       });
       return;
     }
-
     setIsSaving(true);
-    // Simular una operación asíncrona para dar feedback visual
-    setTimeout(() => {
-      const attachments = uploadedFile ? [uploadedFile] : undefined;
-      addEntry(content, selectedTemplate.name, attachments);
+    try {
+      await journalService.createNewEntry(content);
+
       toast({
-        title: '¡Entrada Guardada!',
-        description: 'Tu reflexión ha sido guardada de forma segura en tu santuario digital.',
-        action: <PartyPopper className="h-5 w-5 text-primary" />,
+        title: '¡Guardado!',
+        description: (
+          <div className="flex items-center">
+            <PartyPopper className="mr-2 h-4 w-4 text-green-500" />
+            <span>Tu entrada ha sido guardada de forma segura.</span>
+          </div>
+        ),
       });
-      setContent(selectedTemplate.content);
+
+      // Limpiar el editor
+      setContent('');
+      setSelectedTemplate(templates[0]);
+    } catch (error) {
+      toast({
+        title: 'Error al guardar',
+        description: 'No se pudo guardar tu entrada. Por favor, inténtalo de nuevo.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsSaving(false);
-      handleRemoveFile(); // Clear file after saving
-    }, 500);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedFile({ name: file.name, type: file.type });
+    }
   };
 
   return (
@@ -320,30 +336,60 @@ export function JournalEditor() {
         userText={content}
         therapistContact={therapistContact}
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>{selectedTemplate.name}</CardTitle>
-          <CardDescription>{selectedTemplate.prompt}</CardDescription>
+      <Card className="bg-white border border-neutral-light rounded-xl shadow-md max-w-2xl mx-auto mt-8">
+        <CardHeader className="p-6">
+          <CardTitle className="h2 mb-2">Editor de Notas</CardTitle>
+          <CardDescription className="mb-4">Escribe tus pensamientos, reflexiones o usa una plantilla.</CardDescription>
+          <div className="flex gap-4 items-center mb-2">
+            <Select value={selectedTemplate.name} onValueChange={handleTemplateChange}>
+              <SelectTrigger className="w-64">
+                <SelectValue placeholder="Selecciona una plantilla" />
+              </SelectTrigger>
+              <SelectContent>
+                {templates.map((template) => (
+                  <SelectItem key={template.name} value={template.name}>
+                    {template.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {/* Barra de herramientas con tooltips */}
+            <TooltipProvider>
+              <div className="flex gap-2 ml-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <EnhancedButton size="icon" variant="ghost" aria-label="Adjuntar archivo" onClick={() => fileInputRef.current?.click()}>
+                      <Paperclip className="w-5 h-5" />
+                    </EnhancedButton>
+                  </TooltipTrigger>
+                  <TooltipContent>Adjuntar archivo</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <EnhancedButton size="icon" variant="ghost" aria-label="Grabar voz" onClick={isRecording ? stopRecording : startRecording}>
+                      {isRecording ? <MicOff className="w-5 h-5 text-semantic-danger" /> : <Mic className="w-5 h-5" />}
+                    </EnhancedButton>
+                  </TooltipTrigger>
+                  <TooltipContent>{isRecording ? 'Detener grabación' : 'Grabar voz'}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <EnhancedButton size="icon" variant="ghost" aria-label="Insertar emoji" onClick={() => setContent(content + ' 😊')}>
+                      <PartyPopper className="w-5 h-5" />
+                    </EnhancedButton>
+                  </TooltipTrigger>
+                  <TooltipContent>Insertar emoji</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Select onValueChange={handleTemplateChange} defaultValue={templates[0].name}>
-            <SelectTrigger className="w-full md:w-[300px]">
-              <SelectValue placeholder="Elige una plantilla..." />
-            </SelectTrigger>
-            <SelectContent>
-              {templates.map((template) => (
-                <SelectItem key={template.name} value={template.name}>
-                  {template.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <CardContent className="p-6">
           <Textarea
+            className="body bg-neutral-light rounded-lg min-h-[180px] p-5 focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Comienza a escribir aquí..."
-            className="min-h-[300px] text-base"
-            aria-label="Editor de diario"
+            onChange={e => setContent(e.target.value)}
+            placeholder={selectedTemplate.prompt}
           />
           <input
             type="file"
@@ -356,53 +402,6 @@ export function JournalEditor() {
         <CardFooter>
           <div className="flex items-center justify-between w-full gap-4">
             <div className="flex items-center gap-2 flex-1">
-              {!isUploading && !uploadedFile && !isRecording && !isTranscribing && (
-                <>
-                  <PremiumButton
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isSaving}
-                  >
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    Adjuntar Archivo
-                  </PremiumButton>
-
-                  <PremiumButton
-                    variant="outline"
-                    size="sm"
-                    onClick={startRecording}
-                    disabled={isSaving}
-                    className="bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border-blue-200"
-                  >
-                    <Mic className="mr-2 h-4 w-4 text-blue-600" />
-                    Transcribir Voz
-                  </PremiumButton>
-                </>
-              )}
-
-              {isRecording && (
-                <div className="flex items-center gap-2">
-                  <PremiumButton
-                    variant="outline"
-                    size="sm"
-                    onClick={stopRecording}
-                    className="animate-pulse border-red-200 text-red-600 hover:bg-red-50"
-                  >
-                    <MicOff className="mr-2 h-4 w-4" />
-                    Detener ({formatRecordingTime(recordingTime)})
-                  </PremiumButton>
-                  <span className="text-sm text-muted-foreground">Grabando...</span>
-                </div>
-              )}
-
-              {isTranscribing && (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-                  <span className="text-sm text-muted-foreground">Transcribiendo tu voz...</span>
-                </div>
-              )}
-
               {isUploading && (
                 <div className="flex items-center gap-2 flex-1">
                   <Progress value={uploadProgress} className="w-full" />
@@ -416,19 +415,19 @@ export function JournalEditor() {
                     <Film className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground truncate">{uploadedFile.name}</span>
                   </div>
-                  <PremiumButton
+                  <EnhancedButton
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6 flex-shrink-0"
                     onClick={handleRemoveFile}
                   >
                     <X className="h-4 w-4" />
-                  </PremiumButton>
+                  </EnhancedButton>
                 </div>
               )}
             </div>
 
-            <PremiumButton
+            <EnhancedButton
               onClick={handleSave}
               disabled={isSaving || isUploading || isRecording || isTranscribing}
               className="ml-auto"
@@ -441,7 +440,7 @@ export function JournalEditor() {
               ) : (
                 'Guardar Entrada'
               )}
-            </PremiumButton>
+            </EnhancedButton>
           </div>
         </CardFooter>
       </Card>

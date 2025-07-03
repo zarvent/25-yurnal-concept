@@ -1,9 +1,9 @@
 'use client';
 
-import { BarChart as BarChartIcon, Users, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { BarChart as BarChartIcon, Clock, Users } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 const chartData = [
   { month: 'Enero', stress: 80, anxiety: 65 },
@@ -27,8 +27,8 @@ const chartConfig = {
 
 export default function TherapistDashboardPage() {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Card>
+    <div className="grid gap-6 md:grid-cols-6 lg:grid-cols-12 p-4 md:p-6 lg:p-8">
+      <Card className="col-span-6 lg:col-span-4">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Pacientes Activos</CardTitle>
           <Users className="h-4 w-4 text-muted-foreground" />
@@ -38,7 +38,7 @@ export default function TherapistDashboardPage() {
           <p className="text-xs text-muted-foreground">+2 esta semana</p>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="col-span-6 lg:col-span-4">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Próxima Cita</CardTitle>
           <Clock className="h-4 w-4 text-muted-foreground" />
@@ -48,7 +48,7 @@ export default function TherapistDashboardPage() {
           <p className="text-xs text-muted-foreground">con J. Doe</p>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="col-span-6 lg:col-span-4">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Tendencia General</CardTitle>
           <BarChartIcon className="h-4 w-4 text-muted-foreground" />
@@ -58,8 +58,7 @@ export default function TherapistDashboardPage() {
           <p className="text-xs text-muted-foreground">Nivel de estrés promedio a la baja</p>
         </CardContent>
       </Card>
-      
-      <Card className="md:col-span-2 lg:col-span-3">
+      <Card className="col-span-12">
         <CardHeader>
           <CardTitle>Evolución Emocional Agregada</CardTitle>
           <CardDescription>
@@ -87,8 +86,7 @@ export default function TherapistDashboardPage() {
           </ChartContainer>
         </CardContent>
       </Card>
-      
-      <Card className="lg:col-span-3">
+      <Card className="col-span-12">
         <CardHeader>
           <CardTitle>Actividad Reciente de Pacientes</CardTitle>
           <CardDescription>

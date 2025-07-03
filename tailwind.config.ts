@@ -22,14 +22,14 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
+        primary: '#2E5A88', // Confianza y Enfoque
+        secondary: '#D0E0F0', // Calma y Soporte
+        'accent-calm': '#5DBA8A', // Crecimiento y Positividad
+        'accent-energetic': '#F7B538', // Atención y Alerta
+        'neutral-dark': '#1A202C', // Texto y Jerarquía
+        'neutral-medium': '#4A5568', // Texto Secundario
+        'neutral-light': '#F7FAFC', // Bordes y Fondos
+        'semantic-danger': '#E53E3E', // Crítico
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
