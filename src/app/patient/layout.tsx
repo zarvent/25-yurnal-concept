@@ -1,24 +1,24 @@
 'use client';
 
-import { useState, useEffect, type ReactNode } from 'react';
-import { Pencil, BookOpen, Wrench, Lock } from 'lucide-react';
+import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { BookOpen, Lock, Pencil, Wrench } from 'lucide-react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
-  { href: '/patient/today', label: 'Hoy', icon: Pencil },
-  { href: '/patient/journal', label: 'Diario', icon: BookOpen },
-  { href: '/patient/reflections', label: 'Reflexiones', icon: Wrench },
+    { href: '/patient/today', label: 'Hoy', icon: Pencil },
+    { href: '/patient/journal', label: 'Diario', icon: BookOpen },
+    { href: '/patient/reflections', label: 'Análisis', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
-  '/patient/today': 'Hoy',
-  '/patient/journal': 'Diario',
-  '/patient/tools': 'Caja de Herramientas',
-  '/patient/my-therapist': 'Mi Terapeuta',
-  '/patient/reflections': 'Mis Reflexiones',
-  '/patient/settings': 'Ajustes',
+    '/patient/today': 'Hoy',
+    '/patient/journal': 'Diario',
+    '/patient/tools': 'Caja de Herramientas',
+    '/patient/my-therapist': 'Mi Terapeuta',
+    '/patient/reflections': 'Análisis de Patrones',
+    '/patient/settings': 'Ajustes',
 };
 
 const SidebarFooter = () => {
@@ -33,13 +33,13 @@ const SidebarFooter = () => {
             <div className="p-4 text-center text-xs text-muted-foreground">
                 <TooltipProvider delayDuration={100}>
                     <Tooltip>
-                    <TooltipTrigger asChild>
-                        <button className='cursor-default'>© {year} Zarvent Labs</button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" align="center" className="max-w-xs text-center bg-background text-foreground border-border">
-                        <p className="text-sm font-bold">Un proyecto de Zarvent Labs</p>
-                        <p className="text-xs">Bajo la visión de Cesar Sebastian Zambrana Ventura</p>
-                    </TooltipContent>
+                        <TooltipTrigger asChild>
+                            <button className='cursor-default'>© {year} Zarvent Labs</button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" align="center" className="max-w-xs text-center bg-background text-foreground border-border">
+                            <p className="text-sm font-bold">Un proyecto de Zarvent Labs</p>
+                            <p className="text-xs">Bajo la visión de Cesar Sebastian Zambrana Ventura</p>
+                        </TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
             </div>

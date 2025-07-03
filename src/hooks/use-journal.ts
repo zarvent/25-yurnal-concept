@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useJournalStore, type JournalEntry } from '@/store/journal-store';
+import { useEffect } from 'react';
 
 // Re-export the type for convenience
 export type { JournalEntry };

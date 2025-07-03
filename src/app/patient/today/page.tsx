@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { JournalEditor } from '@/components/journal-editor';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Lightbulb, Wrench } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function TodayPage() {
   const [greeting, setGreeting] = useState('');
@@ -47,36 +47,36 @@ export default function TodayPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lightbulb className="h-5 w-5 text-primary" />
-              <span>Mis Reflexiones</span>
+              <span>Análisis de Patrones</span>
             </CardTitle>
             <CardDescription>
-              Descubre patrones y temas en tus entradas con la ayuda de la IA.
+              Descubre patrones y temas profundos en tus entradas con análisis de IA.
             </CardDescription>
           </CardHeader>
           <CardContent>
-             <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/patient/reflections">
-                  Generar Reflexión <ArrowRight className="ml-2" />
-                </Link>
-             </Button>
+            <Button asChild variant="secondary" className="w-full sm:w-auto">
+              <Link href="/patient/reflections">
+                Generar Análisis <ArrowRight className="ml-2" />
+              </Link>
+            </Button>
           </CardContent>
         </Card>
         <Card className="hover:border-primary/50 transition-colors">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-                <Wrench className="h-5 w-5 text-primary" />
-                <span>Biblioteca de Habilidades</span>
+              <Wrench className="h-5 w-5 text-primary" />
+              <span>Biblioteca de Habilidades</span>
             </CardTitle>
             <CardDescription>
               Explora ejercicios prácticos para manejar tus emociones y pensamientos.
             </CardDescription>
           </CardHeader>
-           <CardContent>
-             <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/patient/tools">
-                  Explorar Herramientas <ArrowRight className="ml-2" />
-                </Link>
-             </Button>
+          <CardContent>
+            <Button asChild variant="secondary" className="w-full sm:w-auto">
+              <Link href="/patient/tools">
+                Explorar Herramientas <ArrowRight className="ml-2" />
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
