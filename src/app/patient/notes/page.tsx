@@ -11,10 +11,11 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { BookOpen, CalendarDays, FileQuestion, Pencil } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { exportJournal } from './test-journal';
 
-function JournalEntryCard({ entry }: { entry: JournalEntry }) {
+function JournalEntryCard({ entry, selected, onSelect }: { entry: JournalEntry, selected: boolean, onSelect: (checked: boolean) => void }) {
   const formattedDate = new Date(entry.createdAt).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'long',
@@ -31,6 +32,7 @@ function JournalEntryCard({ entry }: { entry: JournalEntry }) {
             <CardTitle>{entry.content}</CardTitle>
             <CardDescription>{formattedDate}</CardDescription>
           </div>
+          <input type="checkbox" checked={selected} onChange={e => onSelect(e.target.checked)} className="ml-2 w-5 h-5" />
         </div>
       </CardHeader>
       <CardContent>
@@ -53,7 +55,7 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-12 text-center h-[400px]">
       <FileQuestion className="mx-auto h-12 w-12 text-muted-foreground" />
-      <h3 className="mt-4 text-lg font-semibold">Tu diario está esperando su primera historia</h3>
+      <h3 className="mt-4 text-lg font-semibold">Tus notas están esperando su primera historia</h3>
       <p className="mb-4 mt-2 text-sm text-muted-foreground">
         Cada gran viaje comienza con un solo paso. Da el tuyo ahora.
       </p>
@@ -89,10 +91,11 @@ function JournalLoadingSkeleton() {
   )
 }
 
-
-export default function JournalPage() {
+export default function NotesPage() {
   const { entries } = useJournal();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     setSelectedDate(new Date());
@@ -115,6 +118,15 @@ export default function JournalPage() {
     });
   }, [entries, selectedDate]);
 
+  const handleSelect = (id: string, checked: boolean) => {
+    setSelectedIds(prev => checked ? [...prev, id] : prev.filter(i => i !== id));
+  };
+
+  const handleAnalyzeSelected = () => {
+    if (selectedIds.length === 0) return;
+    router.push(`/patient/reflections?ids=${selectedIds.join(',')}`);
+  };
+
   if (entries.length === 0) {
     return <EmptyState />;
   }
@@ -132,18 +144,30 @@ export default function JournalPage() {
         </TabsTrigger>
       </TabsList>
 
-      <div className="mb-4">
+      <div className="mb-4 flex gap-4 items-center">
         <Button
-          onClick={() => exportJournal(entries, 'markdown', 'journal-notes.md')}
+          onClick={() => exportJournal(entries, 'markdown', 'notas.md')}
           className="bg-blue-500 text-white"
         >
           Exportar todas las notas como Markdown
+        </Button>
+        <Button
+          onClick={handleAnalyzeSelected}
+          className="bg-primary text-white"
+          disabled={selectedIds.length === 0}
+        >
+          Analizar seleccionadas
         </Button>
       </div>
 
       <TabsContent value="list" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {entries.map((entry: JournalEntry) => (
-          <JournalEntryCard key={entry.id} entry={entry} />
+          <JournalEntryCard
+            key={entry.id}
+            entry={entry}
+            selected={selectedIds.includes(entry.id)}
+            onSelect={checked => handleSelect(entry.id, checked)}
+          />
         ))}
       </TabsContent>
 
@@ -172,7 +196,7 @@ export default function JournalPage() {
             {selectedEntries.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {selectedEntries.map((entry: JournalEntry) => (
-                  <JournalEntryCard key={entry.id} entry={entry} />
+                  <JournalEntryCard key={entry.id} entry={entry} selected={selectedIds.includes(entry.id)} onSelect={checked => handleSelect(entry.id, checked)} />
                 ))}
               </div>
             ) : (

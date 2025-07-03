@@ -1,25 +1,25 @@
 'use client';
 
-import { useState, useEffect, type ReactNode } from 'react';
-import { LayoutDashboard, Network, Library, BookUser, Lock } from 'lucide-react';
+import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { BookUser, LayoutDashboard, Library, Lock, Network } from 'lucide-react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
-  { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/student/courses', label: 'Rutas de Aprendizaje', icon: Network },
-  { href: '/student/library', label: 'Biblioteca', icon: Library },
-  { href: '/student/my-journal', label: 'Mi Diario', icon: BookUser },
+    { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/student/courses', label: 'Rutas de Aprendizaje', icon: Network },
+    { href: '/student/library', label: 'Biblioteca', icon: Library },
+    { href: '/student/my-journal', label: 'Mis Notas', icon: BookUser },
 ];
 
 const pageTitles: { [key: string]: string } = {
-  '/student/dashboard': 'Dashboard Académico',
-  '/student/articles': 'Artículos de Divulgación',
-  '/student/courses': 'Rutas de Aprendizaje',
-  '/student/library': 'Biblioteca de Tesis y Papers',
-  '/student/my-journal': 'Mi Diario Personal',
-  '/student/settings': 'Ajustes',
+    '/student/dashboard': 'Dashboard Académico',
+    '/student/articles': 'Artículos de Divulgación',
+    '/student/courses': 'Rutas de Aprendizaje',
+    '/student/library': 'Biblioteca de Tesis y Papers',
+    '/student/my-journal': 'Mis Notas Personales',
+    '/student/settings': 'Ajustes',
 };
 
 const SidebarFooter = () => {

@@ -1,6 +1,6 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookUser, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight, BookUser } from "lucide-react";
 import Link from "next/link";
 
 export default function MyJournalPage() {
@@ -13,14 +13,14 @@ export default function MyJournalPage() {
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center text-center p-12">
         <p className="max-w-prose text-muted-foreground mb-6">
-          Como estudiante de psicología, experimentar las herramientas en primera persona es una forma poderosa de aprender. Esta sección te da acceso completo a las funcionalidades de diario y reflexión, tal como las usaría un paciente.
+          Como estudiante de psicología, experimentar las herramientas en primera persona es una forma poderosa de aprender. Esta sección te da acceso completo a las funcionalidades de notas y reflexión, tal como las usaría un paciente.
         </p>
         <Button asChild>
           <Link href="/patient/today">
-            Ir a mi Diario <ArrowRight className="ml-2 h-4 w-4" />
+            Ir a mis Notas <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
-          <p className="text-xs text-muted-foreground mt-4">
+        <p className="text-xs text-muted-foreground mt-4">
           (Serás dirigido a la sección de paciente, que es tu espacio personal y privado)
         </p>
       </CardContent>

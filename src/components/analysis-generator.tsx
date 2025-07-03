@@ -3,17 +3,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { journalService } from '@/services/journal.service';
+import { useJournalDataStore } from '@/store/journal-data.store';
 import { Insight, JournalEntry } from '@/types';
 import { useState, useTransition } from 'react';
 
 interface AnalysisGeneratorProps {
-	selectedEntries: JournalEntry[];
+	selectedEntries?: JournalEntry[];
 }
 
-export function AnalysisGenerator({ selectedEntries }: AnalysisGeneratorProps) {
+export function AnalysisGenerator({ selectedEntries = [] }: AnalysisGeneratorProps) {
 	const [insights, setInsights] = useState<Insight[] | null>(null);
 	const [isPending, startTransition] = useTransition();
 	const { toast } = useToast();
+	const addEntry = useJournalDataStore(state => state.addEntry);
 
 	const handleGenerateClick = () => {
 		if (selectedEntries.length === 0) {
@@ -24,13 +26,27 @@ export function AnalysisGenerator({ selectedEntries }: AnalysisGeneratorProps) {
 			try {
 				const entry = selectedEntries[0];
 				const generated = await journalService.generateInsightsForEntry(entry.id);
-				// Aseguramos un array
 				setInsights([generated]);
 				toast({ title: 'Éxito', description: 'Insights generados correctamente.' });
 			} catch (e) {
 				toast({ variant: 'destructive', title: 'Error', description: (e as Error).message });
 			}
 		});
+	};
+
+	const handleSaveAnalysis = (insight: Insight) => {
+		const content = `Temas: ${insight.themes.join(', ')}\n\nPreguntas: ${insight.questions.join(', ')}\n\nFortalezas: ${insight.strengths.join(', ')}`;
+		addEntry({
+			id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+			content,
+			mood: 'neutral',
+			tags: ['análisis', 'reflexión'],
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			userId: 'user',
+			isPrivate: true,
+		});
+		toast({ title: 'Análisis guardado', description: 'El análisis se ha guardado en tu diario.' });
 	};
 
 	return (
@@ -50,6 +66,9 @@ export function AnalysisGenerator({ selectedEntries }: AnalysisGeneratorProps) {
 							<ul>{insight.themes.map((t, i) => <li key={i}>{t}</li>)}</ul>
 							<h4>Preguntas:</h4>
 							<ul>{insight.questions.map((q, i) => <li key={i}>{q}</li>)}</ul>
+							<Button className="mt-4" onClick={() => handleSaveAnalysis(insight)}>
+								Guardar análisis en mi diario
+							</Button>
 						</CardContent>
 					</Card>
 				))}

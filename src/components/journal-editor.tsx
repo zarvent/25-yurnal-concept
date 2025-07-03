@@ -6,6 +6,7 @@ import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { TranscriptionResult, VoiceTranscriptionService } from '@/lib/voice-transcription';
 import { journalService } from '@/services/journal.service';
@@ -43,7 +44,7 @@ const templates = [
       'Emoción que siento: \nIntensidad (0-100): \n\nEvento Desencadenante (objetivamente): \n\nMis Interpretaciones y Pensamientos: \n\nEvidencia que apoya mi emoción: \n\nEvidencia que NO apoya mi emoción: \n\nUna visión más equilibrada es: \n',
   },
   {
-    name: 'Diario de Mindfulness',
+    name: 'Notas de Mindfulness',
     prompt: 'Registra tus prácticas de mindfulness, enfocándote en observar y describir sin juicio.',
     content:
       'Actividad Específica:\n\n' +
@@ -335,30 +336,60 @@ export function JournalEditor() {
         userText={content}
         therapistContact={therapistContact}
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>{selectedTemplate.name}</CardTitle>
-          <CardDescription>{selectedTemplate.prompt}</CardDescription>
+      <Card className="bg-white border border-neutral-light rounded-xl shadow-md max-w-2xl mx-auto mt-8">
+        <CardHeader className="p-6">
+          <CardTitle className="h2 mb-2">Editor de Notas</CardTitle>
+          <CardDescription className="mb-4">Escribe tus pensamientos, reflexiones o usa una plantilla.</CardDescription>
+          <div className="flex gap-4 items-center mb-2">
+            <Select value={selectedTemplate.name} onValueChange={handleTemplateChange}>
+              <SelectTrigger className="w-64">
+                <SelectValue placeholder="Selecciona una plantilla" />
+              </SelectTrigger>
+              <SelectContent>
+                {templates.map((template) => (
+                  <SelectItem key={template.name} value={template.name}>
+                    {template.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {/* Barra de herramientas con tooltips */}
+            <TooltipProvider>
+              <div className="flex gap-2 ml-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <EnhancedButton size="icon" variant="ghost" aria-label="Adjuntar archivo" onClick={() => fileInputRef.current?.click()}>
+                      <Paperclip className="w-5 h-5" />
+                    </EnhancedButton>
+                  </TooltipTrigger>
+                  <TooltipContent>Adjuntar archivo</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <EnhancedButton size="icon" variant="ghost" aria-label="Grabar voz" onClick={isRecording ? stopRecording : startRecording}>
+                      {isRecording ? <MicOff className="w-5 h-5 text-semantic-danger" /> : <Mic className="w-5 h-5" />}
+                    </EnhancedButton>
+                  </TooltipTrigger>
+                  <TooltipContent>{isRecording ? 'Detener grabación' : 'Grabar voz'}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <EnhancedButton size="icon" variant="ghost" aria-label="Insertar emoji" onClick={() => setContent(content + ' 😊')}>
+                      <PartyPopper className="w-5 h-5" />
+                    </EnhancedButton>
+                  </TooltipTrigger>
+                  <TooltipContent>Insertar emoji</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Select onValueChange={handleTemplateChange} defaultValue={templates[0].name}>
-            <SelectTrigger className="w-full md:w-[300px]">
-              <SelectValue placeholder="Elige una plantilla..." />
-            </SelectTrigger>
-            <SelectContent>
-              {templates.map((template) => (
-                <SelectItem key={template.name} value={template.name}>
-                  {template.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <CardContent className="p-6">
           <Textarea
+            className="body bg-neutral-light rounded-lg min-h-[180px] p-5 focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Comienza a escribir aquí..."
-            className="min-h-[300px] text-base"
-            aria-label="Editor de diario"
+            onChange={e => setContent(e.target.value)}
+            placeholder={selectedTemplate.prompt}
           />
           <input
             type="file"
@@ -371,53 +402,6 @@ export function JournalEditor() {
         <CardFooter>
           <div className="flex items-center justify-between w-full gap-4">
             <div className="flex items-center gap-2 flex-1">
-              {!isUploading && !uploadedFile && !isRecording && !isTranscribing && (
-                <>
-                  <EnhancedButton
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isSaving}
-                  >
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    Adjuntar Archivo
-                  </EnhancedButton>
-
-                  <EnhancedButton
-                    variant="outline"
-                    size="sm"
-                    onClick={startRecording}
-                    disabled={isSaving}
-                    className="bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border-blue-200"
-                  >
-                    <Mic className="mr-2 h-4 w-4 text-blue-600" />
-                    Transcribir Voz
-                  </EnhancedButton>
-                </>
-              )}
-
-              {isRecording && (
-                <div className="flex items-center gap-2">
-                  <EnhancedButton
-                    variant="outline"
-                    size="sm"
-                    onClick={stopRecording}
-                    className="animate-pulse border-red-200 text-red-600 hover:bg-red-50"
-                  >
-                    <MicOff className="mr-2 h-4 w-4" />
-                    Detener ({formatRecordingTime(recordingTime)})
-                  </EnhancedButton>
-                  <span className="text-sm text-muted-foreground">Grabando...</span>
-                </div>
-              )}
-
-              {isTranscribing && (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-                  <span className="text-sm text-muted-foreground">Transcribiendo tu voz...</span>
-                </div>
-              )}
-
               {isUploading && (
                 <div className="flex items-center gap-2 flex-1">
                   <Progress value={uploadProgress} className="w-full" />
