@@ -69,6 +69,20 @@ export class JournalService {
 
     return insight;
   }
+
+  public async createNewEntry(content: string): Promise<void> {
+    const newEntry = {
+      id: crypto.randomUUID(),
+      content,
+      tags: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: this.getCurrentUserId(),
+      isPrivate: true,
+    };
+
+    this._dataStore.addEntry(newEntry);
+  }
 }
 
 export const journalService = new JournalService();

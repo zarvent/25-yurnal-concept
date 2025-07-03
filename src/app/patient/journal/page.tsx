@@ -12,6 +12,7 @@ import { es } from 'date-fns/locale';
 import { BookOpen, CalendarDays, FileQuestion, Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { exportJournal } from './test-journal';
 
 function JournalEntryCard({ entry }: { entry: JournalEntry }) {
   const formattedDate = new Date(entry.createdAt).toLocaleDateString('es-ES', {
@@ -36,6 +37,13 @@ function JournalEntryCard({ entry }: { entry: JournalEntry }) {
         <p className="whitespace-pre-wrap text-sm text-muted-foreground line-clamp-6">
           {entry.content}
         </p>
+        <Button
+          onClick={() => exportJournal(entry, 'markdown', `nota-${entry.id}.md`)}
+          className="mt-2 bg-green-600 text-white"
+          size="sm"
+        >
+          Exportar esta nota
+        </Button>
       </CardContent>
     </Card>
   );
@@ -123,6 +131,15 @@ export default function JournalPage() {
           Vista de Calendario
         </TabsTrigger>
       </TabsList>
+
+      <div className="mb-4">
+        <Button
+          onClick={() => exportJournal(entries, 'markdown', 'journal-notes.md')}
+          className="bg-blue-500 text-white"
+        >
+          Exportar todas las notas como Markdown
+        </Button>
+      </div>
 
       <TabsContent value="list" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {entries.map((entry: JournalEntry) => (
