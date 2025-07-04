@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { BookHeart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -26,9 +28,6 @@ const useScrollPosition = (): boolean => {
 
 /**
  * Hook que encapsula toda la lógica de interacción para el menú móvil.
- * @param {boolean} isMenuOpen - Estado actual del menú.
- * @param {React.Dispatch<React.SetStateAction<boolean>>} setIsMenuOpen - Función para actualizar el estado del menú.
- * @returns {{ menuRef: React.RefObject<HTMLDivElement>, toggleButtonRef: React.RefObject<HTMLButtonElement> }}
  */
 const useMobileMenuLogic = (
     isMenuOpen: boolean,
@@ -73,101 +72,114 @@ const useMobileMenuLogic = (
     return { menuRef, toggleButtonRef };
 };
 
+// --- COMPONENTES DE UI TERAPÉUTICOS ---
 
-// --- ÁTOMOS Y MOLÉCULAS (Componentes de UI Puros) ---
-
-const Logo = () => (
-    <Link href="/" className="flex items-center gap-2 shrink-0">
-        <svg className="h-8 w-auto text-blue-600" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clipRule="evenodd" />
-        </svg>
-        <span className="text-xl font-bold text-gray-900">Yurnal</span>
+const TherapeuticLogo = () => (
+    <Link href="/" className="flex items-center gap-3 shrink-0 group transition-all duration-200 hover:-translate-y-0.5">
+        <div className="relative">
+            <BookHeart className="h-8 w-8 text-primary group-hover:text-primary/80 transition-colors" />
+            <div className="absolute inset-0 bg-primary/20 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <span className="text-xl font-bold text-foreground tracking-tight">Yurnal</span>
     </Link>
 );
 
-const AnimatedBurgerIcon = ({ isOpen }: { isOpen: boolean }) => (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-1.5 rotate-45' : ''}`} d="M4 6h16" />
-        <path strokeLinecap="round" strokeLinejoin="round" className={`transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-0' : ''}`} d="M4 12h16" />
-        <path strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ease-in-out ${isOpen ? '-translate-y-1.5 -rotate-45' : ''}`} d="M4 18h16" />
-    </svg>
+const AnimatedMenuIcon = ({ isOpen }: { isOpen: boolean }) => (
+    <div className="relative w-6 h-6">
+        <span className={`absolute left-0 w-6 h-0.5 bg-current transform transition-all duration-200 ease-in-out ${isOpen ? 'rotate-45 top-2.5' : 'top-1'}`} />
+        <span className={`absolute left-0 w-6 h-0.5 bg-current transform transition-all duration-200 ease-in-out ${isOpen ? 'opacity-0' : 'top-2.5'}`} />
+        <span className={`absolute left-0 w-6 h-0.5 bg-current transform transition-all duration-200 ease-in-out ${isOpen ? '-rotate-45 top-2.5' : 'top-4'}`} />
+    </div>
 );
 
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+const TherapeuticNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
     const pathname = usePathname();
     const isActive = pathname === href;
+
     return (
-        <Link href={href} className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}>
+        <Link
+            href={href}
+            className={`relative px-4 py-2 rounded-therapeutic text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 ${isActive
+                ? 'text-primary bg-primary/5 shadow-therapeutic-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                }`}
+        >
             {children}
+            {isActive && (
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
+            )}
         </Link>
     );
 };
 
-const ActionButton = ({ href, children, variant = 'link' }: { href: string; children: React.ReactNode; variant?: 'link' | 'button' }) => {
-    const baseClasses = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
-    const variantClasses = variant === 'button'
-        ? 'bg-blue-600 text-white hover:bg-blue-700 h-9 px-4'
-        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 h-9 px-3';
-    return <Link href={href} className={`${baseClasses} ${variantClasses}`}>{children}</Link>;
-};
-
-
 // --- ORGANISMOS (Componentes Ensamblados) ---
 
 const DesktopNav = () => (
-    <nav className="hidden md:flex items-center gap-4" aria-label="Navegación principal">
-        <ul className="flex items-center gap-2">
-            {primaryNavLinks.map(link => <li key={link.href}><NavLink href={link.href}>{link.label}</NavLink></li>)}
-        </ul>
-        <div className="flex items-center gap-2">
-            {userActionLinks.map(action => <ActionButton key={action.href} href={action.href} variant={action.type}>{action.label}</ActionButton>)}
+    <nav className="hidden md:flex items-center gap-1" aria-label="Navegación principal">
+        <div className="flex items-center gap-1">
+            {primaryNavLinks.map(link => (
+                <TherapeuticNavLink key={link.href} href={link.href}>
+                    {link.label}
+                </TherapeuticNavLink>
+            ))}
+        </div>
+        <div className="flex items-center gap-3 ml-6">
+            <Button variant="ghost" size="sm" asChild>
+                <Link href="/login">Iniciar Sesión</Link>
+            </Button>
+            <Button variant="healing" size="sm" asChild>
+                <Link href="/signup">Comenzar Gratis</Link>
+            </Button>
         </div>
     </nav>
 );
 
 const MobileNav = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => void }) => (
-    <div className={`md:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'}`}>
-        <div className="container mx-auto flex flex-col gap-4 p-4">
+    <div
+        className={`md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-lg border-t shadow-therapeutic-lg transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'
+            }`}
+    >
+        <div className="container mx-auto flex flex-col gap-6 p-6">
             <nav aria-label="Navegación principal móvil">
                 <ul className="flex flex-col gap-2">
                     {primaryNavLinks.map(link => (
                         <li key={`mobile-${link.href}`}>
-                            <Link href={link.href} onClick={closeMenu} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900">{link.label}</Link>
+                            <Link
+                                href={link.href}
+                                onClick={closeMenu}
+                                className="block px-4 py-3 rounded-therapeutic text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+                            >
+                                {link.label}
+                            </Link>
                         </li>
                     ))}
                 </ul>
             </nav>
-            <hr />
-            <div className="flex flex-col gap-2">
-                {userActionLinks.map(action => (
-                    <Link key={`mobile-${action.href}`} href={action.href} onClick={closeMenu} className={action.type === 'button' ? 'inline-flex items-center justify-center rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2' : 'block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'}>
-                        {action.label}
-                    </Link>
-                ))}
+
+            <div className="border-t pt-6">
+                <div className="flex flex-col gap-3">
+                    <Button variant="ghost" size="lg" asChild className="justify-start">
+                        <Link href="/login" onClick={closeMenu}>Iniciar Sesión</Link>
+                    </Button>
+                    <Button variant="healing" size="lg" asChild>
+                        <Link href="/signup" onClick={closeMenu}>Comenzar Gratis</Link>
+                    </Button>
+                </div>
             </div>
         </div>
     </div>
 );
 
-
-// --- CONFIGURACIÓN CENTRALIZADA (Single Source of Truth) ---
+// --- CONFIGURACIÓN CENTRALIZADA ---
 
 const primaryNavLinks = [
-    { href: '/para-ti', label: 'Para Ti' },
-    { href: '/para-terapeutas', label: 'Para Terapeutas' },
-    { href: '/para-estudiantes', label: 'Para Estudiantes' },
-    { href: '/para-negocios', label: 'Para Negocios' },
-    { href: '/sobre-nosotros', label: 'Sobre Nosotros' },
+    { href: '/pacientes', label: 'Pacientes' },
+    { href: '/terapeutas', label: 'Terapeutas' },
+    { href: '/estudiantes', label: 'Estudiantes' },
+    { href: '/empresas', label: 'Empresas' },
 ];
 
-const userActionLinks: { href: string; label: string; type: 'link' | 'button' }[] = [
-    { href: '/login', label: 'Iniciar Sesión', type: 'link' },
-    { href: '/help', label: 'Ayuda', type: 'link' },
-    { href: '/signup', label: 'Prueba Gratis', type: 'button' },
-];
-
-
-// --- COMPONENTE PRINCIPAL (Orquestador) ---
+// --- COMPONENTE PRINCIPAL ---
 
 interface MainHeaderProps {
     notification?: {
@@ -184,27 +196,36 @@ const MainHeader = ({ notification }: MainHeaderProps) => {
     return (
         <header
             ref={menuRef}
-            className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-200/80 shadow-sm' : 'bg-white'}`}
+            className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
+                ? 'bg-background/80 backdrop-blur-md border-b shadow-therapeutic-sm'
+                : 'bg-background'
+                }`}
         >
             {notification && (
-                <div className="bg-blue-600 text-white text-center text-sm py-1.5 px-4">
-                    {notification.link ? <Link href={notification.link} className="hover:underline">{notification.text}</Link> : notification.text}
+                <div className="bg-primary text-primary-foreground text-center text-sm py-2 px-4">
+                    {notification.link ? (
+                        <Link href={notification.link} className="hover:underline font-medium">
+                            {notification.text}
+                        </Link>
+                    ) : (
+                        <span className="font-medium">{notification.text}</span>
+                    )}
                 </div>
             )}
 
             <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                <Logo />
+                <TherapeuticLogo />
                 <DesktopNav />
 
                 <button
                     ref={toggleButtonRef}
-                    className="md:hidden flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="md:hidden flex items-center justify-center p-2 rounded-therapeutic text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     aria-controls="mobile-menu-panel"
                     aria-expanded={isMenuOpen}
                     aria-label={isMenuOpen ? "Cerrar menú principal" : "Abrir menú principal"}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                    <AnimatedBurgerIcon isOpen={isMenuOpen} />
+                    <AnimatedMenuIcon isOpen={isMenuOpen} />
                 </button>
             </div>
 

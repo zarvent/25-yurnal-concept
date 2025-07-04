@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@700&family=Merriweather:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,113 +6,137 @@
 
 @layer base {
   :root {
-    /* Colores base de la aplicación */
-    --background: 0 0% 97.3%;
-    /* #F8F7F4 (blanco roto) */
-    --foreground: 222.2 84% 4.9%;
-    /* Texto principal oscuro */
+    /* Yurnal Therapeutic Design System - Inspired by Headspace principles */
 
-    /* Paleta de colores de Yurnal */
-    --primary: 210 40% 50%;
-    /* Azul sereno */
-    --primary-foreground: 210 40% 98%;
-    /* Texto para botones primarios */
+    /* Core Light Theme */
+    --background: 0 0% 100%;
+    /* Pure white for cleanliness */
+    --foreground: 215 16% 17%;
+    /* Deep blue-gray for text */
 
-    --secondary: 210 10% 60%;
-    /* Gris cálido */
-    --secondary-foreground: 210 10% 98%;
+    /* Primary colors - Trust & Focus */
+    --primary: 217 91% 60%;
+    /* Deep blue for trust */
+    --primary-foreground: 0 0% 100%;
 
-    --accent: 12 84% 60%;
-    /* Coral suave para acentos */
+    /* Secondary colors - Calm & Support */
+    --secondary: 215 20% 65%;
+    /* Soft blue-gray */
+    --secondary-foreground: 215 25% 20%;
+
+    /* Accent colors - Warmth & Energy */
+    --accent: 25 95% 53%;
+    /* Warm orange for CTAs */
     --accent-foreground: 0 0% 100%;
 
-    /* Otros colores (cards, borders, inputs) */
+    /* Therapeutic colors */
+    --healing: 158 64% 52%;
+    /* Calming green */
+    --healing-foreground: 0 0% 100%;
+
+    --warm: 35 91% 56%;
+    /* Energetic amber */
+    --warm-foreground: 0 0% 100%;
+
+    --calm: 262 83% 68%;
+    /* Mindful purple */
+    --calm-foreground: 0 0% 100%;
+
+    /* Ecosystem colors */
+    --patient: 188 94% 42%;
+    /* Hope cyan */
+    --therapist: 262 83% 68%;
+    /* Professional violet */
+    --academic: 158 64% 52%;
+    /* Knowledge green */
+    --student: 0 84% 60%;
+    /* Energy red */
+
+    /* UI Components */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 16% 17%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 215 20.2% 65.1%;
+    --popover-foreground: 215 16% 17%;
 
-    /* Colores semánticos */
-    --destructive: 0 84.2% 60.2%;
+    /* Borders and inputs */
+    --border: 220 13% 91%;
+    /* Soft gray border */
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+    /* Primary focus ring */
+
+    /* Semantic colors */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --success: 142.1 76.2% 36.3%;
-    --success-foreground: 142.1 76.2% 96.3%;
-    --warning: 47.9 95.8% 53.1%;
-    --warning-foreground: 47.9 95.8% 93.1%;
+    --success: 158 64% 52%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 91% 56%;
+    --warning-foreground: 0 0% 100%;
 
+    /* Muted colors */
+    --muted: 220 14% 96%;
+    /* Very light gray */
+    --muted-foreground: 220 9% 46%;
+    /* Medium gray text */
 
-    /* Radio de borde para consistencia */
+    /* Border radius for therapeutic design */
     --radius: 0.75rem;
-    /* Bordes más redondeados para un look suave */
+    /* 12px - soft rounded corners */
 
-    --yurnal-blue-100: 210 100% 98%;
-    --yurnal-blue-200: 210 100% 95%;
-    --yurnal-blue-300: 210 100% 90%;
-    --yurnal-blue-400: 210 100% 80%;
-    --yurnal-blue-500: 210 100% 70%;
-    --yurnal-blue-600: 210 100% 60%;
-    --yurnal-blue-700: 210 100% 50%;
-    --yurnal-blue-800: 210 100% 40%;
-    --yurnal-blue-900: 210 100% 30%;
+    /* Shadows for depth */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
-    --yurnal-teal-100: 170 100% 98%;
-    --yurnal-teal-200: 170 100% 95%;
-    --yurnal-teal-300: 170 100% 90%;
-    --yurnal-teal-400: 170 100% 80%;
-    --yurnal-teal-500: 170 100% 70%;
-    --yurnal-teal-600: 170 100% 60%;
-    --yurnal-teal-700: 170 100% 50%;
-    --yurnal-teal-800: 170 100% 40%;
-    --yurnal-teal-900: 170 100% 30%;
+    /* Glass morphism */
+    --glass-background: 255 255 255 / 0.8;
+    --glass-border: 255 255 255 / 0.2;
 
-    --yurnal-gray-100: 220 10% 98%;
-    --yurnal-gray-200: 220 10% 95%;
-    --yurnal-gray-300: 220 10% 90%;
-    --yurnal-gray-400: 220 10% 80%;
-    --yurnal-gray-500: 220 10% 70%;
-    --yurnal-gray-600: 220 10% 60%;
-    --yurnal-gray-700: 220 10% 50%;
-    --yurnal-gray-800: 220 10% 40%;
-    --yurnal-gray-900: 220 10% 30%;
-
-    --yurnal-success: 140 80% 60%;
-    --yurnal-warning: 40 100% 70%;
-    --yurnal-error: 0 90% 70%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 210 40% 46.1%;
-
+    /* Typography */
     --font-sans: 'Inter', system-ui, sans-serif;
-    --font-serif: 'Lora', 'Merriweather', serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
   }
 
   .dark {
-    /* Paleta para el modo oscuro */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark theme for therapeutic design */
+    --background: 215 28% 9%;
+    /* Deep blue-black */
+    --foreground: 213 31% 91%;
+    /* Light blue-white */
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217 91% 70%;
+    /* Lighter blue for dark mode */
+    --primary-foreground: 215 28% 9%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 215 20% 25%;
+    /* Dark blue-gray */
+    --secondary-foreground: 213 31% 91%;
 
-    --accent: 12 84% 70%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 25 95% 63%;
+    /* Brighter orange for dark mode */
+    --accent-foreground: 215 28% 9%;
 
-    --card: 217.2 32.6% 17.5%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --card: 215 25% 12%;
+    /* Dark card background */
+    --card-foreground: 213 31% 91%;
+    --popover: 215 25% 12%;
+    --popover-foreground: 213 31% 91%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --border: 215 20% 20%;
+    /* Dark border */
+    --input: 215 20% 20%;
+    --ring: 217 91% 70%;
+
+    --muted: 215 20% 15%;
+    /* Dark muted background */
+    --muted-foreground: 215 15% 65%;
+    /* Light muted text */
+
+    /* Glass morphism for dark mode */
+    --glass-background: 0 0 0 / 0.4;
+    --glass-border: 255 255 255 / 0.1;
   }
 }
 
@@ -123,23 +146,115 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-optical-sizing: auto;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced focus indicators for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Improved selection styling */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  /* Smooth scrolling for better UX */
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-/* Premium Typography Stack */
+/* Yurnal Therapeutic Design System v3.0 - Headspace-Inspired Components */
+@layer components {
 
-body {
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
-  font-optical-sizing: auto;
-  line-height: 1.6;
-  /* Generous line height for readability */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Therapeutic Button System */
+  .btn-therapeutic {
+    @apply inline-flex items-center justify-center rounded-therapeutic px-6 py-3 text-sm font-medium transition-all duration-200 ease-in-out;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground shadow-therapeutic;
+    @apply hover:bg-primary/90 hover:shadow-therapeutic-md hover:-translate-y-0.5;
+    @apply active:translate-y-0 active:shadow-therapeutic;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground border border-border;
+    @apply hover:bg-secondary/80 hover:shadow-therapeutic-sm;
+  }
+
+  .btn-healing {
+    @apply bg-healing text-healing-foreground shadow-healing-glow;
+    @apply hover:bg-healing/90 hover:shadow-therapeutic-md hover:-translate-y-0.5;
+  }
+
+  .btn-warm {
+    @apply bg-warm text-warm-foreground shadow-warm-glow;
+    @apply hover:bg-warm/90 hover:shadow-therapeutic-md hover:-translate-y-0.5;
+  }
+
+  /* Therapeutic Card System */
+  .card-therapeutic {
+    @apply bg-card border border-border rounded-therapeutic-lg shadow-therapeutic;
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .card-therapeutic-hover {
+    @apply card-therapeutic hover:shadow-therapeutic-md hover:border-primary/20 hover:-translate-y-1;
+  }
+
+  .card-glass {
+    @apply backdrop-blur-sm bg-white/80 border border-white/20 rounded-therapeutic-lg;
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .card-glass:hover {
+    @apply backdrop-blur-md bg-white/90 border-white/30;
+  }
+
+  /* Therapeutic Input System */
+  .input-therapeutic {
+    @apply flex h-12 w-full rounded-therapeutic border border-input bg-background px-4 py-2 text-sm;
+    @apply ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium;
+    @apply placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2;
+    @apply focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .input-therapeutic:focus {
+    @apply border-primary/50 shadow-therapeutic-sm;
+  }
+
+  /* Ecosystem-specific styling */
+  .ecosystem-patient {
+    @apply border-l-4 border-l-patient bg-gradient-to-r from-patient/5 to-transparent;
+  }
+
+  .ecosystem-therapist {
+    @apply border-l-4 border-l-therapist bg-gradient-to-r from-therapist/5 to-transparent;
+  }
+
+  .ecosystem-academic {
+    @apply border-l-4 border-l-academic bg-gradient-to-r from-academic/5 to-transparent;
+  }
+
+  .ecosystem-student {
+    @apply border-l-4 border-l-student bg-gradient-to-r from-student/5 to-transparent;
+  }
 }
 
-/* Yurnal Design System v2.0 - Therapeutic UI Utilities */
 @layer utilities {
 
   /* Therapeutic Glass Effects */
@@ -156,93 +271,68 @@ body {
   }
 
   /* Professional Glow Effects */
-  .glow {
-    box-shadow: 0 0 24px -8px hsl(var(--primary) / 0.3);
-    transition: box-shadow 300ms ease-in-out;
+  .glow-primary {
+    box-shadow: 0 10px 40px -10px hsl(var(--primary) / 0.3);
   }
 
-  .glow:hover {
-    box-shadow: 0 0 32px -4px hsl(var(--primary) / 0.4);
+  .glow-healing {
+    box-shadow: 0 10px 40px -10px hsl(var(--healing) / 0.3);
   }
 
-  .glow-accent {
-    box-shadow: 0 0 24px -8px hsl(var(--accent) / 0.3);
+  .glow-warm {
+    box-shadow: 0 10px 40px -10px hsl(var(--warm) / 0.3);
   }
 
-  .glow-success {
-    box-shadow: 0 0 24px -8px hsl(var(--success) / 0.3);
+  .glow-calm {
+    box-shadow: 0 10px 40px -10px hsl(var(--calm) / 0.3);
   }
 
   /* Therapeutic Gradients */
-  .text-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--calm)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .text-gradient-warm {
-    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--warning)));
+  .text-gradient-healing {
+    background: linear-gradient(135deg, hsl(var(--healing)), hsl(var(--warm)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   /* Calming Background Patterns */
-  .bg-mesh {
+  .bg-mesh-therapeutic {
     background-image:
       radial-gradient(at 27% 37%, hsl(var(--primary) / 0.08) 0px, transparent 50%),
-      radial-gradient(at 97% 21%, hsl(var(--secondary) / 0.06) 0px, transparent 50%),
-      radial-gradient(at 52% 99%, hsl(var(--accent) / 0.04) 0px, transparent 50%),
-      radial-gradient(at 10% 29%, hsl(var(--primary) / 0.05) 0px, transparent 50%);
+      radial-gradient(at 97% 21%, hsl(var(--healing) / 0.06) 0px, transparent 50%),
+      radial-gradient(at 52% 99%, hsl(var(--warm) / 0.04) 0px, transparent 50%),
+      radial-gradient(at 10% 29%, hsl(var(--calm) / 0.05) 0px, transparent 50%);
   }
 
-  .bg-therapeutic {
+  .bg-therapeutic-gradient {
     background: linear-gradient(180deg,
         hsl(var(--background)) 0%,
         hsl(var(--primary) / 0.02) 50%,
         hsl(var(--background)) 100%);
   }
 
-  /* Interaction States - Following UX Guidelines */
-  .interactive {
-    transition: all 200ms ease-in-out;
-    cursor: pointer;
+  /* Interaction States */
+  .interactive-therapeutic {
+    @apply transition-all duration-200 ease-in-out cursor-pointer;
   }
 
-  .interactive:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+  .interactive-therapeutic:hover {
+    @apply -translate-y-1 shadow-therapeutic-md;
   }
 
-  .interactive:active {
-    transform: translateY(0);
-    transition-duration: 100ms;
+  .interactive-therapeutic:active {
+    @apply translate-y-0 duration-100;
   }
 
-  /* Professional Card Styles */
-  .card-therapeutic {
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    transition: all 200ms ease-in-out;
-  }
-
-  .card-therapeutic:hover {
-    box-shadow: var(--shadow-md);
-    border-color: hsl(var(--primary) / 0.2);
-  }
-
-  /* Focus States for Accessibility */
-  .focus-therapeutic:focus-visible {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  /* Skeleton Loaders - Better UX */
-  .skeleton {
+  /* Skeleton Loaders */
+  .skeleton-therapeutic {
     background: linear-gradient(90deg,
         hsl(var(--muted)) 25%,
         hsl(var(--muted) / 0.5) 50%,
@@ -251,21 +341,44 @@ body {
     animation: skeleton-loading 2s infinite ease-in-out;
   }
 
-  /* Therapeutic Animations */
-  .animate-gentle-pulse {
-    animation: gentle-pulse 3s ease-in-out infinite;
+  /* Typography utilities */
+  .text-therapeutic-h1 {
+    @apply text-4xl font-bold tracking-tight text-foreground;
+    line-height: 1.2;
   }
 
-  .animate-soft-bounce {
-    animation: soft-bounce 2s ease-in-out infinite;
+  .text-therapeutic-h2 {
+    @apply text-3xl font-semibold tracking-tight text-foreground;
+    line-height: 1.3;
   }
 
-  .animate-therapeutic-fade {
-    animation: therapeutic-fade 0.3s ease-out;
+  .text-therapeutic-h3 {
+    @apply text-2xl font-semibold tracking-tight text-foreground;
+    line-height: 1.4;
+  }
+
+  .text-therapeutic-body {
+    @apply text-base text-foreground;
+    line-height: 1.6;
+  }
+
+  .text-therapeutic-caption {
+    @apply text-sm text-muted-foreground;
+    line-height: 1.5;
   }
 }
 
-/* Therapeutic Keyframe Animations */
+/* Enhanced Keyframe Animations */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @keyframes gentle-pulse {
 
   0%,
@@ -302,16 +415,6 @@ body {
   }
 }
 
-@keyframes skeleton-loading {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
-}
-
 @keyframes gradient-shift {
 
   0%,
@@ -336,71 +439,111 @@ body {
   }
 }
 
-/* Professional Typography Scale */
-.text-therapeutic-h1 {
-  font-size: 2.25rem;
-  /* 36px */
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.025em;
-}
-
-.text-therapeutic-h2 {
-  font-size: 1.875rem;
-  /* 30px */
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-}
-
-.text-therapeutic-h3 {
-  font-size: 1.5rem;
-  /* 24px */
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: -0.015em;
-}
-
-.text-therapeutic-body {
-  font-size: 1rem;
-  /* 16px */
-  font-weight: 400;
-  line-height: 1.6;
-}
-
-.text-therapeutic-caption {
-  font-size: 0.875rem;
-  /* 14px */
-  font-weight: 400;
-  line-height: 1.5;
-  color: hsl(var(--muted-foreground));
-}
-
-/* Transiciones globales */
-.transition-all {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Skeleton shimmer animation */
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
+/* Print styles for better documentation */
+@media print {
+  .no-print {
+    display: none;
   }
-}
 
-.animate-shimmer {
-  position: relative;
-  overflow: hidden;
-}
+  *,
+  *::before,
+  *::after {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
 
-.animate-shimmer::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: translateX(-100%);
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0));
-  animation: shimmer 2s infinite;
+  a:not(.btn) {
+    text-decoration: underline;
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #adb5bd;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  @page {
+    size: a3;
+  }
+
+  body {
+    min-width: 992px !important;
+  }
+
+  .container {
+    min-width: 992px !important;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  .badge {
+    border: 1px solid #000;
+  }
+
+  .table {
+    border-collapse: collapse !important;
+  }
+
+  .table td,
+  .table th {
+    background-color: #fff !important;
+  }
+
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #dee2e6 !important;
+  }
+
+  .table-dark {
+    color: inherit;
+  }
+
+  .table-dark th,
+  .table-dark td,
+  .table-dark thead th,
+  .table-dark tbody+tbody {
+    border-color: #dee2e6;
+  }
+
+  .table .thead-dark th {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #454d55;
+  }
+
+  .print-exact {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
