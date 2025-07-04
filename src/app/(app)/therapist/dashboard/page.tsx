@@ -1,5 +1,3 @@
-'use client';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart as BarChartIcon, Clock, Users } from 'lucide-react';
@@ -62,7 +60,8 @@ export default function TherapistDashboardPage() {
         <CardHeader>
           <CardTitle>Evolución Emocional Agregada</CardTitle>
           <CardDescription>
-            Tendencia de los niveles de estrés y ansiedad reportados por los pacientes en los últimos 6 meses. (Datos de ejemplo)
+            Tendencia de los niveles de estrés y ansiedad reportados por los pacientes en los últimos 6 meses. (Datos de
+            ejemplo)
           </CardDescription>
         </CardHeader>
         <CardContent className="pl-2">

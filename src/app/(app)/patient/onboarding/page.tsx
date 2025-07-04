@@ -1,11 +1,9 @@
-'use client';
-
-import { useState } from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Lightbulb, HeartPulse, Sparkles, Wand2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ArrowRight, HeartPulse, Lightbulb, Sparkles, Wand2 } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 const intentions = [
   {
@@ -59,7 +57,9 @@ export default function PatientOnboardingPage() {
                 {item.icon}
                 <div>
                   <h3 className="font-semibold text-lg">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">{item.description}</p>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    {item.description}
+                  </p>
                 </div>
               </div>
             </Card>

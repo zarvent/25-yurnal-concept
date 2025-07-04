@@ -1,33 +1,28 @@
-'use client';
-
-import { useState, useMemo } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  CheckSquare,
-  Target,
-  MessageSquare,
-  Hand,
-  Wind,
-  ClipboardList,
-  Search,
-  BrainCircuit,
-  HeartPulse,
-  Bed,
-  Smile,
-  ArrowRight
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import {
+  ArrowRight,
+  Bed,
+  BrainCircuit,
+  CheckSquare,
+  Hand,
+  HeartPulse,
+  MessageSquare,
+  Search,
+  Smile,
+  Wind
+} from 'lucide-react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
 
 // Based on M1.1 Requerimientos Backend (Revisados)
 const toolsData = [
@@ -159,9 +154,9 @@ function ToolCard({ tool }: { tool: (typeof toolsData)[number] }) {
           </Badge>
         </div>
         <Button asChild className="w-full">
-            <Link href={`/patient/tools/${tool.id}`}>
-              Ver Herramienta <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
+          <Link href={`/patient/tools/${tool.id}`}>
+            Ver Herramienta <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </Button>
       </CardFooter>
     </Card>
@@ -176,10 +171,10 @@ export default function ToolsPage() {
   const filteredTools = useMemo(() => {
     return toolsData.filter(tool => {
       const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
-      const matchesSearch = tool.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            tool.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = tool.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tool.description.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
-    }).sort((a,b) => b.usageCount - a.usageCount);
+    }).sort((a, b) => b.usageCount - a.usageCount);
   }, [searchTerm, activeCategory]);
 
   return (
@@ -192,40 +187,40 @@ export default function ToolsPage() {
           Explora, filtra y encuentra ejercicios prácticos para apoyar tu bienestar.
         </p>
       </div>
-      
+
       <div className="space-y-4">
         <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input 
-                placeholder="Buscar por título o descripción..." 
-                className="pl-10 text-base h-11"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Input
+            placeholder="Buscar por título o descripción..."
+            className="pl-10 text-base h-11"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <div className="flex flex-wrap gap-2">
-            {(Object.keys(categories) as ToolCategory[]).map(key => (
-                <Button 
-                    key={key}
-                    variant={activeCategory === key ? 'default' : 'outline'}
-                    onClick={() => setActiveCategory(key)}
-                >
-                    {categories[key]}
-                </Button>
-            ))}
+          {(Object.keys(categories) as ToolCategory[]).map(key => (
+            <Button
+              key={key}
+              variant={activeCategory === key ? 'default' : 'outline'}
+              onClick={() => setActiveCategory(key)}
+            >
+              {categories[key]}
+            </Button>
+          ))}
         </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredTools.length > 0 ? (
-            filteredTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-            ))
+          filteredTools.map((tool) => (
+            <ToolCard key={tool.id} tool={tool} />
+          ))
         ) : (
-            <div className="md:col-span-2 lg:col-span-3 xl:col-span-4 text-center py-12">
-                <p className="text-lg font-semibold">No se encontraron herramientas</p>
-                <p className="text-muted-foreground">Intenta ajustar tu búsqueda o filtro.</p>
-            </div>
+          <div className="md:col-span-2 lg:col-span-3 xl:col-span-4 text-center py-12">
+            <p className="text-lg font-semibold">No se encontraron herramientas</p>
+            <p className="text-muted-foreground">Intenta ajustar tu búsqueda o filtro.</p>
+          </div>
         )}
       </div>
     </div>

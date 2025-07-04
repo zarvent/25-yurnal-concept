@@ -1,5 +1,3 @@
-'use client';
-
 import { JournalEditor } from '@/components/journal-editor';
 import { ActionCard } from '@/components/patient/action-card';
 import { GreetingSection } from '@/components/patient/greeting-section';

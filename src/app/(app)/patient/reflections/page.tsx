@@ -1,14 +1,23 @@
-'use client';
 import { AnalysisGenerator } from '@/components/analysis-generator';
-import { useJournal } from '@/hooks/use-journal';
-import { useSearchParams } from 'next/navigation';
+import { journalService } from '@/services/journal.service';
 
-export default function AnalysisPage() {
-  const { entries } = useJournal();
-  const searchParams = useSearchParams();
-  const idsParam = searchParams.get('ids');
+async function fetchEntries(idsParam: string | null) {
+  const insights = await journalService.generateInsightsFromAllEntries(); // Adjusted to use existing method
+  const entries = insights.journalEntriesIds.map(id => ({
+    id,
+    userId: insights.userId,
+    content: '', // Placeholder, replace with actual content fetching logic
+    tags: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isPrivate: true,
+  }));
   const selectedIds = idsParam ? idsParam.split(',') : null;
-  const selectedEntries = selectedIds ? entries.filter(e => selectedIds.includes(e.id)) : entries;
+  return selectedIds ? entries.filter((e: { id: string }) => selectedIds.includes(e.id)) : entries;
+}
+
+export default async function AnalysisPage({ searchParams }: { searchParams: { ids?: string } }) {
+  const entries = await fetchEntries(searchParams.ids || null);
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">
@@ -17,7 +26,7 @@ export default function AnalysisPage() {
           Descubre patrones profundos en tus entradas del diario con inteligencia artificial.
         </p>
       </div>
-      <AnalysisGenerator selectedEntries={selectedEntries} />
+      <AnalysisGenerator selectedEntries={entries} />
     </div>
   );
 }

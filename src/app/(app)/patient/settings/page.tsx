@@ -1,11 +1,9 @@
-"use client";
-
+import { exportJournal } from '@/app/(app)/patient/notes/test-journal';
 import { CreditsDisplay } from "@/components/credits-display";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useJournal } from '@/hooks/use-journal';
 import { Bell, FileText, Info, User } from 'lucide-react';
-import { exportJournal } from '@/app/(app)/patient/notes/test-journal';
 
 export default function SettingsPage() {
   return (

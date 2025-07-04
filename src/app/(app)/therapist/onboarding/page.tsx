@@ -1,11 +1,9 @@
-'use client';
-
-import { useState } from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Users, BarChart, Calendar, TestTube2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ArrowRight, BarChart, Calendar, TestTube2, Users } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 const intentions = [
   {
@@ -52,14 +50,18 @@ export default function TherapistOnboardingPage() {
               onClick={() => setSelected(item.title)}
               className={cn(
                 'p-6 rounded-lg border-2 bg-card hover:bg-muted/50 transition-all cursor-pointer text-center shadow-sm hover:shadow-md',
-                selected === item.title ? 'border-primary shadow-lg' : 'border-border'
+                selected === item.title
+                  ? 'border-primary shadow-lg'
+                  : 'border-border'
               )}
             >
               <div className="flex flex-col items-center gap-4">
                 {item.icon}
                 <div>
                   <h3 className="font-semibold text-lg">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">{item.description}</p>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    {item.description}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -70,7 +72,8 @@ export default function TherapistOnboardingPage() {
       <footer className="mt-10 w-full max-w-4xl flex justify-end">
         <Button asChild size="lg" disabled={!selected}>
           <Link href="/therapist/dashboard">
-            Continuar <ArrowRight className="ml-2 h-5 w-5" />
+            Continuar{' '}
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </Button>
       </footer>

@@ -1,5 +1,3 @@
-'use client';
-
 import { AccessPortal } from '@/components/marketing/access-portal';
 import { EcosystemHero } from '@/components/marketing/ecosystem-hero';
 import { FeatureShowcase } from '@/components/marketing/feature-showcase';
@@ -9,11 +7,9 @@ import {
     Calendar,
     Coffee,
     GraduationCap,
-    Heart,
     HelpCircle,
     ShieldCheck,
     Target,
-    Trophy,
     Users,
     Zap
 } from 'lucide-react';

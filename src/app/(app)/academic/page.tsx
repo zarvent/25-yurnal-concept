@@ -1,5 +1,3 @@
-'use client';
-
 import { AccessPortal } from '@/components/marketing/access-portal';
 import { EcosystemHero } from '@/components/marketing/ecosystem-hero';
 import { FeatureShowcase } from '@/components/marketing/feature-showcase';

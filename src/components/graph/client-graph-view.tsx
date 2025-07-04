@@ -16,7 +16,7 @@ export default function ClientGraphView({ elements }: ClientGraphViewProps) {
                     Visualización interactiva de las conexiones entre tus notas
                 </p>
             </div>
-            
+
             <div className="h-[600px] border rounded-lg">
                 <GraphView elements={elements} />
             </div>
