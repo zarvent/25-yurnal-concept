@@ -3,21 +3,31 @@
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { BookOpen, Lock, Pencil, Wrench } from 'lucide-react';
+import { BookOpen, BookUser, LayoutDashboard, Library, Lock, Network, Newspaper, Pencil, Wrench } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
-    { href: '/patient/today', label: 'Hoy', icon: Pencil },
-    { href: '/patient/notes', label: 'Notas', icon: BookOpen },
-    { href: '/patient/reflections', label: 'Reflexiones', icon: Wrench },
+    { href: '/estudiantes/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/estudiantes/today', label: 'Hoy', icon: Pencil },
+    { href: '/estudiantes/notes', label: 'Notas', icon: BookOpen },
+    { href: '/estudiantes/my-journal', label: 'Mi Diario', icon: BookUser },
+    { href: '/estudiantes/articles', label: 'Artículos', icon: Newspaper },
+    { href: '/estudiantes/library', label: 'Biblioteca', icon: Library },
+    { href: '/estudiantes/courses', label: 'Rutas de Aprendizaje', icon: Network },
+    { href: '/estudiantes/reflections', label: 'Reflexiones', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
-    '/patient/today': 'Hoy',
-    '/patient/notes': 'Notas',
-    '/patient/reflections': 'Análisis de Patrones',
-    '/patient/my-therapist': 'Mi Terapeuta',
-    '/patient/settings': 'Ajustes',
+    '/estudiantes/dashboard': 'Dashboard Académico',
+    '/estudiantes/today': 'Hoy',
+    '/estudiantes/notes': 'Notas',
+    '/estudiantes/my-journal': 'Mi Diario Personal',
+    '/estudiantes/articles': 'Artículos de Divulgación',
+    '/estudiantes/library': 'Biblioteca de Tesis y Papers',
+    '/estudiantes/courses': 'Rutas de Aprendizaje',
+    '/estudiantes/reflections': 'Análisis de Patrones',
+    '/estudiantes/my-therapist': 'Mi Terapeuta',
+    '/estudiantes/settings': 'Ajustes',
 };
 
 const SidebarFooter = () => {
@@ -46,7 +56,7 @@ const SidebarFooter = () => {
             <div className="p-4">
                 <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
                     <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span>Encriptación de Extremo a Extremo. Ni nosotros podemos leer tus notas.</span>
+                    <span>Potenciando el conocimiento y el bienestar estudiantil.</span>
                 </div>
             </div>
         </div>
@@ -55,18 +65,18 @@ const SidebarFooter = () => {
 
 const MainFooter = () => (
     <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
-        <strong>Nota Importante:</strong> Yurnal es una herramienta de autoconocimiento y no reemplaza la terapia profesional. Si te encuentras en una crisis de salud mental, por favor, no estás solo. Contacta a la línea de prevención de suicidio de tu país o busca ayuda de emergencia. En Bolivia, puedes llamar a la línea gratuita de ayuda del SEDES (168).
+        <strong>Yurnal Estudiantes:</strong> Una plataforma integral para el aprendizaje, la reflexión y el bienestar estudiantil. Combina herramientas académicas con recursos de autoconocimiento. No reemplaza la terapia profesional.
     </footer>
 );
 
-export default function PatientLayout({ children }: { children: ReactNode }) {
+export default function EstudiantesLayout({ children }: { children: ReactNode }) {
     return (
         <DashboardLayout
             navItems={navItems}
             pageTitles={pageTitles}
-            defaultTitle="Yurnal"
-            brandName="Yurnal"
-            brandHref="/patient/today"
+            defaultTitle="Yurnal Estudiantes"
+            brandName="Yurnal Estudiantes"
+            brandHref="/estudiantes/dashboard"
             sidebarFooter={<SidebarFooter />}
             mainFooter={<MainFooter />}
         >

@@ -43,10 +43,9 @@ src/app/page.tsx              # Página principal con layout marketing directo
 ### **3. Ecosistema de Aplicación - Contexto Privado**
 
 ```plaintext
-src/app/patient/               # Experiencia del paciente
-src/app/therapist/             # Experiencia del terapeuta
-src/app/academic/              # Experiencia académica (unificado)
-src/app/business/              # Soluciones empresariales
+src/app/(app)/estudiantes/     # Experiencia unificada del estudiante (antes patient + academic)
+src/app/(app)/therapist/       # Experiencia del terapeuta
+src/app/(app)/business/        # Soluciones empresariales
 ```
 
 **Características del Ecosistema de Aplicación:**
@@ -72,7 +71,7 @@ src/app/business/              # Soluciones empresariales
    - Testimonios y casos de uso relevantes
    - Trust signals y seguridad
 
-3. **Acción** (`/patient/onboarding`, etc.)
+3. **Acción** (`/estudiantes/onboarding`, etc.)
 
    - Transición al ecosistema de aplicación
    - Onboarding específico por rol
@@ -128,11 +127,12 @@ src/app/business/              # Soluciones empresariales
 
 ## 🚀 Próximas Fases del Plan
 
-### **Fase 2: Unificación student → academic (En proceso)**
+### **Fase 2: Unificación student → academic ✅ COMPLETADA**
 
-- Migración de funcionalidades duplicadas
-- Consolidación de stores y hooks
-- Testing de regresión
+- ✅ Migración de funcionalidades duplicadas
+- ✅ Consolidación de stores y hooks
+- ✅ Redirecciones 301 implementadas
+- ✅ Estructura unificada en `/estudiantes`
 
 ### **Fase 3: Grupo (app) con Autenticación**
 
@@ -172,7 +172,7 @@ src/app/business/              # Soluciones empresariales
 
 Esta arquitectura representa un ejemplo magistral de **Clean Architecture aplicada a Next.js**, donde:
 
-- **Entities**: Arquetipos de usuario (patient, therapist, academic)
+- **Entities**: Arquetipos de usuario (estudiantes, therapist, business)
 - **Use Cases**: Flujos específicos por contexto (marketing vs app)
 - **Interface Adapters**: Layouts específicos para cada responsabilidad
 - **Frameworks**: Next.js Route Groups como herramienta de organización
