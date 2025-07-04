@@ -3,27 +3,39 @@
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Calendar, LayoutDashboard, Library, Lock, Users } from 'lucide-react';
+import { BookOpen, BookUser, LayoutDashboard, Library, Lock, Network, Newspaper, Pencil, Wrench } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
-    { href: '/therapist/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/therapist/patients', label: 'Pacientes', icon: Users },
-    { href: '/therapist/library', label: 'Biblioteca', icon: Library },
-    { href: '/therapist/schedule', label: 'Agenda', icon: Calendar },
+    { href: '/pacientes/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/pacientes/app/today', label: 'Hoy', icon: Pencil },
+    { href: '/pacientes/app/notes', label: 'Notas', icon: BookOpen },
+    { href: '/pacientes/app/my-journal', label: 'Mi Diario', icon: BookUser },
+    { href: '/pacientes/app/articles', label: 'Artículos', icon: Newspaper },
+    { href: '/pacientes/app/library', label: 'Biblioteca', icon: Library },
+    { href: '/pacientes/app/courses', label: 'Rutas de Aprendizaje', icon: Network },
+    { href: '/pacientes/app/reflections', label: 'Reflexiones', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
-    '/therapist/dashboard': 'Dashboard',
-    '/therapist/patients': 'Mis Pacientes',
-    '/therapist/library': 'Biblioteca de Recursos',
-    '/therapist/schedule': 'Mi Agenda',
-    '/therapist/settings': 'Ajustes',
+    '/pacientes/app/dashboard': 'Dashboard Personal',
+    '/pacientes/app/today': 'Hoy',
+    '/pacientes/app/notes': 'Notas',
+    '/pacientes/app/my-journal': 'Mi Diario Personal',
+    '/pacientes/app/articles': 'Artículos de Apoyo',
+    '/pacientes/app/library': 'Biblioteca de Recursos',
+    '/pacientes/app/courses': 'Rutas de Bienestar',
+    '/pacientes/app/reflections': 'Análisis de Patrones',
+    '/pacientes/app/my-therapist': 'Mi Terapeuta',
+    '/pacientes/app/settings': 'Ajustes',
 };
 
 const SidebarFooter = () => {
     const [year, setYear] = useState(new Date().getFullYear());
-    useEffect(() => { setYear(new Date().getFullYear()); }, []);
+
+    useEffect(() => {
+        setYear(new Date().getFullYear());
+    }, []);
 
     return (
         <div>
@@ -44,27 +56,27 @@ const SidebarFooter = () => {
             <div className="p-4">
                 <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
                     <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span>Plataforma segura y profesional.</span>
+                    <span>Potenciando el bienestar y la salud mental.</span>
                 </div>
             </div>
         </div>
     );
-};
+}
 
 const MainFooter = () => (
     <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
-        <strong>Recurso Profesional:</strong> Esta plataforma es una herramienta de apoyo. En caso de una emergencia de un paciente, guíalo hacia los servicios de emergencia apropiados.
+        <strong>Yurnal Pacientes:</strong> Una plataforma integral para el bienestar mental y emocional. Combina herramientas de autoconocimiento con recursos terapéuticos. No reemplaza la terapia profesional.
     </footer>
 );
 
-export default function TherapistLayout({ children }: { children: ReactNode }) {
+export default function PacientesLayout({ children }: { children: ReactNode }) {
     return (
         <DashboardLayout
             navItems={navItems}
             pageTitles={pageTitles}
-            defaultTitle="Portal de Terapeuta"
-            brandName="Yurnal Terapia"
-            brandHref="/therapist/dashboard"
+            defaultTitle="Yurnal Pacientes"
+            brandName="Yurnal Pacientes"
+            brandHref="/pacientes/app/dashboard"
             sidebarFooter={<SidebarFooter />}
             mainFooter={<MainFooter />}
         >

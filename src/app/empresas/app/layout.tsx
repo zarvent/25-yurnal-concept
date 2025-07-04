@@ -3,31 +3,24 @@
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { BookOpen, BookUser, LayoutDashboard, Library, Lock, Network, Newspaper, Pencil, Wrench } from 'lucide-react';
+import { BarChart3, LayoutDashboard, Lock, Settings, UserCheck, Users } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
-    { href: '/estudiantes/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/estudiantes/today', label: 'Hoy', icon: Pencil },
-    { href: '/estudiantes/notes', label: 'Notas', icon: BookOpen },
-    { href: '/estudiantes/my-journal', label: 'Mi Diario', icon: BookUser },
-    { href: '/estudiantes/articles', label: 'Artículos', icon: Newspaper },
-    { href: '/estudiantes/library', label: 'Biblioteca', icon: Library },
-    { href: '/estudiantes/courses', label: 'Rutas de Aprendizaje', icon: Network },
-    { href: '/estudiantes/reflections', label: 'Reflexiones', icon: Wrench },
+    { href: '/empresas/app', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/empresas/app/empleados', label: 'Empleados', icon: Users },
+    { href: '/empresas/app/programas', label: 'Programas', icon: UserCheck },
+    { href: '/empresas/app/reportes', label: 'Reportes', icon: BarChart3 },
+    { href: '/empresas/app/configuracion', label: 'Configuración', icon: Settings },
 ];
 
 const pageTitles: { [key: string]: string } = {
-    '/estudiantes/dashboard': 'Dashboard Académico',
-    '/estudiantes/today': 'Hoy',
-    '/estudiantes/notes': 'Notas',
-    '/estudiantes/my-journal': 'Mi Diario Personal',
-    '/estudiantes/articles': 'Artículos de Divulgación',
-    '/estudiantes/library': 'Biblioteca de Tesis y Papers',
-    '/estudiantes/courses': 'Rutas de Aprendizaje',
-    '/estudiantes/reflections': 'Análisis de Patrones',
-    '/estudiantes/my-therapist': 'Mi Terapeuta',
-    '/estudiantes/settings': 'Ajustes',
+    '/empresas/app': 'Dashboard Corporativo',
+    '/empresas/app/empleados': 'Gestión de Empleados',
+    '/empresas/app/programas': 'Programas de Bienestar',
+    '/empresas/app/reportes': 'Reportes y Análisis',
+    '/empresas/app/configuracion': 'Configuración Empresarial',
+    '/empresas/app/settings': 'Ajustes',
 };
 
 const SidebarFooter = () => {
@@ -56,7 +49,7 @@ const SidebarFooter = () => {
             <div className="p-4">
                 <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
                     <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span>Potenciando el conocimiento y el bienestar estudiantil.</span>
+                    <span>Potenciando el bienestar corporativo y la productividad.</span>
                 </div>
             </div>
         </div>
@@ -65,18 +58,18 @@ const SidebarFooter = () => {
 
 const MainFooter = () => (
     <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
-        <strong>Yurnal Estudiantes:</strong> Una plataforma integral para el aprendizaje, la reflexión y el bienestar estudiantil. Combina herramientas académicas con recursos de autoconocimiento. No reemplaza la terapia profesional.
+        <strong>Yurnal Empresas:</strong> Una plataforma integral para el bienestar corporativo y la gestión del talento humano. Combina herramientas de análisis organizacional con programas de bienestar. Complementa pero no reemplaza el apoyo profesional especializado.
     </footer>
 );
 
-export default function EstudiantesLayout({ children }: { children: ReactNode }) {
+export default function EmpresasLayout({ children }: { children: ReactNode }) {
     return (
         <DashboardLayout
             navItems={navItems}
             pageTitles={pageTitles}
-            defaultTitle="Yurnal Estudiantes"
-            brandName="Yurnal Estudiantes"
-            brandHref="/estudiantes/dashboard"
+            defaultTitle="Yurnal Empresas"
+            brandName="Yurnal Empresas"
+            brandHref="/empresas/app"
             sidebarFooter={<SidebarFooter />}
             mainFooter={<MainFooter />}
         >

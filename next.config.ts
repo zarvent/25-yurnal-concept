@@ -21,62 +21,75 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Redirecciones de patient a estudiantes
+      // === REDIRECCIONES LEGACY A NUEVA ARQUITECTURA ===
+
+      // Redirecciones de rutas legacy de patient a nueva estructura
       {
         source: '/patient',
-        destination: '/estudiantes/dashboard',
+        destination: '/pacientes/app',
         permanent: true,
       },
       {
         source: '/patient/:path*',
-        destination: '/estudiantes/:path*',
+        destination: '/pacientes/app/:path*',
         permanent: true,
       },
-      // Redirecciones de academic a estudiantes
+
+      // Redirecciones de rutas legacy de academic/estudiantes a nueva estructura
       {
         source: '/academic',
-        destination: '/estudiantes/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/academic/dashboard',
-        destination: '/estudiantes/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/academic/articles',
-        destination: '/estudiantes/articles',
-        permanent: true,
-      },
-      {
-        source: '/academic/library',
-        destination: '/estudiantes/library',
-        permanent: true,
-      },
-      {
-        source: '/academic/courses',
-        destination: '/estudiantes/courses',
-        permanent: true,
-      },
-      {
-        source: '/academic/my-journal',
-        destination: '/estudiantes/my-journal',
+        destination: '/pacientes/app',
         permanent: true,
       },
       {
         source: '/academic/:path*',
-        destination: '/estudiantes/:path*',
+        destination: '/pacientes/app/:path*',
         permanent: true,
       },
-      // Redirección de landing antigua a nueva
+      {
+        source: '/estudiantes',
+        destination: '/pacientes/app',
+        permanent: true,
+      },
+      {
+        source: '/estudiantes/:path*',
+        destination: '/pacientes/app/:path*',
+        permanent: true,
+      },
+
+      // Redirecciones de rutas legacy de therapist a nueva estructura
+      {
+        source: '/therapist',
+        destination: '/terapeutas/app',
+        permanent: true,
+      },
+      {
+        source: '/therapist/:path*',
+        destination: '/terapeutas/app/:path*',
+        permanent: true,
+      },
+
+      // Redirecciones de rutas legacy de business a nueva estructura
+      {
+        source: '/business',
+        destination: '/empresas/app',
+        permanent: true,
+      },
+      {
+        source: '/business/:path*',
+        destination: '/empresas/app/:path*',
+        permanent: true,
+      },
+
+      // Redirecciones de marketing legacy
       {
         source: '/para-estudiantes',
-        destination: '/estudiantes',
+        destination: '/pacientes',
         permanent: true,
       },
       {
         source: '/para-estudiantes/:path*',
-        destination: '/estudiantes/:path*',
+        destination: '/pacientes/:path*',
         permanent: true,
       },
     ];
