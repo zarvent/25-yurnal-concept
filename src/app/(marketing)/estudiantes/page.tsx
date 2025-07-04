@@ -1,8 +1,8 @@
 'use client';
 
-import { AccessPortal } from '@/components/ecosystem-landing/access-portal';
-import { EcosystemHero } from '@/components/ecosystem-landing/ecosystem-hero';
-import { FeatureShowcase } from '@/components/ecosystem-landing/feature-showcase';
+import { AccessPortal } from '@/components/marketing/access-portal';
+import { EcosystemHero } from '@/components/marketing/ecosystem-hero';
+import { FeatureShowcase } from '@/components/marketing/feature-showcase';
 import {
     BookOpen,
     Brain,
@@ -10,6 +10,8 @@ import {
     Coffee,
     GraduationCap,
     Heart,
+    HelpCircle,
+    ShieldCheck,
     Target,
     Trophy,
     Users,
@@ -23,7 +25,7 @@ export default function StudentLandingPage() {
         subtitle: 'Diseñado para Estudiantes',
         description: 'Herramientas especializadas para manejar el estrés académico, mejorar el bienestar estudiantil y optimizar tu rendimiento académico.',
         ctaText: 'Comenzar mi Jornada',
-        ctaLink: '/student/dashboard',
+        ctaLink: '/academic/dashboard',
         features: ['Manejo de Estrés', 'Bienestar Estudiantil', 'Rendimiento Académico'],
         backgroundGradient: 'bg-gradient-to-br from-student via-student/90 to-primary',
         icon: <GraduationCap className="h-10 w-10 text-white" />
@@ -33,7 +35,7 @@ export default function StudentLandingPage() {
         {
             icon: <Brain className="h-6 w-6 text-primary" />,
             title: 'Manejo de Estrés Académico',
-            description: 'Herramientas especializadas para lidiar con la presión académica, ansiedad de exámenes y deadlines.',
+            description: 'Herramientas especiales para lidiar con la presión académica, ansiedad de exámenes y deadlines.',
             benefits: [
                 'Técnicas de relajación para épocas de exámenes',
                 'Manejo de ansiedad académica',
@@ -100,83 +102,38 @@ export default function StudentLandingPage() {
 
     const accessPortalData = {
         ecosystem: 'student' as const,
-        title: 'Transforma tu Experiencia Universitaria',
-        description: 'Únete a miles de estudiantes que están mejorando su bienestar y rendimiento académico.',
-        appLink: '/student/dashboard',
-        demoLink: '/demo/student',
+        title: 'Portal del Estudiante',
+        description: 'Accede a tus herramientas, cursos y comunidad. Tu centro de mando para el éxito académico y personal.',
+        appLink: '/academic/dashboard',
         supportItems: [
             {
-                icon: <Heart className="h-6 w-6 text-primary" />,
-                title: 'Soporte 24/7',
-                description: 'Crisis support y recursos de emergencia disponibles en cualquier momento.'
-            },
-            {
-                icon: <Trophy className="h-6 w-6 text-primary" />,
-                title: 'Precio Estudiantil',
-                description: 'Descuentos especiales y planes accesibles diseñados para presupuestos estudiantiles.'
+                icon: <HelpCircle className="h-6 w-6 text-primary" />,
+                title: 'Soporte Técnico',
+                description: 'Nuestro equipo está listo para ayudarte con cualquier problema técnico que encuentres.'
             },
             {
                 icon: <BookOpen className="h-6 w-6 text-primary" />,
-                title: 'Recursos Educativos',
-                description: 'Biblioteca de recursos sobre salud mental y bienestar estudiantil.'
+                title: 'Guías y Tutoriales',
+                description: 'Explora nuestra base de conocimientos para sacar el máximo provecho de la plataforma.'
+            },
+            {
+                icon: <ShieldCheck className="h-6 w-6 text-primary" />,
+                title: 'Seguridad y Privacidad',
+                description: 'Tu información está segura con nosotros. Conoce más sobre nuestras políticas.'
             }
         ]
     };
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="flex flex-col items-center bg-background text-foreground">
             <EcosystemHero {...heroData} />
-
             <FeatureShowcase
                 ecosystem="student"
-                title="Herramientas para tu Éxito Académico y Personal"
-                subtitle="Desarrollado específicamente para las necesidades únicas de estudiantes universitarios y de posgrado."
+                title="Un Ecosistema de Herramientas para tu Éxito"
+                subtitle="Todo lo que necesitas para prosperar en tu vida académica y personal, integrado en un solo lugar."
                 features={features}
             />
-
             <AccessPortal {...accessPortalData} />
-
-            {/* Student Success Stats */}
-            <section className="py-16 bg-muted/10">
-                <div className="container mx-auto px-4 sm:px-8 lg:px-16">
-                    <div className="mx-auto max-w-4xl text-center">
-                        <h3 className="text-2xl font-bold text-foreground mb-6">
-                            Éxito Estudiantil Comprobado
-                        </h3>
-                        <div className="grid gap-6 md:grid-cols-3">
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-primary">85%</div>
-                                <p className="text-sm text-muted-foreground">Reducción de Ansiedad</p>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-primary">92%</div>
-                                <p className="text-sm text-muted-foreground">Mejora en Organización</p>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-primary">78%</div>
-                                <p className="text-sm text-muted-foreground">Incremento en GPA</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="border-t bg-muted/10 px-4 py-12 sm:px-8 lg:px-16">
-                <div className="mx-auto max-w-6xl">
-                    <div className="text-center">
-                        <p className="text-therapeutic-caption text-muted-foreground">
-                            © 2025 Yurnal. Transformando vidas a través de la tecnología terapéutica.
-                        </p>
-                        <div className="mt-4 flex justify-center gap-6 text-xs text-muted-foreground">
-                            <a href="/privacy" className="hover:text-foreground transition-colors">Privacidad</a>
-                            <a href="/terms" className="hover:text-foreground transition-colors">Términos</a>
-                            <a href="/support" className="hover:text-foreground transition-colors">Soporte</a>
-                            <a href="/about" className="hover:text-foreground transition-colors">Acerca de</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 }

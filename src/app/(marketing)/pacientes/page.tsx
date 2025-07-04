@@ -265,11 +265,11 @@ function PatientCTA() {
  */
 export default function PacientesPage() {
     return (
-        <>
+        <div>
             <PatientHero />
             <PatientFeatures />
             <PatientTestimonials />
             <PatientCTA />
-        </>
+        </div>
     );
 }

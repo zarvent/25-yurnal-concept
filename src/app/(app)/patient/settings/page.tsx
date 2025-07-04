@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useJournal } from '@/hooks/use-journal';
 import { Bell, FileText, Info, User } from 'lucide-react';
-import { exportJournal } from '../notes/test-journal';
+import { exportJournal } from '@/app/(app)/patient/notes/test-journal';
 
 export default function SettingsPage() {
   return (

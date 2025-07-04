@@ -1,8 +1,8 @@
 'use client';
 
-import { AccessPortal } from '@/components/ecosystem-landing/access-portal';
-import { EcosystemHero } from '@/components/ecosystem-landing/ecosystem-hero';
-import { FeatureShowcase } from '@/components/ecosystem-landing/feature-showcase';
+import { AccessPortal } from '@/components/marketing/access-portal';
+import { EcosystemHero } from '@/components/marketing/ecosystem-hero';
+import { FeatureShowcase } from '@/components/marketing/feature-showcase';
 import {
     BookOpen,
     Database,

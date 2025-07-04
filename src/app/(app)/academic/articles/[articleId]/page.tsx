@@ -77,8 +77,9 @@ const getArticleDetails = (articleId: string) => {
     return mockArticles.find(a => a.articleId === articleId) || null;
 }
 
-export default function ArticleDetailPage({ params }: { params: { articleId: string } }) {
-  const article = getArticleDetails(params.articleId);
+export default async function ArticleDetailPage({ params }: { params: Promise<{ articleId: string }> }) {
+  const { articleId } = await params;
+  const article = getArticleDetails(articleId);
 
   if (!article) {
     return (

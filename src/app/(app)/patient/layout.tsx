@@ -1,32 +1,34 @@
 'use client';
 
-import { useState, useEffect, type ReactNode } from 'react';
-import { LayoutDashboard, Users, Library, Calendar, Lock } from 'lucide-react';
+import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { BookOpen, Lock, Pencil, Wrench } from 'lucide-react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 const navItems = [
-  { href: '/therapist/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/therapist/patients', label: 'Pacientes', icon: Users },
-  { href: '/therapist/library', label: 'Biblioteca', icon: Library },
-  { href: '/therapist/schedule', label: 'Agenda', icon: Calendar },
+    { href: '/patient/today', label: 'Hoy', icon: Pencil },
+    { href: '/patient/notes', label: 'Notas', icon: BookOpen },
+    { href: '/patient/reflections', label: 'Reflexiones', icon: Wrench },
 ];
 
 const pageTitles: { [key: string]: string } = {
-  '/therapist/dashboard': 'Dashboard',
-  '/therapist/patients': 'Mis Pacientes',
-  '/therapist/library': 'Biblioteca de Recursos',
-  '/therapist/schedule': 'Mi Agenda',
-  '/therapist/settings': 'Ajustes',
+    '/patient/today': 'Hoy',
+    '/patient/notes': 'Notas',
+    '/patient/reflections': 'Análisis de Patrones',
+    '/patient/my-therapist': 'Mi Terapeuta',
+    '/patient/settings': 'Ajustes',
 };
 
 const SidebarFooter = () => {
     const [year, setYear] = useState(new Date().getFullYear());
-    useEffect(() => { setYear(new Date().getFullYear()); }, []);
+
+    useEffect(() => {
+        setYear(new Date().getFullYear());
+    }, []);
 
     return (
-        <>
+        <div>
             <div className="p-4 text-center text-xs text-muted-foreground">
                 <TooltipProvider delayDuration={100}>
                     <Tooltip>
@@ -44,27 +46,27 @@ const SidebarFooter = () => {
             <div className="p-4">
                 <div className="flex items-center justify-center text-center text-xs text-muted-foreground">
                     <Lock className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span>Plataforma segura y profesional.</span>
+                    <span>Encriptación de Extremo a Extremo. Ni nosotros podemos leer tus notas.</span>
                 </div>
             </div>
-        </>
+        </div>
     );
-};
+}
 
 const MainFooter = () => (
     <footer className="text-center p-4 text-xs text-muted-foreground border-t bg-background">
-        <strong>Recurso Profesional:</strong> Esta plataforma es una herramienta de apoyo. En caso de una emergencia de un paciente, guíalo hacia los servicios de emergencia apropiados.
+        <strong>Nota Importante:</strong> Yurnal es una herramienta de autoconocimiento y no reemplaza la terapia profesional. Si te encuentras en una crisis de salud mental, por favor, no estás solo. Contacta a la línea de prevención de suicidio de tu país o busca ayuda de emergencia. En Bolivia, puedes llamar a la línea gratuita de ayuda del SEDES (168).
     </footer>
 );
 
-export default function TherapistLayout({ children }: { children: ReactNode }) {
+export default function PatientLayout({ children }: { children: ReactNode }) {
     return (
         <DashboardLayout
             navItems={navItems}
             pageTitles={pageTitles}
-            defaultTitle="Portal de Terapeuta"
-            brandName="Yurnal Terapia"
-            brandHref="/therapist/dashboard"
+            defaultTitle="Yurnal"
+            brandName="Yurnal"
+            brandHref="/patient/today"
             sidebarFooter={<SidebarFooter />}
             mainFooter={<MainFooter />}
         >

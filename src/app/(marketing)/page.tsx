@@ -119,7 +119,7 @@ const jsonLd = {
  */
 export default function MarketingHomePage() {
     return (
-        <>
+        <div>
             {/* Structured Data para SEO */}
             <script
                 type="application/ld+json"
@@ -140,7 +140,7 @@ export default function MarketingHomePage() {
                 {/* Call to Action - Construcción de confianza y conversión final */}
                 <CTASection />
             </div>
-        </>
+        </div>
     );
 }
 
