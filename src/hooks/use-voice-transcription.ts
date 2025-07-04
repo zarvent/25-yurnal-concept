@@ -41,6 +41,9 @@ export interface UseVoiceTranscriptionReturn {
   // Información del servicio
   currentConfig: Partial<VoiceTranscriptionConfig>;
   updateConfig: (newConfig: Partial<VoiceTranscriptionConfig>) => void;
+
+  // Utilidades
+  formatRecordingTime: (seconds: number) => string;
 }
 
 export function useVoiceTranscription(

@@ -68,6 +68,17 @@ const nextConfig: NextConfig = {
         destination: '/estudiantes/:path*',
         permanent: true,
       },
+      // Redirección de landing antigua a nueva
+      {
+        source: '/para-estudiantes',
+        destination: '/estudiantes',
+        permanent: true,
+      },
+      {
+        source: '/para-estudiantes/:path*',
+        destination: '/estudiantes/:path*',
+        permanent: true,
+      },
     ];
   },
 };

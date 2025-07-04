@@ -100,8 +100,8 @@ const TherapeuticNavLink = ({ href, children }: { href: string; children: React.
         <Link
             href={href}
             className={`relative px-4 py-2 rounded-therapeutic text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 ${isActive
-                    ? 'text-primary bg-primary/5 shadow-therapeutic-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                ? 'text-primary bg-primary/5 shadow-therapeutic-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
         >
             {children}
@@ -173,11 +173,10 @@ const MobileNav = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => vo
 // --- CONFIGURACIÓN CENTRALIZADA ---
 
 const primaryNavLinks = [
-    { href: '/patient', label: 'Para Ti' },
-    { href: '/therapist', label: 'Terapeutas' },
-    { href: '/academic', label: 'Académicos' },
-    { href: '/student', label: 'Estudiantes' },
-    { href: '/business', label: 'Empresas' },
+    { href: '/pacientes', label: 'Pacientes' },
+    { href: '/terapeutas', label: 'Terapeutas' },
+    { href: '/estudiantes', label: 'Estudiantes' },
+    { href: '/empresas', label: 'Empresas' },
 ];
 
 // --- COMPONENTE PRINCIPAL ---
@@ -198,8 +197,8 @@ const MainHeader = ({ notification }: MainHeaderProps) => {
         <header
             ref={menuRef}
             className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
-                    ? 'bg-background/80 backdrop-blur-md border-b shadow-therapeutic-sm'
-                    : 'bg-background'
+                ? 'bg-background/80 backdrop-blur-md border-b shadow-therapeutic-sm'
+                : 'bg-background'
                 }`}
         >
             {notification && (

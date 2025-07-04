@@ -16,8 +16,9 @@ async function fetchEntries(idsParam: string | null) {
   return selectedIds ? entries.filter((e: { id: string }) => selectedIds.includes(e.id)) : entries;
 }
 
-export default async function AnalysisPage({ searchParams }: { searchParams: { ids?: string } }) {
-  const entries = await fetchEntries(searchParams.ids || null);
+export default async function AnalysisPage({ searchParams }: { searchParams: Promise<{ ids?: string }> }) {
+  const resolvedSearchParams = await searchParams;
+  const entries = await fetchEntries(resolvedSearchParams.ids || null);
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">

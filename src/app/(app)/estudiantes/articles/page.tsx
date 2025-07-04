@@ -1,6 +1,6 @@
 "use client";
 
-import { ArticlesView } from '@/components/academic/articles-view';
+import { ArticlesView } from '@/components/estudiantes/articles-view';
 import { Suspense } from 'react';
 
 type Article = {

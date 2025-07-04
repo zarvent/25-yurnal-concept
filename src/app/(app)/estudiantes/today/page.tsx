@@ -1,6 +1,6 @@
+import { ActionCard } from '@/components/estudiantes/action-card';
+import { GreetingSection } from '@/components/estudiantes/greeting-section';
 import { JournalEditor } from '@/components/journal-editor';
-import { ActionCard } from '@/components/patient/action-card';
-import { GreetingSection } from '@/components/patient/greeting-section';
 import { Lightbulb, Wrench } from 'lucide-react';
 
 export default function TodayPage() {

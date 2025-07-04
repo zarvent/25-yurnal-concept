@@ -21,8 +21,9 @@ async function getNote(slug: string) {
     return { source };
 }
 
-export default async function NotePage({ params }: { params: { slug: string } }) {
-    const { source } = await getNote(params.slug);
+export default async function NotePage({ params }: { params: Promise<{ slug: string }> }) {
+    const resolvedParams = await params;
+    const { source } = await getNote(resolvedParams.slug);
 
     return (
         <div className="prose dark:prose-invert mx-auto p-6">

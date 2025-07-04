@@ -72,21 +72,17 @@ export function JournalEditor() {
 
   const initializeTranscriptionService = useCallback(() => {
     if (!transcriptionService) {
-      const service = new VoiceTranscriptionService(
-        (progress) => setTranscriptionProgress(progress),
-        (result) => {
-          if (result.type === 'final') {
-            finalTranscriptionRef.current += result.text + ' ';
-            setEntry((prev) => prev + result.text + ' ');
-          }
-          setTranscriptionResult(result);
-        }
-      );
+      const service = new VoiceTranscriptionService({
+        language: 'es-ES',
+        emotionalContextAnalysis: true,
+        localProcessing: true,
+        confidenceThreshold: 0.7
+      });
       setTranscriptionService(service);
       return service;
     }
     return transcriptionService;
-  }, [transcriptionService, setEntry]);
+  }, [transcriptionService]);
 
   const startRecording = async () => {
     const service = initializeTranscriptionService();
@@ -101,12 +97,26 @@ export function JournalEditor() {
 
   const stopRecording = async () => {
     if (transcriptionService) {
-      await transcriptionService.stopRecording();
-      setIsRecording(false);
-      setIsTranscribing(true);
-      toast({ title: 'Procesando audio...', description: 'Transcribiendo tu grabación.' });
-      // The result will be handled by the callback
-      setIsTranscribing(false);
+      try {
+        setIsRecording(false);
+        setIsTranscribing(true);
+        toast({ title: 'Procesando audio...', description: 'Transcribiendo tu grabación.' });
+
+        const result = await transcriptionService.stopRecording();
+
+        // Manejar el resultado de la transcripción
+        if (result.text) {
+          finalTranscriptionRef.current += result.text + ' ';
+          setEntry(entry + result.text + ' ');
+          setTranscriptionResult(result);
+        }
+
+        setIsTranscribing(false);
+        toast({ title: 'Transcripción completada', description: 'El texto ha sido añadido a tu entrada.' });
+      } catch (error) {
+        setIsTranscribing(false);
+        toast({ title: 'Error de transcripción', description: `No se pudo procesar el audio: ${error}` });
+      }
     }
   };
 
@@ -116,8 +126,10 @@ export function JournalEditor() {
     setTranscriptionProgress(0);
     finalTranscriptionRef.current = '';
     try {
-      await service.transcribeFile(file);
-      toast({ title: 'Archivo procesado', description: 'La transcripción ha sido añadida a tu entrada.' });
+      // Por ahora, simulamos el procesamiento del archivo
+      toast({ title: 'Procesando archivo...', description: 'Esta funcionalidad está en desarrollo.' });
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simular procesamiento
+      toast({ title: 'Archivo procesado', description: 'La funcionalidad de archivos de audio será implementada pronto.' });
     } catch (error) {
       toast({ title: 'Error de transcripción', description: `No se pudo procesar el archivo: ${error}` });
     } finally {
@@ -127,7 +139,7 @@ export function JournalEditor() {
 
   return (
     <Card className="w-full shadow-therapeutic-lg border-border/20">
-      <CrisisAlert open={showCrisisAlert} onOpenChange={setShowCrisisAlert} />
+      <CrisisAlert isVisible={showCrisisAlert} onClose={() => setShowCrisisAlert(false)} />
       <CardHeader>
         <CardTitle>Mi Diario</CardTitle>
         <CardDescription>{currentPrompt}</CardDescription>
@@ -153,7 +165,7 @@ export function JournalEditor() {
               {isTranscribing && <Loader2 className="h-4 w-4 animate-spin" />}
             </div>
             <Progress value={transcriptionProgress} className="w-full" />
-            {transcriptionResult && transcriptionResult.type === 'interim' && (
+            {transcriptionResult && transcriptionResult.text && (
               <p className="text-sm text-muted-foreground italic">{transcriptionResult.text}</p>
             )}
           </div>
