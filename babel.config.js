@@ -4,4 +4,8 @@ module.exports = {
     '@babel/preset-react',
     '@babel/preset-typescript',
   ],
+  ignore: [
+    'src/ai/flows/**/*.ts',
+    'src/ai/flows/**/*.tsx',
+  ],
 };
