@@ -14,6 +14,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error';
 
 interface ToolsState {
   tools: Tool[];
+  lastSavedTools: Tool[];
   activeToolId: string | null;
   status: Status;
   error: string | null;
@@ -25,19 +26,19 @@ interface ToolsState {
 }
 
 export const debouncedSave = debounce(async (get: () => ToolsState, set: (state: Partial<ToolsState>) => void) => {
-  const { tools } = get();
-  const originalTools = [...tools];
+  const { tools, lastSavedTools } = get();
   set({ status: 'loading', error: null });
 
   try {
     const toolOrderIds = tools.map((tool: Tool) => tool.id);
     await axios.post('/api/patient/tools/order', { toolIds: toolOrderIds });
-    set({ status: 'success' });
+    // On success, update lastSavedTools to match the tools we just saved
+    set({ status: 'success', lastSavedTools: tools });
   } catch (err) {
     set({
       status: 'error',
       error: 'Error al guardar el orden. Revirtiendo cambios.',
-      tools: originalTools
+      tools: lastSavedTools
     });
   } finally {
     setTimeout(() => set({ status: 'idle' }), 2000);
@@ -47,11 +48,12 @@ export const debouncedSave = debounce(async (get: () => ToolsState, set: (state:
 export const useToolsStore = create<ToolsState>()(
   devtools((set, get) => ({
     tools: [],
+    lastSavedTools: [],
     activeToolId: null,
     status: 'idle',
     error: null,
 
-    setTools: (tools) => set({ tools, status: 'idle', error: null }),
+    setTools: (tools) => set({ tools, lastSavedTools: tools, status: 'idle', error: null }),
     setActiveToolId: (id) => set({ activeToolId: id }),
 
     moveTool: (activeId, overId) =>
